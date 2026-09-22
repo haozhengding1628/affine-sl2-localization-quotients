@@ -65,7 +65,8 @@ outputs/       canonical notes (.tex + compiled .pdf, EN and CN)
   boundary_localization_pbw_general_note_*_well_defined  (PBW well-definedness)
   boundary_localization_advisor_note_*                   (advisor-style boundary note)
   boundary_derivation_extension_*                       (derivation extension)
-  nonboundary_localization_results_en                   (nonboundary quotients)
+  nonboundary_localization_results_en                   (nonboundary quotients, earlier EN note)
+  nonboundary_results_en / nonboundary_results_cn       (verified-results summary, EN/CN)
   localization_quotients_unified_*                      (unified note, EN/CN)
   localization_quotients_additional_progress_en         (addendum: deep-region
                                                          simplicity, unique maximal

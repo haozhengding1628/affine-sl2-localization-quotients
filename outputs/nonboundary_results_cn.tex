@@ -1,0 +1,515 @@
+% !TeX program = xelatex
+% Compile twice: xelatex -interaction=nonstopmode nonboundary_results_cn.tex
+\documentclass[UTF8,11pt,a4paper,fontset=fandol]{ctexart}
+\usepackage[margin=24mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,enumitem,microtype}
+\usepackage[hidelinks,unicode]{hyperref}
+\hypersetup{pdftitle={非边界局部化商的现有结论},pdfsubject={PBW、单性、极大子模与 Takiff 实现}}
+\usepackage{fancyhdr}
+\setlength{\emergencystretch}{2em}
+\setlength{\parskip}{2pt}
+\setlist{nosep,leftmargin=2em}
+\allowdisplaybreaks[2]
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 非边界局部化商：现有结论}
+\fancyhead[R]{\small 2026-09-22}
+\fancyfoot[C]{\thepage}
+\ctexset{section={format=\large\bfseries,beforeskip=1.4ex,afterskip=.8ex},
+subsection={format=\normalsize\bfseries,beforeskip=1ex,afterskip=.5ex}}
+\newtheoremstyle{upright}{5pt}{5pt}{\normalfont}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{upright}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{remark}[theorem]{注}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\g}{\mathfrak g}
+\newcommand{\s}{\mathfrak s}
+\newcommand{\p}{\mathfrak p}
+\newcommand{\slc}{\mathfrak{sl}_2}
+\newcommand{\T}{\mathcal T}
+\newcommand{\D}{\mathcal D}
+\newcommand{\X}{\mathcal X}
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\soc}{soc}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\Supp}{Supp}
+\DeclareMathOperator{\Ind}{Ind}
+\DeclareMathOperator{\pole}{pole}
+\DeclareMathOperator{\coker}{coker}
+\title{\vspace{-10mm}非边界局部化商的现有结论\\[2pt]
+\normalsize PBW 结构、单性、极大子模与 Takiff 实现}
+\author{}
+\date{2026 年 9 月 22 日}
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries 非边界局部化商的现有结论}\par\vspace{3pt}
+{\normalsize PBW 结构、单性、极大子模与 Takiff 实现}\par\vspace{5pt}
+{\small 2026 年 9 月 22 日}
+\end{center}
+\vspace{-3mm}
+\begin{abstract}
+本文汇总光滑仿射 $\slc$ 诱导模的非边界局部化商之已核查结论。
+深区在原模单的假设下具有精确单性判据；整数参数时，其对向根局部幂零部分
+是唯一极大子模。基本例可由一个 Takiff 局部化商诱导得到，但整个仿射模
+并不经过有限阶 current algebra 截断。$G_c$ 的内部子模分类与浅区单性不在已证结论之列。
+主要依据为统一稿与附录 \cite{Unified,Addendum}；本文不采用原结构稿中有误的权尾部滤过。
+\end{abstract}
+
+\section{设定与参数范围}
+
+所有对象定义在 $\C$ 上。先不加入次数导子，令
+\[
+\g=(\slc\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g),\qquad x_i=x\otimes t^i,
+\]
+其中
+\[
+\begin{aligned}
+[e_i,f_j]&=h_{i+j}+i\delta_{i+j,0}K,& [h_i,h_j]&=2i\delta_{i+j,0}K,\\
+[h_i,e_j]&=2e_{i+j},&[h_i,f_j]&=-2f_{i+j},
+\end{aligned}
+\]
+$K$ 中心，$[e_i,e_j]=[f_i,f_j]=0$。取 $a,b\in\Z$，$L=a+b+1\ge1$，设
+\[
+S_{a,b}=\Span\{K,h_i\ (i\ge0),e_i\ (i>a),f_j\ (j>b)\}.
+\]
+特征 $\chi$ 满足 $\chi(K)=\kappa$、$\chi(h_i)=\lambda_i$，根向量的值为零，
+并约定 $\lambda_i=0$ 对一切 $i>L$ 成立。记
+\[
+M=M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad u=1\otimes1.
+\]
+FGXZ 的判据为 \cite[Theorem 1.1]{FGXZ}
+\begin{equation}\label{eq:original-simple}
+M\text{ 单}\quad\Longleftrightarrow\quad \lambda_L\ne0\ \text{且}\ \kappa\ne-2.
+\end{equation}
+
+全文固定非边界指标 $c<b$，并记
+\[
+\begin{gathered}
+F=f_c,\qquad d_*=b-c,\qquad D_FM=U[F^{-1}]\otimes_U M,\\
+Q_c=\T_FM=D_FM/M,\qquad w_m=F^{-m}u+M\quad(m\ge1).
+\end{gathered}
+\]
+$\ad F$ 局部幂零保证 Ore 局部化存在，PBW 保证 $F$ 在 $M$ 上单射。
+\emph{$Q_c$ 是商局部化，而不是完整局部化；$F^{-1}$ 不在 $Q_c$ 上定义。}
+以下将
+\[
+\begin{array}{lll}
+\text{深区：}&c\le-a-1,&d_*\ge L,\\
+\text{浅区：}&-a\le c<b,&1\le d_*<L
+\end{array}
+\]
+严格区分。除明确声明外，结构结论不要求 \eqref{eq:original-simple}。
+
+\section{任意非边界指标的结构}
+
+\begin{proposition}[PBW、根模态与权空间]\label{prop:pbw}
+令 $\X$ 为下列自由模态的有序 PBW 单项式（含空字）：
+\[
+f_j\ (j\le b,\ j\ne c),\qquad e_i\ (i\le a),\qquad h_r\ (r<0).
+\]
+则 $\{F^{-m}Xu+M:m\ge1,\ X\in\X\}$ 是 $Q_c$ 的基，且
+\[
+\ker(F^r|_{Q_c})=\Span\{F^{-m}Xu+M:1\le m\le r,\ X\in\X\}.
+\]
+特别地，$Q_c\ne0$，每个非零子模均与 $\ker F$ 非平凡相交。负根模态满足
+\[
+\begin{array}{c|c}
+\text{指标}&\text{在 }Q_c\text{ 上的作用}\\ \hline
+j=c&\text{满射且局部幂零}\\
+j\le b,\ j\ne c&\text{单射但不满射}\\
+j>b&\text{局部幂零}
+\end{array}
+\]
+$Q_c$ 是光滑权模，$K=\kappa$，$h_0$ 半单，且
+\[
+\Supp_{h_0}Q_c=\lambda_0+2\Z,
+\qquad \dim (Q_c)_\eta=\aleph_0\quad(\eta\in\lambda_0+2\Z).
+\]
+它没有非零有限维子模或有限维商模，也不是整个仿射代数的可积模。
+\end{proposition}
+\begin{proof}
+取 $F$ 为第一个自由 PBW 变量，$M$ 是自由 $\C[F]$-模；局部化与取商给出所述基。
+其余自由 $f_j$ 为独立的多项式变量。对尾部根模态，用 $f_ju=0$ 及
+$\ad f_j$ 的局部幂零性。权公式为
+$h_0(F^{-m}Xu)=(\lambda_0+2m+2\#e(X)-2\#f(X))F^{-m}Xu$；
+附加 $h_{-1}$ 的幂得到无限重数。
+局部化保持光滑性，见 \eqref{eq:commutation}。
+有限维商模上 $F$ 不可能既满射又局部幂零；有限维光滑仿射模必平凡，
+而 $f_{c+1}$ 的单射性排除了平凡子模。
+\end{proof}
+
+\begin{proposition}[Cartan 模态、gap 与 Hom]\label{prop:profiles}
+若 $1\le i\le d_*$，$0\ne v\in Q_c$，$z\in\C$，则
+\[
+\pole_F((h_i-z)v)=\pole_F(v)+1.
+\]
+因而 $h_i$ 没有非零局部有限向量；若 $i>d_*$，则 $h_i-\lambda_i$ 在 $Q_c$ 上局部幂零。
+局部幂零负根模态的集合恰为 $\{c\}\cup\{j:j>b\}$。所以 $Q_c$ 不同构于任何标准模
+$M_{a',b'}(\psi)$，并且
+\[
+\Hom_\g(M_{a',b'}(\psi),Q_c)=0,
+\qquad
+\Hom_\g(\T_{f_c}M,\T_{f_{c'}}M)=0\quad(c\ne c',\ c,c'\le b).
+\]
+\end{proposition}
+\begin{proof}
+在完整局部化中有
+\begin{equation}\label{eq:commutation}
+\begin{aligned}
+h_iF^{-m}&=F^{-m}h_i+2mF^{-m-1}f_{c+i},\\
+e_iF^{-m}&=F^{-m}e_i-mF^{-m-1}(h_{i+c}+i\delta_{i+c,0}K)\\
+&\hspace{22mm}-m(m+1)F^{-m-2}f_{i+2c}.
+\end{aligned}
+\end{equation}
+当 $i\le d_*$，最高 pole 的系数包含非零自由变量 $f_{c+i}$；当 $i>d_*$，
+$h_iw_m=\lambda_iw_m$，用光滑性及正指标平移即得局部幂零性。
+标准模的局部幂零 $f$-模态集合是完整上尾，且标准生成元是 $h_1$-特征向量。
+最后一个 Hom 消失由源上的 $f_c$-扭性与目标上的 $f_c$-单射性给出。
+这里使用 $Q_c=\sum_{m\ge1}Uw_m$：给分子字次数 $2\#e+\#h$，将字移过分母，
+所有非零交换修正严格降次，归纳即可。
+\end{proof}
+
+\section{深区：单性与唯一极大子模}
+
+本节令 $c\le-a-1$，并设
+\[
+E=e_{-c},\qquad H=h_0-cK,\qquad \mu=\lambda_0-c\kappa,
+\qquad G_c=\{v\in Q_c:E^nv=0\text{ 对某个 }n\ge1\}.
+\]
+则 $(E,H,F)$ 是 $\slc$-三元组，$Eu=0$、$Hu=\mu u$，并且
+\begin{equation}\label{eq:pure}
+Ew_m=-m(\mu+m+1)w_{m+1},\qquad Hw_m=(\mu+2m)w_m.
+\end{equation}
+
+\begin{proposition}[不要求原模单]\label{prop:G}
+$G_c$ 是 $Q_c$ 的真子模，并且
+\[
+G_c=0\ \Longleftrightarrow\ \mu\notin\Z.
+\]
+若 $\mu\in\Z$，则对 $k\ge\max(1,\mu+2)$，
+\[
+0\ne f_b^kw_1\in G_c,\qquad E^{2k-\mu-1}(f_b^kw_1)=0.
+\]
+$E$ 在 $Q_c/G_c$ 上单射。此外，$Q_c$ 总是循环模，且
+\[
+Q_c=Uw_1\ \Longleftrightarrow\ \mu\notin\{-2,-3,\ldots\};
+\qquad \mu=-s,\ s\ge2\ \Longrightarrow\ Q_c=Uw_s\ne Uw_1.
+\]
+\end{proposition}
+\begin{proof}
+$\ad E$ 局部幂零，故 $G_c$ 为子模；\eqref{eq:pure} 中足够大的 $m$ 给出
+不属于 $G_c$ 的向量。若 $0\ne v\in\ker E$ 为 $H$-权向量，权为 $\nu$，
+取最小 $n$ 使 $F^nv=0$，则
+$0=EF^nv=n(\nu-n+1)F^{n-1}v$，从而 $\nu=n-1\in\Z$。
+结合 $\nu\in\mu+2\Z$，得到非整数情形 $G_c=0$。
+
+整数情形令 $Y=f_b$、$\eta=\lambda_{d_*}$。在 $\C[F,Y]u$ 上，
+\[
+E(F^jY^\ell u)=j(\mu-j+1-2\ell)F^{j-1}Y^\ell u
++\ell\eta F^jY^{\ell-1}u.
+\]
+取 $v_k=\sum_{j=0}^k a_jF^jY^{k-j}u$，其中
+\[
+a_0=1,\qquad a_j=-\frac{(k-j+1)\eta}{j(\mu-2k+j+1)}a_{j-1}.
+\]
+各分母非零，且 $Ev_k=0$、$Hv_k=(\mu-2k)v_k$。
+对 $F^{-1}v_k$ 使用秩一公式再取商，得到所述非零向量及幂零界。
+$Ev\in G_c\Rightarrow v\in G_c$ 给出商上的单射性。
+循环性由 \eqref{eq:pure}、$Fw_m=w_{m-1}$（$w_0=0$）及纯分式生成性得出；
+$\mu=-s$ 时 $w_1\in G_c$ 而 $w_s\notin G_c$。
+\end{proof}
+
+\begin{theorem}[深区精确判据与 simple head]\label{thm:main}
+假设
+\begin{equation}\label{eq:main-assumptions}
+\lambda_L\ne0,\qquad \kappa\ne-2,\qquad c<b,\qquad c\le-a-1.
+\end{equation}
+则
+\[
+\boxed{\quad Q_c\text{ 单}\quad\Longleftrightarrow\quad
+\lambda_0-c\kappa\notin\Z.\quad}
+\]
+对任意 $\mu$，每个真子模均包含于 $G_c$。因此 $G_c$ 是唯一极大子模，
+$\rad Q_c=G_c$，$Q_c/G_c$ 单，且 $Q_c$ 不可分解。
+若 $\mu\in\Z$，则 $0\ne G_c\ne Q_c$，并有不分裂正合列
+\begin{equation}\label{eq:head}
+0\longrightarrow G_c\longrightarrow Q_c\longrightarrow Q_c/G_c\longrightarrow0.
+\end{equation}
+在此整数情形，$\soc Q_c=\soc G_c$，但这不决定该 socle 是否为零。
+\end{theorem}
+
+\begin{proof}
+由 \eqref{eq:original-simple}，$M$ 单；$E$ 在 $M$ 上局部幂零，$F$ 单射，$H$ 半单。
+下面证明核心包含关系 \cite[Section 2]{Addendum}。
+设 $N\subseteq Q_c$ 不包含于 $G_c$，$P\subseteq D_FM$ 为其逆像。
+取 $w\in P$ 为 $H$-权向量，其商类 $q\in N$ 满足 $E^rq\ne0$ 对所有 $r\ge0$ 成立。
+秩一 Casimir
+\[
+C=H^2+2H+4FE
+\]
+在 $M$ 及 $D_FM$ 上局部有限，因为对 $Hz=\eta z$ 有
+\[
+F^nE^nz=A_n(C;\eta)z,
+\qquad A_n(t;\eta)=4^{-n}\prod_{j=0}^{n-1}
+\bigl(t-(\eta+2j)(\eta+2j+2)\bigr).
+\]
+$E$ 在 $M$ 上局部幂零，且 $C$ 与 $F^{-1}$ 对易。取 $0\ne p(t)$ 使 $p(C)w=0$。
+将 $w$ 换成足够高的 $v=E^rw$，其权 $\nu$ 可满足
+$p((\nu+2j)(\nu+2j+2))\ne0$ 对所有 $j\ge0$ 成立。
+Bézout 恒等式给出多项式 $B_n$ 使
+\[
+v=F^nE^nB_n(C)v\in F^nP\qquad(n\ge0).
+\]
+于是 $0\ne v\in W(P):=\bigcap_{n\ge0}F^nP$。
+$\ad F$ 的局部幂零性保证 $W(P)$ 是 $U$-子模：
+若 $(\ad F)^{\ell+1}s=0$，则
+\[
+sF^{n+\ell}=\sum_{j=0}^{\ell}(-1)^j\binom{n+\ell}{j}
+F^{n+\ell-j}(\ad F)^j(s).
+\]
+$W(P)$ 还对 $F^{-1}$ 稳定，并与 $M$ 非平凡相交。
+$M$ 单，故 $M\subseteq W(P)$，再局部化得 $P=D_FM$、$N=Q_c$。
+结合命题 \ref{prop:G}，即得单性判据及唯一极大子模。
+任何非平凡直和分解的两项都会包含于 $G_c$，故不可分解且 \eqref{eq:head} 不分裂。
+整数情形所有简单子模都是真子模，故 socle 等式成立。
+\end{proof}
+
+\begin{remark}[循环性不等于单性]
+在 $M_{-1,1}$、$c=0$、$\lambda_0=0$、$\lambda_1\ne0$、$\kappa\ne-2$ 时，
+$Q_0=Uw_1$，但 $0\ne f_1^2w_1\in G_0$ 且 $e_0^3f_1^2w_1=0$，所以 $Q_0$ 不单。
+定理 \ref{thm:main} 不得直接推广至原始临界或退化诱导模。
+\end{remark}
+
+\section{关于极大子模内部与浅区，现阶段的界限}
+
+\begin{proposition}[横向 $\slc$ 结构，不是仿射子模分类]\label{prop:sl2}
+深区中令 $\s=\langle E,H,F\rangle\cong\slc$，
+$P_\nu=\ker E\cap\{v\in Q_c:Hv=\nu v\}$。作为 $\s$-模，
+\[
+G_c\cong\bigoplus_{\nu\in\Z_{\ge0}}P_\nu\otimes L(\nu),
+\]
+其中 $L(\nu)$ 为最高权 $\nu$ 的有限维简单 $\slc$-模，重数空间 $P_\nu$ 不必有限维。
+对 $0\ne p\in P_\nu$，有 $\nu\in\mu+2\Z$ 及 $\pole_F(p)=\nu+1$。
+\end{proposition}
+\begin{proof}
+$E,F$ 在 $G_c$ 上局部幂零，$H$ 半单；PBW 给出每个向量包含于有限维 $\s$-子模。
+由完全可约性得到分解。最高权向量满足 $F^{\nu+1}p=0$、$F^\nu p\ne0$，
+再用命题 \ref{prop:pbw} 的 kernel 公式得到 pole 等式。
+\end{proof}
+
+不能将 $\bigoplus_{\nu\ge n}P_\nu\otimes L(\nu)$ 自动视为 $\g$-子模。
+仿射模态存在降低横向最高权的分量；例如，对 $p\in P_\nu$、$\nu\ge2$，
+\[
+f_jp-\frac1\nu Fh_{j-c}p
+-\frac1{\nu(\nu+1)}F^2e_{j-2c}p\in P_{\nu-2}
+\qquad(j\ne c).
+\]
+这是直接的 $\slc$ 投影公式，不断言其值总为零。
+因此，整数参数下 $G_c$ 是否单、$\soc G_c$ 的具体值、$Q_c$ 是否有有限合成长度，
+目前均未由上述结果确定。特别地，不能宣称 $\soc Q_c=0$ 或合成长度无限；
+长度为二等价于 $G_c$ 单，亦尚未确定。
+
+\begin{proposition}[浅区]\label{prop:shallow}
+若 $-a\le c<b$，则 $E=e_{-c}$ 在 $Q_c$ 上单射，因此 $G_c=0$。
+若再假设 $\lambda_L\ne0$，则 $Q_c=Uw_1$。
+\end{proposition}
+\begin{proof}
+$E$ 是自由 PBW 模态。以 $2\#e+\#h$ 为分子次数，$E$ 的最高次作用是乘自由变量，
+交换修正次数更低，故单射。令 $Y=e_{L-c}$；浅区保证 $Yu=0$、
+$[Y,F]=h_L$、$f_{L+c}u=0$，从而 $Yw_m=-m\lambda_Lw_{m+1}$，得到循环性。
+\end{proof}
+
+浅区中 $E$ 不在原模 $M$ 上局部幂零，所以不能用定理 \ref{thm:main} 的证明从 $G_c=0$
+推出 $Q_c$ 单。在 $\lambda_L\ne0$ 时，非零循环性保证存在极大子模；
+其唯一性及 $Q_c$ 的精确单性条件仍未确定。
+
+\section{与 Takiff 模的准确关系}
+
+记
+\[
+\mathfrak t_N=\slc[t]/(\slc\otimes t^{N+1}\C[t])\quad(N\ge1),
+\qquad \p=\slc[t]\oplus\C K.
+\]
+$\mathfrak t_1$ 是通常的 Takiff 代数；$N>1$ 为高阶截断 current algebra。
+\emph{作为 Takiff 模、含有 Takiff 子空间、由 Takiff 模诱导，是三个不同命题。}
+
+\subsection{基本例的精确模型与诱导实现}
+取 $Q_0=\T_{f_0}M_{-1,1}$，定义
+\[
+V=\Span\{f_1^kw_m:m\ge1,\ k\ge0\}
+\cong\C[x,x^{-1},y]/\C[x,y],\qquad f_1^kw_m\longleftrightarrow x^{-m}y^k.
+\]
+则 $V$ 对 $\slc[t]$ 稳定，所有 $e_i,f_i,h_i$（$i\ge2$）在其上为零，因而是
+$\mathfrak t_1$-模。其精确作用为 \cite[Section 6]{Unified}
+\begin{equation}\label{eq:takiff}
+\begin{aligned}
+f_0&=x,& f_1&=y,\\
+h_0&=\lambda_0-2x\partial_x-2y\partial_y,
+&h_1&=\lambda_1-2y\partial_x,\\
+e_0&=\lambda_0\partial_x+\lambda_1\partial_y
+-x\partial_x^2-2y\partial_x\partial_y,
+&e_1&=\lambda_1\partial_x-y\partial_x^2.
+\end{aligned}
+\end{equation}
+这些算子保持被商去的多项式子空间，故作用良定义。
+赋予 $K$ 标量作用 $\kappa$ 后，PBW 还给出
+\begin{equation}\label{eq:ind-basic}
+\boxed{\quad Q_0\cong U(\g)\otimes_{U(\p)}V.\quad}
+\end{equation}
+事实上，自然映射 $X\otimes v\mapsto Xv$ 将
+$U(\slc\otimes t^{-1}\C[t^{-1}])\otimes V$ 的 PBW 基映到右正规局部化 PBW 基。
+$V$ 并非 $\g$-子模，例如
+$h_{-1}w_1=F^{-1}h_{-1}u+2F^{-2}f_{-1}u+M\notin V$。
+因此基本例准确地说是\emph{由 Takiff 局部化商诱导得到的仿射模}。
+
+\subsection{一般指标中可直接得到的实现}
+对 $M_{-1,N}$，令 $W_N=\C[f_0,\ldots,f_N]u$。这是 $\mathfrak t_N$-模，且
+$M_{-1,N}\cong U(\g)\otimes_{U(\p)}W_N$ \cite[Lemma 2.2]{FGXZ}。
+同一 PBW 比较给出：当 $0\le r<N$ 时，
+\begin{equation}\label{eq:ind-general}
+\T_{f_r}M_{-1,N}\cong U(\g)\otimes_{U(\p)}V_{N,r},\qquad
+V_{N,r}:=\T_{f_r}W_N
+\cong\frac{\C[z_0,\ldots,z_N,z_r^{-1}]}{\C[z_0,\ldots,z_N]}.
+\end{equation}
+右端分式为向量空间模型；$V_{N,r}$ 的作用从 $W_N$ 的局部化取商而来。
+高模态理想在 $W_N$ 上为零，且被 $\ad f_r$ 保持，故也在 $V_{N,r}$ 上为零。
+\eqref{eq:ind-general} 不要求非临界或非退化假设，也不自动给出诱导模的单性。
+
+明确采用扭转约定 $x\cdot_{\rm new}v=\sigma_k(x)v$，其中
+\[
+\sigma_k(e_i)=e_{i+k},\quad \sigma_k(f_i)=f_{i-k},\quad
+\sigma_k(h_i)=h_i+k\delta_{i,0}K,\quad \sigma_k(K)=K.
+\]
+取 $k=a+1$ 后，
+\[
+(Q_c)^{\sigma_{a+1}}\cong\T_{f_r}M_{-1,L}(\chi'),\quad
+r=c+a+1,\quad \chi'(h_0)=\lambda_0+(a+1)\kappa,
+\]
+其余参数不变。因此 $-a-1\le c<b$ 时，上述 Takiff 诱导实现直接适用；
+这包括整个浅区与深区端点 $c=-a-1$。这是扭转后的同构，不是未扭转同构。
+
+对任意深区指标，另一种正规化为
+\[
+(Q_c)^{\sigma_{-c}}\cong\T_{f_0}M_{A,B}(\chi''),\qquad
+A=a+c\le-1,\quad B=b-c,\quad \chi''(h_0)=\mu.
+\]
+其子空间
+\[
+V_B=\Span\{f_0^{-m}f_1^{k_1}\cdots f_B^{k_B}u+M:m\ge1,\ k_i\ge0\}
+\]
+对 $\slc[t]$ 稳定，并被 $\slc\otimes t^{B+1}\C[t]$ 消灭，故是 $\mathfrak t_B$-模。
+这是正模态重排的直接结果。若 $A<-1$，本文不将基本例的诱导\emph{同构}
+\eqref{eq:ind-basic} 原样推广至这一子空间。
+
+\subsection{整个非边界商不经过有限阶截断}
+对任何 $Q_c$ 及任何 $R\ge1$，都有
+\begin{equation}\label{eq:no-truncation}
+(\slc\otimes t^R\C[t])Q_c\ne0.
+\end{equation}
+否则 $h_R$ 在整个 $Q_c$ 上为零，由
+\[
+[h_R,f_{c+1-R}]=-2f_{c+1}
+\]
+推出 $f_{c+1}$ 也为零，与命题 \ref{prop:pbw} 矛盾。
+所以，即使只看自然的 $\slc[t]$ 限制作用，整个 $Q_c$ 也不是任何有限阶 Takiff 模。
+光滑性只表示\emph{每个向量}有自己的高模态消灭界，并不提供全模统一的截断阶。
+由 Takiff 模诱导也不意味着属于原标准族 $M_{a',b'}$。
+
+\section{进一步局部化、中心约化与导出性质}
+
+以下均不以 $G_c$ 的内部分类为前提。证明分别见 \cite[Sections 8--10]{Unified}
+及 \cite[Section 5]{Addendum}。
+
+\paragraph{完整局部化与消灭子.}
+在普通包络代数 $U$ 中，
+\[
+\Ann_U M=\Ann_U D_FM=\Ann_U Q_c.
+\]
+$0\to M\to D_FM\to Q_c\to0$ 不分裂，且
+\[
+\Hom_\g(Q_c,M)=\Hom_\g(Q_c,D_FM)=\Hom_\g(M,Q_c)=0.
+\]
+若 $M$ 单，则 $M$ 是 $D_FM$ 的本质子模与唯一简单子模，故 $D_FM$ 不可分解。
+这与 \eqref{eq:head} 是两个不同的正合列。
+
+\paragraph{交换的商局部化.}
+若 $j\le b$、$j\ne c$，则
+\[
+\T_{f_j}\T_{f_c}M\cong
+\frac{D_{f_c,f_j}M}{D_{f_c}M+D_{f_j}M}
+\cong\T_{f_c}\T_{f_j}M.
+\]
+任意有限个不同自由 $f$-模态的商局部化同样与次序无关。
+若 $\lambda_L\ne0$，将 $f_c,\ldots,f_b$ 各作一次商局部化，则得到
+\[
+M_{a+b-c+1,c-1}(\chi^{(b-c+1)}),\qquad
+\chi^{(k)}(h_0)=\lambda_0+2k,
+\]
+其余参数不变。若再有 $\kappa\ne-2$，最终模单；这不推出中间商模单。
+
+\paragraph{导出函子.}
+对任意 $U$-模 $V$，统一定义 $\T_FV=\coker(V\to D_FV)$，则
+\[
+\begin{aligned}
+\T_FV&=(U[F^{-1}]/U)\otimes_UV,\\
+L_1\T_F(V)&\cong\{v\in V:F^nv=0\text{ 对某个 }n\ge1\},
+&L_j\T_F(V)&=0\quad(j\ge2).
+\end{aligned}
+\]
+故 $D_FQ_c=\T_FQ_c=0$，而 $L_1\T_F(Q_c)\cong Q_c$。
+
+\paragraph{中心约化与加入导子.}
+若交换代数 $R$ 通过 $U$-模自同态作用于 $V$，$I\subseteq R$ 为代数理想，则
+\[
+\T_F(V/IV)\cong(\T_FV)/I(\T_FV).
+\]
+临界层光滑模上的 Sugawara 算子满足这一适用条件；但此同构本身不保证非零、
+约化后 $F$ 单射或商模单。这里只涉及有限代数和构成的理想倍，不涉及闭理想的拓扑商。
+
+对 $\widetilde\g=\g\rtimes\C d$、$[d,x_i]=ix_i$，令
+$\mathcal I(V)=U(\widetilde\g)\otimes_UV$，则
+\[
+\mathcal I(\T_FV)\cong\T_F\mathcal I(V).
+\]
+$\mathcal I(V)\cong\C[d]\otimes V$ 的作用为
+$x_i(p(d)\otimes v)=p(d-i)\otimes x_iv$，并非平凡张量作用。
+诱导一般不保持单性、唯一极大子模或不可分解性，不能直接将定理 \ref{thm:main} 转移到这里。
+
+\paragraph{结论范围.}
+非边界商的 PBW、模态 profile、循环性与深区 simple head 已明确；
+深区整数参数的 $G_c$ 内部结构、浅区单性、临界约化后的非边界单性，
+以及完整参数同构分类，仍需独立论证。
+
+\begin{thebibliography}{9}
+\small\raggedright
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+\href{https://arxiv.org/abs/2404.03855v2}{arXiv:2404.03855v2}, 2024.
+Theorem 1.1; Section 2.4; Lemma 2.2.
+
+\bibitem{Unified}
+项目统一稿，\emph{Boundary and Nonboundary Localization Quotients of Smooth Affine Modules},
+2026 年 9 月。
+\href{https://github.com/haozhengding1628/affine-sl2-localization-quotients/blob/5f766461cb0a01d171b136b55a64cd1f214886de/outputs/localization_quotients_unified_en.tex}{\texttt{localization\_quotients\_unified\_en.tex}}。
+本文采用其已核查结构结论；其原列未决问题由下述附录部分解决。
+
+\bibitem{Addendum}
+项目附录，\emph{Additional Progress on Localization Quotients:
+Deep-region simplicity, the unique maximal submodule, and compatibility with central reduction},
+2026 年 9 月 15 日。
+\href{https://github.com/haozhengding1628/affine-sl2-localization-quotients/blob/5f766461cb0a01d171b136b55a64cd1f214886de/outputs/localization_quotients_additional_progress_en.tex}{\texttt{localization\_quotients\_additional\_progress\_en.tex}}。
+\end{thebibliography}
+\vspace{2pt}
+{\footnotesize 仓库核对版本：\texttt{5f766461cb0a01d171b136b55a64cd1f214886de}。
+本文为结果摘要及必要证明，不构成对全部内部结构的分类。}
+\end{document}

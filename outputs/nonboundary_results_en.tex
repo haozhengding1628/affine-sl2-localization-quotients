@@ -1,0 +1,573 @@
+% !TeX program = xelatex
+% Compile twice: xelatex -interaction=nonstopmode nonboundary_results_en.tex
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=24mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,enumitem,microtype}
+\usepackage[hidelinks,unicode]{hyperref}
+\hypersetup{pdftitle={Verified results on nonboundary localization quotients},pdfsubject={PBW, simplicity, the maximal submodule, and Takiff realizations}}
+\usepackage{fancyhdr}
+\setlength{\emergencystretch}{2em}
+\setlength{\parskip}{2pt}
+\setlist{nosep,leftmargin=2em}
+\allowdisplaybreaks[2]
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Nonboundary localization quotients: verified results}
+\fancyhead[R]{\small 2026-09-22}
+\fancyfoot[C]{\thepage}
+\newtheoremstyle{upright}{5pt}{5pt}{\normalfont}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{upright}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\g}{\mathfrak g}
+\newcommand{\s}{\mathfrak s}
+\newcommand{\p}{\mathfrak p}
+\newcommand{\slc}{\mathfrak{sl}_2}
+\newcommand{\T}{\mathcal T}
+\newcommand{\D}{\mathcal D}
+\newcommand{\X}{\mathcal X}
+\DeclareMathOperator{\ad}{ad}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\Ann}{Ann}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\soc}{soc}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\Supp}{Supp}
+\DeclareMathOperator{\Ind}{Ind}
+\DeclareMathOperator{\pole}{pole}
+\DeclareMathOperator{\coker}{coker}
+\title{\vspace{-10mm}Verified Results on Nonboundary Localization Quotients\\[2pt]
+\normalsize PBW structure, simplicity, the maximal submodule, and Takiff realizations}
+\author{}
+\date{September 22, 2026}
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+{\Large\bfseries Verified Results on Nonboundary Localization Quotients}\par\vspace{3pt}
+{\normalsize PBW structure, simplicity, the maximal submodule, and Takiff realizations}\par\vspace{5pt}
+{\small September 22, 2026}
+\end{center}
+\vspace{-3mm}
+\begin{abstract}
+This note collects the audited results on nonboundary localization quotients
+of smooth induced modules over affine $\slc$. In the deep region, under the
+simplicity assumption on the original module, there is an exact simplicity
+criterion; at integral parameters the locally nilpotent part of the opposite
+root is the unique maximal submodule. The basic example is induced from a
+Takiff localization quotient, but the whole affine module does not factor
+through any finite-order current-algebra truncation. The internal submodule
+classification of $G_c$ and shallow-region simplicity are not among the
+proved statements. The main sources are the unified note and the addendum
+\cite{Unified,Addendum}; the erroneous weight-tail filtration of an earlier
+structure draft is not used here.
+\end{abstract}
+
+\section{Setup and parameter ranges}
+
+All objects are over $\C$. Omitting first the degree derivation, let
+\[
+\g=(\slc\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g),\qquad x_i=x\otimes t^i,
+\]
+with
+\[
+\begin{aligned}
+[e_i,f_j]&=h_{i+j}+i\delta_{i+j,0}K,& [h_i,h_j]&=2i\delta_{i+j,0}K,\\
+[h_i,e_j]&=2e_{i+j},&[h_i,f_j]&=-2f_{i+j},
+\end{aligned}
+\]
+$K$ central and $[e_i,e_j]=[f_i,f_j]=0$. Fix $a,b\in\Z$ with $L=a+b+1\ge1$
+and set
+\[
+S_{a,b}=\Span\{K,h_i\ (i\ge0),e_i\ (i>a),f_j\ (j>b)\}.
+\]
+The character $\chi$ satisfies $\chi(K)=\kappa$ and $\chi(h_i)=\lambda_i$,
+vanishes on root vectors, and we set $\lambda_i=0$ for all $i>L$. Write
+\[
+M=M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad u=1\otimes1.
+\]
+The FGXZ criterion is \cite[Theorem 1.1]{FGXZ}
+\begin{equation}\label{eq:original-simple}
+M\ \text{simple}\quad\Longleftrightarrow\quad \lambda_L\ne0\ \text{and}\ \kappa\ne-2.
+\end{equation}
+
+Throughout we fix a nonboundary index $c<b$ and write
+\[
+\begin{gathered}
+F=f_c,\qquad d_*=b-c,\qquad D_FM=U[F^{-1}]\otimes_U M,\\
+Q_c=\T_FM=D_FM/M,\qquad w_m=F^{-m}u+M\quad(m\ge1).
+\end{gathered}
+\]
+$\ad F$ is locally nilpotent, so the Ore localization exists, and PBW makes
+$F$ injective on $M$. \emph{$Q_c$ is a quotient localization, not the full
+localization; $F^{-1}$ is not defined on $Q_c$.} We distinguish
+\[
+\begin{array}{lll}
+\text{deep region:}&c\le-a-1,&d_*\ge L,\\
+\text{shallow region:}&-a\le c<b,&1\le d_*<L.
+\end{array}
+\]
+Unless stated otherwise, the structural results do not require
+\eqref{eq:original-simple}.
+
+\section{Structure at arbitrary nonboundary indices}
+
+\begin{proposition}[PBW, root modes, and weight spaces]\label{prop:pbw}
+Let $\X$ be the set of ordered PBW monomials (including the empty word) in
+the free modes
+\[
+f_j\ (j\le b,\ j\ne c),\qquad e_i\ (i\le a),\qquad h_r\ (r<0).
+\]
+Then $\{F^{-m}Xu+M:m\ge1,\ X\in\X\}$ is a basis of $Q_c$, and
+\[
+\ker(F^r|_{Q_c})=\Span\{F^{-m}Xu+M:1\le m\le r,\ X\in\X\}.
+\]
+In particular $Q_c\ne0$, and every nonzero submodule meets $\ker F$
+nontrivially. The negative root modes act as follows:
+\[
+\begin{array}{c|c}
+\text{index}&\text{action on }Q_c\\ \hline
+j=c&\text{surjective and locally nilpotent}\\
+j\le b,\ j\ne c&\text{injective but not surjective}\\
+j>b&\text{locally nilpotent}
+\end{array}
+\]
+$Q_c$ is a smooth weight module with $K=\kappa$ and $h_0$ semisimple, and
+\[
+\Supp_{h_0}Q_c=\lambda_0+2\Z,
+\qquad \dim (Q_c)_\eta=\aleph_0\quad(\eta\in\lambda_0+2\Z).
+\]
+It has no nonzero finite-dimensional submodules or quotients, and it is not
+integrable for the full affine algebra.
+\end{proposition}
+\begin{proof}
+Put $F$ first among the free PBW variables: $M$ is a free $\C[F]$-module, and
+localization plus quotienting gives the basis. The remaining free $f_j$ are
+independent polynomial variables. For the tail root modes use $f_ju=0$ and
+the local nilpotence of $\ad f_j$. The weight formula is
+$h_0(F^{-m}Xu)=(\lambda_0+2m+2\#e(X)-2\#f(X))F^{-m}Xu$; powers of $h_{-1}$
+give infinite multiplicities. Localization preserves smoothness, see
+\eqref{eq:commutation}. On a finite-dimensional quotient $F$ cannot be both
+surjective and locally nilpotent; a finite-dimensional smooth affine module
+is trivial, and the injectivity of $f_{c+1}$ excludes trivial submodules.
+\end{proof}
+
+\begin{proposition}[Cartan modes, the gap, and Hom-vanishing]\label{prop:profiles}
+If $1\le i\le d_*$, $0\ne v\in Q_c$ and $z\in\C$, then
+\[
+\pole_F((h_i-z)v)=\pole_F(v)+1.
+\]
+Hence $h_i$ has no nonzero locally finite vectors; if $i>d_*$, then
+$h_i-\lambda_i$ is locally nilpotent on $Q_c$. The set of locally nilpotent
+negative root modes is exactly $\{c\}\cup\{j:j>b\}$. Consequently $Q_c$ is
+not isomorphic to any standard module $M_{a',b'}(\psi)$, and
+\[
+\Hom_\g(M_{a',b'}(\psi),Q_c)=0,
+\qquad
+\Hom_\g(\T_{f_c}M,\T_{f_{c'}}M)=0\quad(c\ne c',\ c,c'\le b).
+\]
+\end{proposition}
+\begin{proof}
+In the full localization,
+\begin{equation}\label{eq:commutation}
+\begin{aligned}
+h_iF^{-m}&=F^{-m}h_i+2mF^{-m-1}f_{c+i},\\
+e_iF^{-m}&=F^{-m}e_i-mF^{-m-1}(h_{i+c}+i\delta_{i+c,0}K)\\
+&\hspace{22mm}-m(m+1)F^{-m-2}f_{i+2c}.
+\end{aligned}
+\end{equation}
+For $i\le d_*$ the top-pole coefficient contains the nonzero free variable
+$f_{c+i}$; for $i>d_*$ one has $h_iw_m=\lambda_iw_m$, and local nilpotence
+follows from smoothness and positive index shifts. Standard modules have a
+full upper tail of locally nilpotent $f$-modes and a cyclic vector that is an
+$h_1$-eigenvector. The last Hom-vanishing comes from $f_c$-torsion in the
+source and $f_c$-injectivity in the target. Here $Q_c=\sum_{m\ge1}Uw_m$:
+grade numerator words by $2\#e+\#h$; moving words past denominators gives
+correction terms of strictly lower grade, so induction applies.
+\end{proof}
+
+\section{Deep region: simplicity and the unique maximal submodule}
+
+In this section $c\le-a-1$, and we set
+\[
+E=e_{-c},\qquad H=h_0-cK,\qquad \mu=\lambda_0-c\kappa,
+\qquad G_c=\{v\in Q_c:E^nv=0\ \text{for some}\ n\ge1\}.
+\]
+Then $(E,H,F)$ is an $\slc$-triple with $Eu=0$, $Hu=\mu u$, and
+\begin{equation}\label{eq:pure}
+Ew_m=-m(\mu+m+1)w_{m+1},\qquad Hw_m=(\mu+2m)w_m.
+\end{equation}
+
+\begin{proposition}[No simplicity assumption on the original module]\label{prop:G}
+$G_c$ is a proper submodule of $Q_c$, and
+\[
+G_c=0\ \Longleftrightarrow\ \mu\notin\Z.
+\]
+If $\mu\in\Z$, then for $k\ge\max(1,\mu+2)$,
+\[
+0\ne f_b^kw_1\in G_c,\qquad E^{2k-\mu-1}(f_b^kw_1)=0.
+\]
+$E$ is injective on $Q_c/G_c$. Moreover $Q_c$ is always cyclic, and
+\[
+Q_c=Uw_1\ \Longleftrightarrow\ \mu\notin\{-2,-3,\ldots\};
+\qquad \mu=-s,\ s\ge2\ \Longrightarrow\ Q_c=Uw_s\ne Uw_1.
+\]
+\end{proposition}
+\begin{proof}
+$\ad E$ is locally nilpotent, so $G_c$ is a submodule; \eqref{eq:pure} for
+sufficiently large $m$ produces vectors outside $G_c$. If $0\ne v\in\ker E$
+is an $H$-weight vector of weight $\nu$, let $n$ be minimal with $F^nv=0$;
+then $0=EF^nv=n(\nu-n+1)F^{n-1}v$, so $\nu=n-1\in\Z$. With
+$\nu\in\mu+2\Z$ this gives $G_c=0$ in the nonintegral case.
+
+In the integral case let $Y=f_b$ and $\eta=\lambda_{d_*}$. On $\C[F,Y]u$,
+\[
+E(F^jY^\ell u)=j(\mu-j+1-2\ell)F^{j-1}Y^\ell u
++\ell\eta F^jY^{\ell-1}u.
+\]
+Take $v_k=\sum_{j=0}^k a_jF^jY^{k-j}u$ with
+\[
+a_0=1,\qquad a_j=-\frac{(k-j+1)\eta}{j(\mu-2k+j+1)}a_{j-1}.
+\]
+The denominators are nonzero, and $Ev_k=0$, $Hv_k=(\mu-2k)v_k$. Applying the
+rank-one formula to $F^{-1}v_k$ and passing to the quotient gives the
+claimed nonzero vector and the nilpotence bound. $Ev\in G_c\Rightarrow v\in
+G_c$ gives injectivity on the quotient. Cyclicity follows from
+\eqref{eq:pure}, $Fw_m=w_{m-1}$ ($w_0=0$) and generation by pure fractions;
+for $\mu=-s$ one has $w_1\in G_c$ but $w_s\notin G_c$.
+\end{proof}
+
+\begin{theorem}[Exact deep-region criterion and simple head]\label{thm:main}
+Assume
+\begin{equation}\label{eq:main-assumptions}
+\lambda_L\ne0,\qquad \kappa\ne-2,\qquad c<b,\qquad c\le-a-1.
+\end{equation}
+Then
+\[
+\boxed{\quad Q_c\ \text{simple}\quad\Longleftrightarrow\quad
+\lambda_0-c\kappa\notin\Z.\quad}
+\]
+For every $\mu$, every proper submodule is contained in $G_c$. Hence $G_c$ is
+the unique maximal submodule, $\rad Q_c=G_c$, $Q_c/G_c$ is simple, and $Q_c$
+is indecomposable. If $\mu\in\Z$, then $0\ne G_c\ne Q_c$ and there is a
+nonsplit exact sequence
+\begin{equation}\label{eq:head}
+0\longrightarrow G_c\longrightarrow Q_c\longrightarrow Q_c/G_c\longrightarrow0.
+\end{equation}
+In this integral case $\soc Q_c=\soc G_c$, which does not determine whether
+that socle is zero.
+\end{theorem}
+
+\begin{proof}
+By \eqref{eq:original-simple}, $M$ is simple; $E$ is locally nilpotent on
+$M$, $F$ is injective, and $H$ is semisimple. We prove the key containment
+\cite[Section 2]{Addendum}. Let $N\subseteq Q_c$ be a submodule not
+contained in $G_c$, and let $P\subseteq D_FM$ be its inverse image. Choose an
+$H$-weight vector $w\in P$ whose class $q\in N$ satisfies $E^rq\ne0$ for all
+$r\ge0$. The rank-one Casimir
+\[
+C=H^2+2H+4FE
+\]
+acts locally finitely on $M$ and $D_FM$, because for $Hz=\eta z$,
+\[
+F^nE^nz=A_n(C;\eta)z,
+\qquad A_n(t;\eta)=4^{-n}\prod_{j=0}^{n-1}
+\bigl(t-(\eta+2j)(\eta+2j+2)\bigr).
+\]
+$E$ is locally nilpotent on $M$, and $C$ commutes with $F^{-1}$. Choose
+$0\ne p(t)$ with $p(C)w=0$. Replacing $w$ by a sufficiently high $v=E^rw$
+of weight $\nu$, we may arrange
+$p((\nu+2j)(\nu+2j+2))\ne0$ for all $j\ge0$. A B\'ezout identity provides
+polynomials $B_n$ with
+\[
+v=F^nE^nB_n(C)v\in F^nP\qquad(n\ge0).
+\]
+Thus $0\ne v\in W(P):=\bigcap_{n\ge0}F^nP$. The local nilpotence of $\ad F$
+makes $W(P)$ a $U$-submodule: if $(\ad F)^{\ell+1}s=0$, then
+\[
+sF^{n+\ell}=\sum_{j=0}^{\ell}(-1)^j\binom{n+\ell}{j}
+F^{n+\ell-j}(\ad F)^j(s).
+\]
+$W(P)$ is also stable under $F^{-1}$ and meets $M$ nontrivially. Since $M$
+is simple, $M\subseteq W(P)$; localizing gives $P=D_FM$ and $N=Q_c$. Together
+with Proposition~\ref{prop:G} this yields the criterion and the unique
+maximal submodule. In any nontrivial direct-sum decomposition both summands
+would be contained in $G_c$, so $Q_c$ is indecomposable and \eqref{eq:head}
+does not split. In the integral case every simple submodule is proper, hence
+the socle equality.
+\end{proof}
+
+\begin{remark}[Cyclicity is not simplicity]
+For $M_{-1,1}$, $c=0$, $\lambda_0=0$, $\lambda_1\ne0$, $\kappa\ne-2$, one has
+$Q_0=Uw_1$, but $0\ne f_1^2w_1\in G_0$ and $e_0^3f_1^2w_1=0$, so $Q_0$ is
+not simple. Theorem~\ref{thm:main} must not be transferred verbatim to the
+raw critical or degenerate induced modules.
+\end{remark}
+
+\section{Current limits: the maximal submodule's interior and the shallow region}
+
+\begin{proposition}[Transverse $\slc$ structure; not an affine submodule
+classification]\label{prop:sl2}
+In the deep region let $\s=\langle E,H,F\rangle\cong\slc$ and
+$P_\nu=\ker E\cap\{v\in Q_c:Hv=\nu v\}$. As $\s$-modules,
+\[
+G_c\cong\bigoplus_{\nu\in\Z_{\ge0}}P_\nu\otimes L(\nu),
+\]
+where $L(\nu)$ is the finite-dimensional simple $\slc$-module of highest
+weight $\nu$, and the multiplicity spaces $P_\nu$ need not be
+finite-dimensional. For $0\ne p\in P_\nu$ one has $\nu\in\mu+2\Z$ and
+$\pole_F(p)=\nu+1$.
+\end{proposition}
+\begin{proof}
+$E,F$ are locally nilpotent on $G_c$ and $H$ is semisimple; PBW places every
+vector in a finite-dimensional $\s$-submodule. Complete reducibility gives
+the decomposition. A highest-weight vector satisfies $F^{\nu+1}p=0$ and
+$F^\nu p\ne0$; the kernel formula of Proposition~\ref{prop:pbw} gives the
+pole equality.
+\end{proof}
+
+One must not treat $\bigoplus_{\nu\ge n}P_\nu\otimes L(\nu)$ as a
+$\g$-submodule automatically. Affine modes have components that lower the
+transverse highest weight; for instance, for $p\in P_\nu$ with $\nu\ge2$,
+\[
+f_jp-\frac1\nu Fh_{j-c}p
+-\frac1{\nu(\nu+1)}F^2e_{j-2c}p\in P_{\nu-2}
+\qquad(j\ne c).
+\]
+This is a direct $\slc$ projection formula; it is not asserted that its
+value is always zero. Consequently, at integral parameters the questions
+whether $G_c$ is simple, the value of $\soc G_c$, and whether $Q_c$ has
+finite composition length are not settled by the results above. In
+particular one may not claim $\soc Q_c=0$ or infinite length; length two is
+equivalent to simplicity of $G_c$, which is likewise undecided.
+
+\begin{proposition}[Shallow region]\label{prop:shallow}
+If $-a\le c<b$, then $E=e_{-c}$ is injective on $Q_c$, hence $G_c=0$. If in
+addition $\lambda_L\ne0$, then $Q_c=Uw_1$.
+\end{proposition}
+\begin{proof}
+$E$ is a free PBW mode. Grade numerators by $2\#e+\#h$: the top action of
+$E$ is multiplication by a free variable, and commutation corrections have
+lower grade, so $E$ is injective. Let $Y=e_{L-c}$; the shallow region gives
+$Yu=0$, $[Y,F]=h_L$ and $f_{L+c}u=0$, hence $Yw_m=-m\lambda_Lw_{m+1}$, which
+yields cyclicity.
+\end{proof}
+
+In the shallow region $E$ is not locally nilpotent on the original module
+$M$, so the proof of Theorem~\ref{thm:main} cannot deduce simplicity of
+$Q_c$ from $G_c=0$. Under $\lambda_L\ne0$ the nonzero cyclicity guarantees
+the existence of a maximal submodule; its uniqueness and the exact
+simplicity condition for $Q_c$ remain undetermined.
+
+\section{The precise relation to Takiff modules}
+
+Write
+\[
+\mathfrak t_N=\slc[t]/(\slc\otimes t^{N+1}\C[t])\quad(N\ge1),
+\qquad \p=\slc[t]\oplus\C K.
+\]
+$\mathfrak t_1$ is the usual Takiff algebra; $N>1$ gives higher-order
+truncated current algebras. \emph{Being a Takiff module, containing a Takiff
+subspace, and being induced from a Takiff module are three different
+statements.}
+
+\subsection{The basic example: exact model and induced realization}
+Take $Q_0=\T_{f_0}M_{-1,1}$ and define
+\[
+V=\Span\{f_1^kw_m:m\ge1,\ k\ge0\}
+\cong\C[x,x^{-1},y]/\C[x,y],\qquad f_1^kw_m\longleftrightarrow x^{-m}y^k.
+\]
+Then $V$ is stable under $\slc[t]$, all $e_i,f_i,h_i$ ($i\ge2$) act by zero on
+it, so it is a $\mathfrak t_1$-module. The exact action is
+\cite[Section 6]{Unified}
+\begin{equation}\label{eq:takiff}
+\begin{aligned}
+f_0&=x,& f_1&=y,\\
+h_0&=\lambda_0-2x\partial_x-2y\partial_y,
+&h_1&=\lambda_1-2y\partial_x,\\
+e_0&=\lambda_0\partial_x+\lambda_1\partial_y
+-x\partial_x^2-2y\partial_x\partial_y,
+&e_1&=\lambda_1\partial_x-y\partial_x^2.
+\end{aligned}
+\end{equation}
+These operators preserve the polynomial subspace being quotiented out, so
+the action is well defined. Endowing $K$ with the scalar action $\kappa$, PBW
+also gives
+\begin{equation}\label{eq:ind-basic}
+\boxed{\quad Q_0\cong U(\g)\otimes_{U(\p)}V.\quad}
+\end{equation}
+Indeed, the natural map $X\otimes v\mapsto Xv$ sends the PBW basis of
+$U(\slc\otimes t^{-1}\C[t^{-1}])\otimes V$ to the right-normal localized PBW
+basis. $V$ is not a $\g$-submodule: for instance
+$h_{-1}w_1=F^{-1}h_{-1}u+2F^{-2}f_{-1}u+M\notin V$. Thus the basic example is
+precisely an \emph{affine module induced from a Takiff localization
+quotient}.
+
+\subsection{Realizations available directly at general indices}
+For $M_{-1,N}$ let $W_N=\C[f_0,\ldots,f_N]u$. This is a $\mathfrak t_N$-module
+with $M_{-1,N}\cong U(\g)\otimes_{U(\p)}W_N$ \cite[Lemma 2.2]{FGXZ}. The
+same PBW comparison gives, for $0\le r<N$,
+\begin{equation}\label{eq:ind-general}
+\T_{f_r}M_{-1,N}\cong U(\g)\otimes_{U(\p)}V_{N,r},\qquad
+V_{N,r}:=\T_{f_r}W_N
+\cong\frac{\C[z_0,\ldots,z_N,z_r^{-1}]}{\C[z_0,\ldots,z_N]}.
+\end{equation}
+The right-hand fractions are vector-space models; the action on $V_{N,r}$
+comes from localizing $W_N$ and taking the quotient. The higher-mode ideal
+vanishes on $W_N$ and is preserved by $\ad f_r$, so it also vanishes on
+$V_{N,r}$. \eqref{eq:ind-general} requires neither noncritical nor
+nondegenerate hypotheses, and it does not by itself give simplicity of the
+induced module.
+
+Using the twisted convention $x\cdot_{\rm new}v=\sigma_k(x)v$ with
+\[
+\sigma_k(e_i)=e_{i+k},\quad \sigma_k(f_i)=f_{i-k},\quad
+\sigma_k(h_i)=h_i+k\delta_{i,0}K,\quad \sigma_k(K)=K,
+\]
+take $k=a+1$: then
+\[
+(Q_c)^{\sigma_{a+1}}\cong\T_{f_r}M_{-1,L}(\chi'),\quad
+r=c+a+1,\quad \chi'(h_0)=\lambda_0+(a+1)\kappa,
+\]
+with the remaining parameters unchanged. Hence for $-a-1\le c<b$ the Takiff
+induced realization above applies directly; this covers the whole shallow
+region and the deep-region endpoint $c=-a-1$. This is a twisted isomorphism,
+not an untwisted one.
+
+For arbitrary deep-region indices, the alternative normalization is
+\[
+(Q_c)^{\sigma_{-c}}\cong\T_{f_0}M_{A,B}(\chi''),\qquad
+A=a+c\le-1,\quad B=b-c,\quad \chi''(h_0)=\mu.
+\]
+Its subspace
+\[
+V_B=\Span\{f_0^{-m}f_1^{k_1}\cdots f_B^{k_B}u+M:m\ge1,\ k_i\ge0\}
+\]
+is stable under $\slc[t]$ and is annihilated by
+$\slc\otimes t^{B+1}\C[t]$, so it is a $\mathfrak t_B$-module. This is a
+direct consequence of positive-mode reordering. If $A<-1$, this note does
+not extend the basic induction isomorphism \eqref{eq:ind-basic} verbatim to
+this subspace.
+
+\subsection{No finite-order truncation carries the whole nonboundary quotient}
+For every $Q_c$ and every $R\ge1$,
+\begin{equation}\label{eq:no-truncation}
+(\slc\otimes t^R\C[t])Q_c\ne0.
+\end{equation}
+Otherwise $h_R$ would vanish on all of $Q_c$; then
+$[h_R,f_{c+1-R}]=-2f_{c+1}$ forces $f_{c+1}$ to vanish as well, contradicting
+Proposition~\ref{prop:pbw}. So even for the natural restricted $\slc[t]$
+action, the whole module $Q_c$ is not a Takiff module of any finite order.
+Smoothness only says that \emph{each vector} has its own bound annihilating
+high modes; there is no uniform truncation order for the whole module.
+Being induced from a Takiff module also does not place the result in the
+original standard family $M_{a',b'}$.
+
+\section{Further localization, central reduction, and derived properties}
+
+None of the following presupposes the internal classification of $G_c$.
+Proofs: \cite[Sections 8--10]{Unified} and \cite[Section 5]{Addendum}.
+
+\paragraph{Full localization and annihilators.}
+In the ordinary enveloping algebra $U$,
+\[
+\Ann_U M=\Ann_U D_FM=\Ann_U Q_c.
+\]
+$0\to M\to D_FM\to Q_c\to0$ does not split, and
+\[
+\Hom_\g(Q_c,M)=\Hom_\g(Q_c,D_FM)=\Hom_\g(M,Q_c)=0.
+\]
+If $M$ is simple, then $M$ is the essential and the unique simple submodule
+of $D_FM$, so $D_FM$ is indecomposable. This is a different exact sequence
+from \eqref{eq:head}.
+
+\paragraph{Commuting quotient localizations.}
+If $j\le b$ and $j\ne c$, then
+\[
+\T_{f_j}\T_{f_c}M\cong
+\frac{D_{f_c,f_j}M}{D_{f_c}M+D_{f_j}M}
+\cong\T_{f_c}\T_{f_j}M.
+\]
+Quotient localization in any finite set of distinct free $f$-modes is
+independent of the order. If $\lambda_L\ne0$, localizing once each of
+$f_c,\ldots,f_b$ produces
+\[
+M_{a+b-c+1,c-1}(\chi^{(b-c+1)}),\qquad
+\chi^{(k)}(h_0)=\lambda_0+2k,
+\]
+with the remaining parameters unchanged. If in addition $\kappa\ne-2$, the
+final module is simple; this does not imply simplicity of the intermediate
+quotients.
+
+\paragraph{Derived functors.}
+For any $U$-module $V$, define $\T_FV=\coker(V\to D_FV)$. Then
+\[
+\begin{aligned}
+\T_FV&=(U[F^{-1}]/U)\otimes_UV,\\
+L_1\T_F(V)&\cong\{v\in V:F^nv=0\ \text{for some}\ n\ge1\},
+&L_j\T_F(V)&=0\quad(j\ge2).
+\end{aligned}
+\]
+Hence $D_FQ_c=\T_FQ_c=0$, while $L_1\T_F(Q_c)\cong Q_c$.
+
+\paragraph{Central reduction and the derivation.}
+If a commutative algebra $R$ acts on $V$ by $U$-module endomorphisms and
+$I\subseteq R$ is an algebraic ideal, then
+\[
+\T_F(V/IV)\cong(\T_FV)/I(\T_FV).
+\]
+The Sugawara operators on smooth modules at the critical level satisfy this
+hypothesis; the isomorphism itself guarantees neither nonvanishing nor
+injectivity of $F$ after reduction nor simplicity of the quotient. Only
+ideal multiples by finite algebraic sums are involved; no assertion is made
+about topological quotients of closed ideals.
+
+For $\widetilde\g=\g\rtimes\C d$ with $[d,x_i]=ix_i$, put
+$\mathcal I(V)=U(\widetilde\g)\otimes_UV$. Then
+\[
+\mathcal I(\T_FV)\cong\T_F\mathcal I(V),
+\]
+with $\mathcal I(V)\cong\C[d]\otimes V$ and the action
+$x_i(p(d)\otimes v)=p(d-i)\otimes x_iv$, which is not the trivial tensor
+action. Induction does not in general preserve simplicity, the unique
+maximal submodule, or indecomposability, so Theorem~\ref{thm:main} does not
+transfer verbatim.
+
+\paragraph{Scope.}
+The PBW structure, the mode profiles, and the cyclicity of the nonboundary
+quotients, together with the deep-region simple head, are established. The
+internal structure of $G_c$ at deep integral parameters, shallow-region
+simplicity, nonboundary simplicity after critical reduction, and the full
+parameter isomorphism classification still require independent arguments.
+
+\begin{thebibliography}{9}
+\small\raggedright
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+\href{https://arxiv.org/abs/2404.03855v2}{arXiv:2404.03855v2}, 2024.
+Theorem 1.1; Section 2.4; Lemma 2.2.
+
+\bibitem{Unified}
+Project unified note, \emph{Boundary and Nonboundary Localization Quotients
+of Smooth Affine Modules}, September 2026.
+\href{https://github.com/haozhengding1628/affine-sl2-localization-quotients/blob/5f766461cb0a01d171b136b55a64cd1f214886de/outputs/localization_quotients_unified_en.tex}{\texttt{localization\_quotients\_unified\_en.tex}}.
+This note uses its audited structural conclusions; its open problems are
+partially resolved by the addendum below.
+
+\bibitem{Addendum}
+Project addendum, \emph{Additional Progress on Localization Quotients:
+Deep-region simplicity, the unique maximal submodule, and compatibility
+with central reduction}, September 15, 2026.
+\href{https://github.com/haozhengding1628/affine-sl2-localization-quotients/blob/5f766461cb0a01d171b136b55a64cd1f214886de/outputs/localization_quotients_additional_progress_en.tex}{\texttt{localization\_quotients\_additional\_progress\_en.tex}}.
+\end{thebibliography}
+\vspace{2pt}
+{\footnotesize Repository version checked: \texttt{5f766461cb0a01d171b136b55a64cd1f214886de}.
+This note is a summary of results with the necessary proofs; it does not
+constitute a classification of the full internal structure.}
+\end{document}
