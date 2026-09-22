@@ -4,7 +4,7 @@
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{xcolor}
 \usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
-\hypersetup{pdftitle={The locally nilpotent part of nonboundary localization quotients},pdfauthor={Discussion note}}
+\hypersetup{pdftitle={The locally nilpotent part of nonboundary localization quotients (corrected)},pdfauthor={Discussion note}}
 \newcommand{\C}{\mathbb C}
 \newcommand{\Z}{\mathbb Z}
 \newcommand{\g}{\widehat{\mathfrak{sl}}_2}
@@ -12,7 +12,6 @@
 \newcommand{\ad}{\operatorname{ad}}
 \newcommand{\im}{\operatorname{Im}}
 \newcommand{\D}{\mathcal D}
-\newcommand{\wt}{\operatorname{wt}}
 \newcommand{\Span}{\operatorname{span}_{\C}}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
@@ -20,368 +19,272 @@
 \newtheorem{corollary}[theorem]{Corollary}
 \setlength{\emergencystretch}{2em}
 \title{The Locally Nilpotent Part of Nonboundary Localization Quotients\\
-  \large \texorpdfstring{\(G_c\)}{G_c} is never simple: a weight filtration\\
-  with simple quotients, zero socle, and infinite length}
-  \large \(G_c\) is never simple: a weight filtration with simple quotients,\\
-  zero socle, and infinite length}
-\author{Progress report}
+  \large Corrected E-action and primitive recursion; the weight-filtration
+  claims are withdrawn}
+\author{Progress report, corrected after the audit of 2026-09-22}
 \date{September 22, 2026}
 \begin{document}
 \maketitle
 
+\begin{abstract}
+This is a corrected version of the September 22 note on
+$G_c=\{v\in\mathcal T_{f_c}M_{a,b}:e_{-c}^nv=0$ for some $n\}$ in the deep
+region. The independent audit (\texttt{audits/2026-09-22/}) found explicit
+counterexamples to the E-action formula, to the primitive-space description
+$P_\nu\cong\{X:T^{\nu+1}(X)u=0\}$, to the claim $P_0=\C w_1$ at $\mu=-2$,
+and to the statement that the weight tails $G^{\ge\nu}$ are affine
+submodules. This version records the corrected E-action through the full
+components $A_r$, the corrected triangular recursion for primitive vectors,
+the infinite family $Z^nw_1$ in $P_0$, the complete set of projections
+including the lowering map $\ell_j:P_\nu\to P_{\nu-2}$, and withdraws the
+weight-filtration consequences. The statements proved earlier and not
+affected are the boundary isomorphism, the deep-region simplicity criterion,
+the unique maximal submodule with simple head, and the algebraic central
+reduction compatibility. The internal classification of $G_c$ (simplicity,
+socle, length) is open.
+\end{abstract}
+
 \section{Definitions, notation, and assumptions}
 
 \paragraph{Affine algebra and induced modules.}
-All vector spaces and tensor products are over \(\C\). We use the affine
-Lie algebra without the degree derivation:
+As in the unified note: $\g=(\mathfrak{sl}_2\otimes\C[t,t^{-1}])\oplus\C K$,
 \[
- \g=(\mathfrak{sl}_2\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g).
+ [e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K,\quad [h_i,h_j]=2i\delta_{i+j,0}K,\quad
+ [h_i,e_j]=2e_{i+j},\quad [h_i,f_j]=-2f_{i+j},
 \]
-Write \(x_i=x\otimes t^i\). For \(i,j\in\Z\), the brackets are
-\begin{equation}\label{eq:brackets}
-\begin{aligned}
- [e_i,f_j]&=h_{i+j}+i\delta_{i+j,0}K,&
- [h_i,h_j]&=2i\delta_{i+j,0}K,\\
- [h_i,e_j]&=2e_{i+j},&
- [h_i,f_j]&=-2f_{i+j},
-\end{aligned}
-\end{equation}
-with \(K\) central and \([e_i,e_j]=[f_i,f_j]=0\).
-Fix \(a,b\in\Z\) with \(a+b\ge0\) and put \(L=a+b+1\ge1\). Set
-\[
- S_{a,b}=\Span\{K,\ h_i\ (i\ge0),\ e_i\ (i>a),\ f_j\ (j>b)\}.
-\]
-This is a Lie subalgebra. A character \(\chi:S_{a,b}\to\C\) is specified
-by \(c,\lambda_0,\ldots,\lambda_L\in\C\) through
-\[
- \chi(K)=c,\quad \chi(h_i)=\lambda_i\ (0\le i\le L),\quad
- \chi(h_i)=0\ (i>L),\quad \chi(e_i)=\chi(f_j)=0,
-\]
-with \(\lambda_i:=0\) for \(i>L\). Define
-\[
- \C_\chi=\C 1_\chi,\qquad
- M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad u=1\otimes1_\chi.
-\]
-By \cite[Theorem~1.1]{FGXZ},
-\[
- M_{a,b}(\chi)\ \text{is simple}\ \Longleftrightarrow\
- \lambda_L\ne0\ \text{and}\ c\ne-2.
-\]
-This criterion is not used in Sections 2--4 below.
+$K$ central, $[e_i,e_j]=[f_i,f_j]=0$. Fix $a,b\in\Z$, $a+b\ge0$,
+$L=a+b+1\ge1$, and
+$S_{a,b}=\Span\{K,h_i\ (i\ge0),e_i\ (i>a),f_j\ (j>b)\}$. The character
+$\chi:S_{a,b}\to\C$ is determined by $\kappa=\chi(K)$ and
+$\lambda_i=\chi(h_i)$, $0\le i\le L$, with $\lambda_i=0$ for $i>L$;
+$M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi$, $u=1\otimes1_\chi$. The central
+level is denoted by $\kappa$ (not $c$), reserving $c$ for the localization
+index.
 
 \paragraph{Deep-region localization.}
-Fix \(c<b\) and set \(F=f_c\). The derivation \(\ad F\) is locally
-nilpotent on \(U\), so the Ore localization \(U_F=U[F^{-1}]\) exists and
-\[
- \D_FM=U_F\otimes_U M,\qquad T_FM=\D_FM/M.
-\]
-PBW with \(F\) first makes \(M\) free over \(\C[F]\), so \(F\) acts
-injectively and the quotient notation is legitimate. The deep region is
-\[
- c\le-a-1,\qquad\text{equivalently}\qquad d_*:=b-c\ge L.
-\]
-The spectral-flow automorphism \(\sigma_{-c}\), defined on generators by
-\(e_i\mapsto e_{i-c}\), \(f_i\mapsto f_{i+c}\), \(h_i\mapsto
-h_i-c\delta_{i,0}K\), identifies \(T_FM_{a,b}(\chi)\) with
-\[
- Q=\mathcal T_{f_0}M_{A,B}(\chi'),\qquad
- A=a+c\le-1,\quad B=b-c=d_*\ge L,\quad
- \mu:=\chi'(h_0)=\lambda_0-c\kappa.
-\]
-Write
-\[
- E=e_0,\qquad H=h_0,\qquad w_m=f_0^{-m}u+M\quad(m\ge1).
-\]
-Then \([E,f_0]=H\), \(Eu=0\), \(Hu=\mu u\), so \((E,H,f_0)\) is an
-\(\slc\)-triple with \(u\) of weight \(\mu\).
+Fix $c<b$ with $c\le-a-1$ (equivalently $d_*:=b-c\ge L$) and set $F=f_c$.
+The spectral-flow twist $\sigma_{-c}$ identifies $\mathcal T_FM_{a,b}(\chi)$
+with $Q=\mathcal T_{f_0}M_{A,B}(\chi')$, where $A=a+c\le-1$, $B=d_*\ge L$,
+and $\mu:=\chi'(h_0)=\lambda_0-c\kappa$. Write $E=e_0$, $H=h_0$,
+$w_m=f_0^{-m}u+M$. Then $[E,f_0]=H$, $Eu=0$, $Hu=\mu u$.
 
 \paragraph{PBW notation.}
-Let \(\mathcal X\) be the set of ordered monomials
 \[
- \mathcal X=\Big\{X=f_{j_1}\cdots f_{j_p}\,e_{i_1}\cdots e_{i_q}\,
- h_{r_1}\cdots h_{r_s}:\ j_t\le B,\ j_t\ne0,\ i_t\le A,\ r_u<0\Big\},
+ \mathcal X=\Big\{X=f_{j_1}\cdots f_{j_p}e_{i_1}\cdots e_{i_q}h_{r_1}\cdots
+ h_{r_s}:j_t\le B,\ j_t\ne0,\ i_t\le A,\ r_u<0\Big\},
 \]
-including the empty word, with \(p,q,s\ge0\) arbitrary and the factors in
-the displayed order. Put
-\[
- \deg X=2q-2p,
-\]
-so that \(H(F^{-m}Xu)=(\mu+2m+\deg X)F^{-m}Xu\). Then
-\[
- \{F^{-m}Xu:m\ge1,\ X\in\mathcal X\}
-\]
-is a basis of \(Q\), and the weight spaces are \(Q_\nu\), \(\nu\in\mu+2\Z\).
+including the empty word. $\{F^{-m}Xu:m\ge1,\ X\in\mathcal X\}$ is a basis
+of $Q$. Write $\deg X=2q-2p$; then $H(F^{-m}Xu)=(\mu+2m+\deg X)F^{-m}Xu$.
+Let $V_0\subset M$ be the span of $\{Xu:X\in\mathcal X\}$ (the $F$-free
+part), so that $M=\bigoplus_{r\ge0}f_0^rV_0$.
 
 \paragraph{The locally nilpotent part.}
-Set
-\[
- G=G_c:=\{v\in Q:E^nv=0\ \text{for some}\ n\ge1\},\qquad
- P_\nu:=\ker E\cap G\cap Q_\nu.
-\]
-Because \(\ad E\) is locally nilpotent, \(G\) is a \(\g\)-submodule of
-\(Q\), and every nonzero \(\g\)-submodule of \(G\) contains a nonzero
-vector of some \(P_\nu\): apply powers of \(E\) to a nonzero vector and
-take its last nonzero image. In the shallow region \(-a\le c<b\) the mode
-\(E=e_{-c}\) is injective on \(Q\), so \(G=0\); the theory below is the
-complete answer for all nonboundary indices.
+$G:=\{v\in Q:E^nv=0$ for some $n\ge1\}$ is a $\g$-submodule, and every
+nonzero $\g$-submodule of $G$ contains a nonzero vector of
+$P_\nu:=\ker E\cap G\cap Q_\nu$ (apply powers of $E$ and take the last
+nonzero image). In the shallow region $-a\le c<b$, $E=e_{-c}$ is injective
+on $Q$, so $G=0$; only the deep region carries a nonzero locally nilpotent
+part.
 
-\section{The E-action and the primitive space}
+\section{The corrected E-action}
 
 \begin{lemma}\label{lem:Eaction}
-On the PBW basis of \(Q\),
+For $x\in V_0$ define linear maps $A_r:V_0\to V_0$ by
+\[
+ Ex=\sum_{r\ge0}f_0^r\,A_rx,
+\]
+a finite sum for each $x$, with $A_0=\pi_0\circ\ad(e_0)$ the old operator
+$T$. If $Hx=(\mu+\delta)x$ and $m\ge1$, then in $Q$,
 \begin{equation}\label{eq:Eaction}
- E\bigl(F^{-m}Xu\bigr)
- =F^{-m}\,T(X)u
- -m\bigl(\mu+\deg X+m+1\bigr)F^{-m-1}Xu,
-\qquad
- T:=\pi_0\circ\ad(e_0),
+ E\bigl(f_0^{-m}x\bigr)
+ =\sum_{r=0}^{m-1}f_0^{-(m-r)}A_rx
+ -m(\mu+\delta+m+1)f_0^{-m-1}x.
 \end{equation}
-where \(\pi_0\) projects \(M\) onto its \(F^0\)-part. The operator \(T\)
-sends \(\mathcal X\)-words to combinations of \(\mathcal X\)-words, raises
-\(\deg\) by \(2\), and preserves the annihilating ideal:
-\(Wu=0\Rightarrow T(W)u=0\).
 \end{lemma}
 
 \begin{proof}
-The triple identity \(EF^{-m}=F^{-m}E-mF^{-m-1}H-m(m+1)F^{-m-2}F\) and
-\(Eu=0\) give
-\(E(F^{-m}Xu)=F^{-m}(\ad E)(X)u-m(\mu+\deg X)F^{-m-1}Xu
--m(m+1)F^{-m-2}FXu\).
-In the localization \(F^{-m-2}FXu=F^{-m-1}Xu\), and \((\ad E)(X)u\in M\)
-contributes to \(Q\) only through its \(F^0\)-part. The word-level
-description follows from \([e_0,f_j]=h_j\), \([e_0,h_r]=-2e_r\),
-\([e_0,e_i]=0\), and the last assertion from \(T(W)u=\pi_0E(Wu)\).
+By the triple identity $Ef_0^{-m}=f_0^{-m}E-mf_0^{-m-1}H-m(m+1)f_0^{-m-2}f_0$
+and $Ex=\sum_rf_0^rA_rx$; the term $f_0^{-m}f_0^rA_rx$ survives in $Q$ for
+$0\le r<m$ as $f_0^{-(m-r)}A_rx$, and vanishes for $r\ge m$.
 \end{proof}
 
+\begin{corollary}\label{cor:counterexample}
+The earlier formula retaining only $A_0$ is false. For $X=f_{-1}f_1$ one has
+$EXu=(f_1h_{-1}+\lambda_1f_{-1}-2f_0)u$, hence
+\[
+ E\bigl(f_0^{-2}f_{-1}f_1u\bigr)
+ =f_0^{-2}(f_1h_{-1}+\lambda_1f_{-1})u
+ -2w_1-2(\mu-1)f_0^{-3}f_{-1}f_1u,
+\]
+and the $A_0$-only formula misses the nonzero term $-2w_1$ (machine-checked
+in \texttt{work/check\_audit\_regressions.py}).
+\end{corollary}
+
+\section{The primitive space}
+
 \begin{lemma}\label{lem:pole}
-If \(0\ne v\in Q_\nu\) and \(Ev=0\), then \(\nu\in\Z_{\ge0}\) and the
-highest pole of \(v\) in the PBW basis is exactly \(\nu+1\).
+If $0\ne v\in Q_\nu$ and $Ev=0$, then $\nu\in\Z_{\ge0}$, and the highest
+pole of $v$ is exactly $\nu+1$.
 \end{lemma}
 
 \begin{proof}
-Write \(v=\sum_{m=1}^{N}F^{-m}X_mu\) with \(\deg X_m=\nu-\mu-2m\). By
-\eqref{eq:Eaction},
-\[
- Ev=\sum_{m}F^{-m}T(X_m)u-\sum_{m}m(\nu-m+1)F^{-m-1}X_mu.
-\]
-At pole \(N+1\) only the diagonal survives, so \(Ev=0\) forces
-\(N=\nu+1\) and \(\nu\ge0\), with \(X_{\nu+1}\) unconstrained.
+Write $v=\sum_{m=1}^{N}f_0^{-m}x_m$ with $x_m\in V_0$. At pole $N+1$ only
+the diagonal of \eqref{eq:Eaction} survives, forcing $N=\nu+1$.
 \end{proof}
 
 \begin{theorem}\label{thm:P}
-For \(\nu\in\Z_{\ge0}\),
-\begin{equation}\label{eq:P}
- P_\nu\;\cong\;
- \Big\{X\in\mathcal X:\ \deg X=-(\mu+\nu+2),\quad
- T^{\nu+1}(X)u=0\Big\},
+A nonzero vector $v=\sum_{m=1}^{\nu+1}f_0^{-m}x_m\in Q_\nu$ is primitive if
+and only if its layers satisfy the triangular system
+\begin{equation}\label{eq:recursion}
+ \sum_{m=k}^{\nu+1}A_{m-k}x_m=(k-1)(\nu-k+2)x_{k-1},
+ \qquad 1\le k\le\nu+1,\quad x_0=0,
 \end{equation}
-the isomorphism being \(v\mapsto\) its top-pole layer at pole \(\nu+1\).
-In particular \(P_\nu\ne0\) forces \(\mu+\nu\) even, and every nonzero
-\(P_\nu\) is infinite-dimensional: multiply top layers by powers of
-\(h_{-1}\).
+and the bottom condition at $k=1$ is the compatibility
+$\sum_{m=1}^{\nu+1}A_{m-1}x_m=0$. The primitive space $P_\nu$ is the linear
+space of solutions of this system; it is not in general a set of single
+monomials, and the old description $P_\nu\cong\{X:T^{\nu+1}(X)u=0\}$ is
+false.
 \end{theorem}
 
 \begin{proof}
-Equating the coefficient of \(F^{-m}X\) in \(Ev=0\) gives
-\begin{equation}\label{eq:recursion}
- T(X_m)u=(m-1)(\nu-m+2)X_{m-1}u,\qquad X_0=0,\quad X_{\nu+2}=0.
-\end{equation}
-For \(m\ge2\) the scalar \((m-1)(\nu-m+2)\ne0\), so the layers
-\(X_\nu,\ldots,X_1\) are determined one by one from the top layer: a
-strictly decreasing pole with a unique solution. The remaining condition
-at \(m=1\) is \(T(X_1)u=0\), which by the recursion is exactly
-\(T^{\nu+1}(X_{\nu+1})u=0\).
+Equate coefficients of $f_0^{-k}$ in $Ev=0$ using \eqref{eq:Eaction}. For
+$k=\nu+1$ the right-hand side is $\nu x_\nu=A_0x_{\nu+1}$, so the top
+layers are determined downward; the $k=1$ equation is the remaining
+compatibility condition. For $\nu=1$ the system reads
+$x_1=A_0x_2$ and $(A_0^2+A_1)x_2=0$.
 \end{proof}
 
-\begin{corollary}\label{cor:examples}
-\begin{enumerate}
-\item[(i)] If \(\mu=-2\), then \(P_0=\C w_1\): the top layer is the empty
-word, and for \(s\ge1\) one has \(T(h_{-1}^s)u=-2s\,h_{-1}^{s-1}e_{-1}u\ne0\).
-\item[(ii)] In the basic module \(M_{-1,1}\) at \(\lambda_0=0\) the vector
-\(e_0^2f_1^2w_1\) lies in \(P_2\) with top layer \(f_1^2\) at pole \(3\),
-since \(T^3(f_1^2)u=(-12h_1e_1+4e_2)u=0\).
-\end{enumerate}
+\begin{corollary}\label{cor:Zcounter}
+The old criterion genuinely fails. The element
+\[
+ Z=h_{-1}^2+4f_{-1}e_{-1}+2h_{-2}
+ =h_{-1}^2+2(e_{-1}f_{-1}+f_{-1}e_{-1})
+\]
+commutes with $E$, $f_0$, and $H$ (it need not be central in $\g$). At
+$\mu=-1$, the vector $p=\lambda_1f_0^{-1}u+f_0^{-2}f_1u$ lies in $P_1$, and
+$Zp\in P_1$ has layers
+$x_1=(\lambda_1Z-4h_{-1})u$, $x_2=(f_1Z-4(\kappa+1)f_{-1})u$ with
+$A_0^2x_2=8e_{-1}u\ne0$; the missing term $A_1x_2=-8e_{-1}u$ restores the
+compatibility (machine-checked).
 \end{corollary}
 
-\section{The \(\slc\)-decomposition and the projections}
+\begin{corollary}\label{cor:P0}
+At $\mu=-2$, $\dim P_0=\infty$: the vectors
+$Z^nw_1=f_0^{-1}Z^nu+M$ ($n\ge0$) are primitive and linearly independent,
+their leading PBW degrees being $2n$ with leading symbols
+$(h_{-1}^2+4f_{-1}e_{-1})^n\ne0$. The earlier claim $P_0=\C w_1$ is
+withdrawn.
+\end{corollary}
+
+\section{The \texorpdfstring{$\slc$}{sl2}-decomposition and the projections}
 
 \begin{theorem}\label{thm:sl2}
-Every vector of \(G\) is contained in a finite-dimensional
-\(\slc(E,H,f_0)\)-submodule, and
-\begin{equation}\label{eq:sl2}
- G\;\cong\;\bigoplus_{\nu\in\Z_{\ge0}} P_\nu\otimes L(\nu),
-\end{equation}
-where \(L(\nu)\) is the \((\nu+1)\)-dimensional irreducible \(\slc\)-module.
-Thus the \(E\)-primitive vectors of \(G\) have weights in \(\Z_{\ge0}\),
-and \(P_\nu\) is the multiplicity space of \(L(\nu)\).
+Every vector of $G$ lies in a finite-dimensional
+$\slc(E,H,f_0)$-submodule, and
+\[
+ G\;\cong\;\bigoplus_{\nu\in\Z_{\ge0}}P_\nu\otimes L(\nu)
+\]
+as transverse $\slc$-modules, where $L(\nu)$ is the $(\nu+1)$-dimensional
+irreducible and $P_\nu$ is the multiplicity space. This decomposition is
+correct and is retained; it is not a decomposition into $\g$-submodules.
 \end{theorem}
 
 \begin{proof}
-\(E\) is locally nilpotent on \(G\) by definition, and \(f_0\) is locally
-nilpotent on all of \(Q\). Hence the \(\slc\)-span of any vector is spanned
-by the finitely many vectors \(f_0^rE^sv\), and complete reducibility is
-Weyl's theorem. A primitive vector \(p\) with \(f_0^Np=0\) generates
-\(L(\nu)\), \(\nu\) its \(H\)-weight, and \(f_0^Np=0\) forces
-\(\nu\le N-1\), so \(\nu\in\Z_{\ge0}\).
+$E$ and $f_0$ are locally nilpotent on $G$, so each vector generates a
+finite-dimensional $\slc$-module; complete reducibility is Weyl's theorem,
+and primitive weights are nonnegative integers.
 \end{proof}
 
-Let \(p\in P_\nu\) have top layer \(X\), and write \(X_m\) for its layers.
+The principle behind all projections is that the current modes form the
+adjoint module $L(2)$ under the transverse $\slc$, and
+$L(2)\otimes L(\nu)\cong L(\nu+2)\oplus L(\nu)\oplus L(\nu-2)$ for
+$\nu\ge2$.
 
 \begin{proposition}\label{prop:proj}
+Let $p\in P_\nu$ have top layer $X$ at pole $\nu+1$.
 \begin{enumerate}
-\item[(i)] For \(i\le A\): \(e_ip\in P_{\nu+2}\), and its top layer is
-\(e_iX\). Write \(\hat e_i(X)=e_iX\).
-\item[(ii)] For \(r<0\) and \(\nu\ge1\): \(h_rp+\tfrac{2}{\nu+2}f_0e_rp
-\in P_\nu\), with top layer
+\item[(i)] For $i\le A$: $e_ip\in P_{\nu+2}$, and its top layer is
+$-2f_i u$ for $\nu=0$ (example: $e_{-1}w_1=f_0^{-1}e_{-1}u-f_0^{-2}h_{-1}u
+-2f_0^{-3}f_{-1}u$ at $\mu=-2$), and in general the top pole $\nu+3$ carries
+the correction layer of $[e_i,f_0^{-m}]$.
+\item[(ii)] For $r<0$ and $\nu\ge1$:
+$h_rp+\tfrac{2}{\nu+2}f_0e_rp\in P_\nu$, with top layer
+$\tfrac{\nu}{\nu+2}(-h_rX+\tfrac1\nu f_rA_0X)$; for $\nu=0$,
+$h_rp=-f_0e_rp$.
+\item[(iii)] For $j\ge1$: $E^2f_jp=-2e_jp$, and $f_jp$ has a component in
+$P_{\nu+2}$ and one in $P_\nu$.
+\item[(iv)] For $\nu\ge2$ and all $j$: the lowering projection
+\begin{equation}\label{eq:lowering}
+ \ell_j(p)=f_jp-\tfrac1\nu f_0h_jp
+ -\tfrac{1}{\nu(\nu+1)}f_0^2e_jp\;\in\;P_{\nu-2},
+\end{equation}
+the $L(\nu-2)$-component of the tensor product above. It is nonzero: at
+$\mu=-2$, for $p_2=e_{-1}w_1\in P_2$,
 \[
- \hat h_r(X)=\frac{\nu}{\nu+2}\Bigl(-h_rX+\tfrac{1}{\nu}f_rT(X)\Bigr).
+ \ell_1(p_2)=f_0^{-1}\Bigl(\tfrac13f_1e_{-1}+\tfrac{\lambda_1}{6}h_{-1}
+ +\tfrac{2\kappa-2}{3}\Bigr)u+M\in P_0\setminus\{0\}.
 \]
-For \(\nu=0\) one has \(h_rp=-f_0e_rp\), a vector of the \(L(2)\)-block of
-\(e_rp\in P_2\), so the \(P_0\)-part of \(h_rp\) is zero.
-\item[(iii)] For \(j\ge1\): \(E^2f_jp=-2e_jp\), and the primitive part of
-\(f_jp\) in \(P_{\nu+2}\) has top layer \(e_jX\) (lower layers by the
-recursion).
 \end{enumerate}
-Moreover \(G\) is generated, as a \(\g\)-module, by
-\(P=\bigoplus_\nu P_\nu\), and the submodule generated by any
-\(0\ne p\in P_\nu\) contains \(L(\nu)p\) together with the images of \(p\)
-under all words in \(\{\hat e_i,\hat h_r,\hat f_j,E,f_0\}\).
 \end{proposition}
 
 \begin{proof}
-(i) \([E,e_i]=0\), and the pole analysis of Lemma~\ref{lem:pole} applied to
-\(e_ip\) gives the top layer \(e_iX\): the corrections of \([e_i,f_0^{-m}]\)
-land at poles \(m+1,m+2\) and feed the lower layers.
-(ii) \([E,h_r]=-2e_r\) and \([f_0,e_r]=-h_r\) for \(r<0\) give
-\(h_rp=e_rf_0p-f_0e_rp\). For \(\nu=0\): \(f_0p=0\), so \(h_rp=-f_0e_rp\).
-For \(\nu\ge1\): \(Ef_0e_rp=(\nu+2)e_rp\), hence
-\(E(h_rp+\tfrac{2}{\nu+2}f_0e_rp)=0\). The pole-\((\nu+2)\) layers cancel
-exactly, because \([e_r,f_0^{-m}]=-mf_0^{-m-1}h_r-m(m+1)f_0^{-m-2}f_r\).
-(iii) \([E,f_j]=h_j\) gives \(E^2f_jp=-2e_jp\); then \([E,e_j]=0\) gives
-\(e_jp\in P_{\nu+2}\) (here \(j>A\), since \(A\le-1\)).
+(ii) and (iii) use $[E,h_r]=-2e_r$, $[f_0,e_r]=-h_r$ and $[E,f_j]=h_j$ as
+before; (iv) is verified by applying $E$ to the right-hand side of
+\eqref{eq:lowering} and using $Ef_0^s=s(\nu-s+1)f_0^{s-1}$ on the block of
+$p$. The nonvanishing example is machine-checked.
 \end{proof}
 
-\section{The weight filtration}
+\section{Submodule structure: what is withdrawn and what remains open}
 
-For \(\nu\ge0\) define
-\[
- G^{\ge\nu}\;:=\;\bigoplus_{\nu'\ge\nu} P_{\nu'}\otimes L(\nu'),
-\]
-the span of the \(\slc\)-blocks of top weight at least \(\nu\).
-
-\begin{lemma}\label{lem:stable}
-Each \(G^{\ge\nu}\) is a \(\g\)-submodule of \(G\). Moreover
-\(P_\nu\ne0\) if and only if \(\nu\ge\nu_0\) and \(\nu\equiv\mu
-\pmod2\), where \(\nu_0\) is the smallest \(\nu\ge0\) admitting a top
-layer, and for every such \(\nu\) the map \(e_1:P_\nu\to P_{\nu+2}\)
-is nonzero.
-\end{lemma}
-
-\begin{proof}
-The weight never decreases: \(e_r\) sends \(P_{\nu'}\) to \(P_{\nu'+2}\);
-\(h_r\) and \(f_j\) have a \(P_{\nu'}\)-part (the projections of
-Proposition~\ref{prop:proj}) and a \(P_{\nu'+2}\)-part; \(E,H,f_0\) act
-inside each block and \(K\) is a scalar. Hence \(G^{\ge\nu}\) is stable.
-The parity of \(\nu\) is forced by \(\deg X=-(\mu+\nu+2)\). For
-\(0\ne p\in P_\nu\), the vector \(e_1p\) has top layer \(f_1X\ne0\),
-so the support has no gaps above \(\nu_0\).
-\end{proof}
-
-\begin{theorem}\label{thm:weight}
-With \(\nu_0\) as in Lemma~\ref{lem:stable},
-\[
- G=G^{\ge\nu_0}\;\supsetneq\;G^{\ge\nu_0+1}\;\supsetneq\;
- G^{\ge\nu_0+2}\;\supsetneq\;\cdots
-\]
-is an infinite strictly descending chain of \(\g\)-submodules (steps with
-\(P_\nu=0\) collapse), and:
+\paragraph{The weight tails are not affine submodules.}
+The earlier note claimed that
+$G^{\ge\nu}:=\bigoplus_{\nu'\ge\nu}P_{\nu'}\otimes L(\nu')$ is a
+$\g$-submodule. This is false.
 \begin{enumerate}
-\item[(i)] for \(\nu\ge1\),
-\[
- G^{\ge\nu}/G^{\ge\nu+1}\;\cong\;
- \bigoplus_{q\ge q_\nu}\bigl(P_\nu^{(q)}\otimes L(\nu)\bigr),
-\qquad
- P_\nu^{(q)}=\Bigl\{X\in\mathcal X:\ p(X)=q+\tfrac{\mu+\nu+2}{2},\ 
- e(X)=q,\ T^{\nu+1}(X)u=0\Bigr\},
-\]
-and each summand is a simple \(\g\)-module;
-\item[(ii)] if \(P_0\ne0\), then \(G^{\ge0}/G^{\ge1}\cong P_0\otimes L(0)\)
-is a direct sum of one-dimensional trivial \(\g\)-modules.
+\item[(i)] Central obstruction: at $\mu=-2$ and $\kappa\ne0$, take
+$p=w_1\in L(0)$. Then $h_{\pm1}p=-f_0e_{\pm1}p$ lies in the blocks of top
+weight $2$, so both $h_1p$ and $h_{-1}p$ belong to $G^{\ge2}$. Were
+$G^{\ge2}$ a submodule, $[h_1,h_{-1}]p=2\kappa p$ would belong to it,
+contradicting $p\in L(0)$ and $\kappa\ne0$ (machine-checked).
+\item[(ii)] The lowering channel: $\ell_1(e_{-1}w_1)\in P_0\setminus\{0\}$
+at $\mu=-2$ shows that modes map $P_2$ into $P_0$, so the tails are not
+stable even at $\kappa=0$.
 \end{enumerate}
-Consequently \(G\) is not simple,
-\(\operatorname{soc}(G)=0\) (and a fortiori
-\(\operatorname{soc}(Q_c)=0\)), \(G\) has no finite composition series, and
-the head of \(G\) is the \(\nu_0\)-quotient.
-\end{theorem}
+Consequently there are no nonzero trivial affine quotient modules of $Q$ at
+level $\kappa\ne0$: $K$ acts by $\kappa$ while all $h$-modes acting by
+zero would force $[h_1,h_{-1}]=2K$ to act by zero.
 
-\begin{proof}
-Properness and nonemptiness of each step follow from Lemma~\ref{lem:stable}.
-In the quotient \(G^{\ge\nu}/G^{\ge\nu+1}\) the mode \(e_r\) sends the top
-vectors of the summands into \(G^{\ge\nu+2}\) and acts on lower block
-levels through the projections \(\hat h_r,\hat f_r\), via
-\([e_r,f_0^s]=sh_rf_0^{s-1}-s(s-1)f_rf_0^{s-2}\); so each summand is
-preserved. The projections \(\hat h_r,\hat h_j,\hat f_j\) preserve the
-counts \((p,e)\) of the top layer: their candidate lower-count terms cancel
-inside \(P_\nu\) by the degree condition \(\deg X=-(\mu+\nu+2)\).
+\paragraph{Withdrawn claims.}
+The following statements, derived in the earlier version from the invalid
+filtration, are withdrawn as proved results: that $G$ is never simple; that
+$\operatorname{soc}(G)=0$ and $\operatorname{soc}(Q)=0$; that $G$ has
+infinite composition length; that the quotients $G^{\ge\nu}/G^{\ge\nu+1}$
+are simple and form the head. Their negations are not proved either: the
+internal classification of $G_c$ is open.
 
-For triangular generation in the h-degree: on the summand of type
-\(P_\nu^{(q)}\), the projection \(\hat h_r\) acts as
-\(-\tfrac{\nu}{\nu+2}h_rX\) plus terms of lower h-degree or higher
-e-degree, and the leading scalar is nonzero for \(\nu\ge1\). Hence from any
-nonzero class one generates every h-multiset, and with it the whole
-\(P_\nu^{(q)}\otimes L(\nu)\) (the \(L(\nu)\)-factor is irreducible under
-\(E,H,f_0\)). Different \(q\) do not interact, so each summand is simple.
+\paragraph{What remains proved.}
+The boundary isomorphism, the deep-region simplicity criterion
+$\mathcal T_{f_c}M_{a,b}$ simple $\iff\lambda_0-c\kappa\notin\Z$ (under
+$\lambda_L\ne0$, $\kappa\ne-2$), the unique maximal submodule $G_c$ with
+simple head $Q_c/G_c$ and nonsplit extension at integral parameters, the
+algebraic central reduction compatibility, the transverse
+$\slc$-decomposition of $G_c$, and the corrected recursion of
+Theorem~\ref{thm:P} with the projections of Proposition~\ref{prop:proj}.
+A correct submodule analysis of $G_c$ must track all three channels
+$L(\nu+2)$, $L(\nu)$, $L(\nu-2)$ simultaneously; the old filtration is
+abandoned.
 
-For \(\nu=0\), let \(p_0=F^{-1}Xu\in P_0\). Then \(Ep_0=f_0p_0=0\),
-\[
- h_rp_0=F^{-1}h_rXu+2F^{-2}f_rXu=-f_0e_rp_0,
-\qquad
- f_jp_0+\tfrac12 f_0^2e_jp_0=-\tfrac12 h_jXu=
- -\tfrac12(\lambda_jX+[h_j,X])u\in M,
-\]
-and \(e_rp_0\in P_2\). Thus every generator maps \(P_0\) into the
-\(\nu\ge2\) part, so the quotient is the trivial module \(P_0\otimes L(0)\).
-Since every nonzero submodule of \(G\) contains a primitive and hence, by
-the generation argument, a whole tail \(G^{\ge\nu}\), no submodule is
-simple; the socle vanishes.
-\end{proof}
+\section{Verification status}
 
-\begin{corollary}\label{cor:basic}
-\begin{enumerate}
-\item[(i)] In the basic module \(M_{-1,1}\) at \(\lambda_0=0\) with
-\(\lambda_1\ne0\): \(P_0=0\), \(\nu_0=2\), and
-\(G\supsetneq G^{\ge4}\supsetneq G^{\ge6}\supsetneq\cdots\). The vector
-\(e_0^2f_1^2w_1\) (top layer \(f_1^2\)) generates the summand
-\(P_2^{(0)}\otimes L(2)\) of the first quotient.
-\item[(ii)] If \(\mu=-2\), \(B=L\), and \(\lambda_j\ne0\) for all
-\(1\le j\le L\), then \(P_0=\C w_1\) and the chain starts at
-\(\nu_0=0\) with the trivial quotient \(\C w_1\).
-\end{enumerate}
-\end{corollary}
-
-\section{Scope, smoothness, and the assumptions}
-
-The structure of Sections 2--4 uses only the deep region, the integrality
-\(\mu\in\Z\) (otherwise \(G=0\): the pure-fraction recurrence
-\(Ew_m=-m(\mu+m+1)w_{m+1}\) has no vanishing coefficients and the pole
-analysis of Lemma~\ref{lem:pole} forces \(\nu\in\Z\)), and the PBW
-machinery. Simplicity of \(M\) (\(\lambda_L\ne0\), \(c\ne-2\)) is not
-used here; it enters only in the companion addendum, where it guarantees
-that \(G_c\) is the unique maximal submodule of \(Q_c\) with simple
-quotient \(Q_c/G_c\). The two statements are compatible: the head of
-\(Q_c\) is simple while \(G_c\) itself has zero socle and infinite length.
-
-In the shallow region \(-a\le c<b\) one has \(G_c=0\), because
-\(E=e_{-c}\) is injective on \(Q_c\). Hence the three questions posed in
-the addendum---simplicity of \(G_c\), whether \(G_c\) is the socle, and
-its composition length---are answered completely: no, no, and infinite.
-
-Machine checks. The E-action formula \eqref{eq:Eaction}, the examples of
-Corollary~\ref{cor:examples}, and the weight-zero identities used in the
-proof of Theorem~\ref{thm:weight} were checked by exact symbolic
-computation (\texttt{work/check\_gc\_sanity.py},
-\texttt{work/check\_gc\_filter.py}). These are corroborations, not an
-independent review or a formal proof.
+The audit \texttt{audits/2026-09-22/} (report, independent checker with 154
+exact checks, results, log) is part of this repository. Its four classes of
+counterexamples are reproduced by \texttt{work/check\_audit\_regressions.py}
+(24 checks): the E-action residual $-2w_1$; the truncated-$T$ residual
+$-4e_{-2}u$; the $Z$-family in $P_0$ and the $\mu=-1$ corrected-recursion
+example; the obstruction $[h_1,h_{-1}]w_1=2\kappa w_1$; the nonzero
+$\ell_1(p_2)$. These are corroborations, not formal proofs, and the open
+status of the submodule classification should be reflected in any summary
+of this project.
 
 \begin{thebibliography}{9}
 \bibitem{FGXZ}
@@ -390,10 +293,14 @@ V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
 arXiv:2404.03855v2 (2024), Theorem~1.1.
 \url{https://arxiv.org/abs/2404.03855v2}.
 
+\bibitem{Audit}
+Independent audit of 2026-09-22,
+\texttt{audits/2026-09-22/audit\_report\_cn.md} and
+\texttt{audits/2026-09-22/independent\_pbw\_audit.py} (154 exact checks).
+
 \bibitem{Unified}
-Project working note, \emph{Boundary and Nonboundary Localization Quotients
-of Smooth Affine Modules} (September 2026), and its addendum of
-September 15, 2026: the spectral-flow twist \(\sigma_k\), the deep-region
-notation, and the unique-maximal-submodule theorem.
+Project working notes: \emph{Boundary and Nonboundary Localization Quotients
+of Smooth Affine Modules} (unified note, September 2026) and the addendum
+of September 15, 2026.
 \end{thebibliography}
 \end{document}

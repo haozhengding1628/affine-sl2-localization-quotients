@@ -1,243 +1,265 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage[margin=25mm]{geometry}
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
 \usepackage{fontspec}
 \setmainfont{TeX Gyre Pagella}
 \usepackage[UTF8]{ctex}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
-\usepackage{enumitem,microtype,xcolor}
-\usepackage[colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
-\setlength{\emergencystretch}{3em}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\hypersetup{pdftitle={非边界局部化商的局部幂零部分（修正版）}}
 \newcommand{\C}{\mathbb C}
 \newcommand{\Z}{\mathbb Z}
-\newcommand{\g}{\mathfrak g}
+\newcommand{\g}{\widehat{\mathfrak{sl}}_2}
 \newcommand{\slc}{\mathfrak{sl}_2}
 \newcommand{\ad}{\operatorname{ad}}
-\newtheoremstyle{plainupright}{6pt}{5pt}{\normalfont}{}{\bfseries}{.}{.5em}{}
-\theoremstyle{plainupright}
-\newtheorem{theorem}{定理}[section]
-\newtheorem{proposition}[theorem]{命题}
+\newcommand{\Span}{\operatorname{span}_{\C}}
+\newtheorem{theorem}{定理}
 \newtheorem{lemma}[theorem]{引理}
-\newtheorem{remark}[theorem]{注记}
-\hypersetup{pdftitle={G_c 的结构}}
-\title{局部幂零部分 \texorpdfstring{$G_c$}{Gc} 的结构\vspace{-2mm}}
-\author{}
-\date{2026 年 9 月}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{corollary}[theorem]{推论}
+\setlength{\emergencystretch}{2em}
+\title{非边界局部化商的局部幂零部分（修正版）\\
+  \large 修正后的 E-作用与原初递推；撤回权滤过结论}
+\author{进展报告（2026-09-22 审计后修正）}
+\date{2026 年 9 月 22 日}
 \begin{document}
 \maketitle
-\vspace{-4mm}
+
 \begin{abstract}
-本文确定深区非边界局部化商 $Q_c=\mathcal T_{f_c}M_{a,b}$ 的局部幂零部分
-$G_c=\{v\in Q_c:E^nv=0\ \text{对某个}\ n\}$（$E=e_{-c}$）的完整结构。
-在谱流扭转后的基本图像（$E=e_0$，$F=f_0$，$H=h_0$，$A\le-1$，$B\ge L$，
-$\mu\in\Z$）中，证明：$G_c$ 是有限维 $\slc(E,H,F)$-不可约模的直和；权为
-$\nu$ 的 $E$-原初空间由顶层条件 $T^{\nu+1}(X)u=0$ 精确描述；$\g$-作用完全由
-原初投影算子编码。结论：$G_c$ 不单、$\operatorname{soc}(G_c)=0$（从而
-$\operatorname{soc}(Q_c)=0$）、合成长度无限；其标准权滤过的商为单模
-$P_\nu^{(q)}\otimes L(\nu)$ 加上权零处的一个平凡商。浅区中 $G_c=0$。
+本文是 9 月 22 日 $G_c$ 结构笔记的修正版。独立审计
+（\texttt{audits/2026-09-22/}）给出了显式反例，否定：旧的 E-作用公式、原初
+空间描述 $P_\nu\cong\{X:T^{\nu+1}(X)u=0\}$、$\mu=-2$ 时 $P_0=\C w_1$ 的
+断言、以及权尾部 $G^{\ge\nu}$ 是仿射子模的断言。本版记录：经全分量 $A_r$
+修正的 E-作用、原初向量的修正三角递推、$P_0$ 中的无限族 $Z^nw_1$、含降权
+映射 $\ell_j:P_\nu\to P_{\nu-2}$ 的完整投影组，并撤回权滤过的全部推论。
+不受影响的既有结论：边界同构、深区单性判据、整数参数的唯一极大子模与
+simple head、代数中心约化的相容性。$G_c$ 的内部分类（单性、socle、长度）
+为开放问题。
 \end{abstract}
 
-\section{背景与 $\slc$-结构}
-沿用统一笔记与 addendum 的记号。深区（$c<b$，$c\le-a-1$，即
-$d_*=b-c\ge L$）中，谱流 $\sigma_{-c}$ 将 $Q_c$ 等同于
-$Q=\mathcal T_{f_0}M_{A,B}(\chi)$，其中 $A=a+c\le-1$，$B=b-c=d_*\ge L$，
-$\chi(h_0)=\mu=\lambda_0-c\kappa\in\Z$。记 $E=e_0$，$F=f_0$，$H=h_0$，
-$G=\{v\in Q:E^nv=0\ \text{对某个}\ n\ge1\}$。自由 PBW 部分为
-\[
-\mathcal X=\Big\{f_{j_1}\cdots f_{j_p}\,e_{i_1}\cdots e_{i_q}\,
-h_{r_1}\cdots h_{r_s}:\ j_t\le B,\ j_t\ne0,\ i_t\le A,\ r_u<0\Big\},
-\]
-$Q$ 的基为 $\{F^{-m}Xu: m\ge1,\ X\in\mathcal X\}$。记 $\deg X=2q-2p$，则
-$H(F^{-m}Xu)=(\mu+2m+\deg X)F^{-m}Xu$；权空间 $Q_\nu$，$\nu\in\mu+2\Z$。
+\section{定义、记号与假设}
 
-\begin{theorem}\label{thm:sl2}
-$G$ 的每个向量都落在有限维 $\slc(E,H,F)$-子模中，且
+\paragraph{仿射代数与诱导模。}
+沿用统一笔记：$\g=(\mathfrak{sl}_2\otimes\C[t,t^{-1}])\oplus\C K$，括号
 \[
-G\;\cong\;\bigoplus_{\nu\in\Z_{\ge0}} P_\nu\otimes L(\nu),
-\qquad P_\nu:=\ker E\cap G\cap Q_\nu,
+ [e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K,\quad [h_i,h_j]=2i\delta_{i+j,0}K,\quad
+ [h_i,e_j]=2e_{i+j},\quad [h_i,f_j]=-2f_{i+j},
 \]
-其中 $L(\nu)$ 是 $(\nu+1)$ 维不可约 $\slc$-模。特别地，$G$ 的
-$E$-原初向量之权属于 $\Z_{\ge0}$，$P_\nu$ 是 $L(\nu)$ 的重数空间。
-\end{theorem}
+$K$ 中心，$[e_i,e_j]=[f_i,f_j]=0$。固定 $a,b\in\Z$、$a+b\ge0$、
+$L=a+b+1\ge1$，$S_{a,b}=\Span\{K,h_i\ (i\ge0),e_i\ (i>a),f_j\ (j>b)\}$。
+特征 $\chi$ 由 $\kappa=\chi(K)$ 与 $\lambda_i=\chi(h_i)$（$0\le i\le L$，
+$i>L$ 时 $\lambda_i=0$）决定；$M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi$，
+$u=1\otimes1_\chi$。中心水平记为 $\kappa$（不再用 $c$），$c$ 专指局部化
+指标。
+
+\paragraph{深区局部化。}
+取 $c<b$ 且 $c\le-a-1$（即 $d_*:=b-c\ge L$），$F=f_c$。谱流
+$\sigma_{-c}$ 将 $\mathcal T_FM_{a,b}(\chi)$ 等同于
+$Q=\mathcal T_{f_0}M_{A,B}(\chi')$，其中 $A=a+c\le-1$，$B=d_*\ge L$，
+$\mu:=\chi'(h_0)=\lambda_0-c\kappa$。记 $E=e_0$，$H=h_0$，
+$w_m=f_0^{-m}u+M$；则 $[E,f_0]=H$，$Eu=0$，$Hu=\mu u$。
+
+\paragraph{PBW 记号。}
+$\mathcal X$ 为字
+$X=f_{j_1}\cdots f_{j_p}e_{i_1}\cdots e_{i_q}h_{r_1}\cdots h_{r_s}$
+（$j_t\le B,\ j_t\ne0,\ i_t\le A,\ r_u<0$）的集合（含空字）。
+$\{F^{-m}Xu:m\ge1,\ X\in\mathcal X\}$ 是 $Q$ 的基；$\deg X=2q-2p$，
+$H(F^{-m}Xu)=(\mu+2m+\deg X)F^{-m}Xu$。令 $V_0$ 为 $\{Xu:X\in\mathcal X\}$
+的张成（$F$-自由部分），则 $M=\bigoplus_{r\ge0}f_0^rV_0$。
+
+\paragraph{局部幂零部分。}
+$G:=\{v\in Q:E^nv=0\ \text{对某个}\ n\ge1\}$ 是 $\g$-子模；$G$ 的每个
+非零 $\g$-子模都含 $P_\nu:=\ker E\cap G\cap Q_\nu$ 中的非零向量。浅区
+$-a\le c<b$ 中 $E=e_{-c}$ 在 $Q$ 上单射，故 $G=0$；只有深区带有非零局部
+幂零部分。
+
+\section{修正后的 E-作用}
+
+\begin{lemma}\label{lem:Eaction}
+对 $x\in V_0$ 定义线性算子 $A_r:V_0\to V_0$：
+\[
+ Ex=\sum_{r\ge0}f_0^r\,A_rx,
+\]
+对每个 $x$ 为有限和，$A_0=\pi_0\circ\ad(e_0)$ 即旧的 $T$。若
+$Hx=(\mu+\delta)x$ 且 $m\ge1$，则在 $Q$ 中
+\begin{equation}\label{eq:Eaction}
+ E\bigl(f_0^{-m}x\bigr)
+ =\sum_{r=0}^{m-1}f_0^{-(m-r)}A_rx
+ -m(\mu+\delta+m+1)f_0^{-m-1}x.
+\end{equation}
+\end{lemma}
+
 \begin{proof}
-$E$ 在 $G$ 上局部幂零（定义），$F$ 在 $Q$ 上局部幂零，故任一向量生成的
-$\slc$-张成由有限个 $F^iE^jv$ 张成，有限维；完全可约是 Weyl 定理。原初
-向量 $p$ 满足 $F^Np=0$ 时生成 $L(\nu)$，$\nu$ 为 $p$ 的 $H$-权，
-$F^Np=0$ 迫使 $\nu\le N-1$，故 $\nu\in\Z_{\ge0}$。
+由三重恒等式 $Ef_0^{-m}=f_0^{-m}E-mf_0^{-m-1}H-m(m+1)f_0^{-m-2}f_0$ 与
+$Ex=\sum_rf_0^rA_rx$；$f_0^{-m}f_0^rA_rx$ 在 $Q$ 中当 $0\le r<m$ 时存活为
+$f_0^{-(m-r)}A_rx$，$r\ge m$ 时落回 $M$。
 \end{proof}
 
-\section{E-作用与原初空间}
-\begin{lemma}\label{lem:Eaction}
-在 $Q$ 的 PBW 基上，
+\begin{corollary}\label{cor:counterexample}
+仅保留 $A_0$ 的旧公式错误。取 $X=f_{-1}f_1$，则
+$EXu=(f_1h_{-1}+\lambda_1f_{-1}-2f_0)u$，故
 \[
-E\bigl(F^{-m}Xu\bigr)
-=F^{-m}\,T(X)u
--m\bigl(\mu+\deg X+m+1\bigr)F^{-m-1}Xu,
-\qquad
-T:=\pi_0\circ\ad(e_0),
+ E\bigl(f_0^{-2}f_{-1}f_1u\bigr)
+ =f_0^{-2}(f_1h_{-1}+\lambda_1f_{-1})u
+ -2w_1-2(\mu-1)f_0^{-3}f_{-1}f_1u,
 \]
-其中 $\pi_0$ 是 $M$ 到其 $F^0$-部分的投影。$T$ 把 $\mathcal X$-字映为
-$\mathcal X$-字的组合，使 $\deg$ 增加 $2$，并保持消灭 $u$ 的字的理想：
-$Wu=0\Rightarrow T(W)u=0$。
+旧公式漏掉非零项 $-2w_1$（\texttt{work/check\_audit\_regressions.py}
+机器核验）。
+\end{corollary}
+
+\section{原初空间}
+
+\begin{lemma}\label{lem:pole}
+若 $0\ne v\in Q_\nu$ 且 $Ev=0$，则 $\nu\in\Z_{\ge0}$，且 $v$ 的最高 pole
+恰为 $\nu+1$。
 \end{lemma}
+
 \begin{proof}
-由三重恒等式 $EF^{-m}=F^{-m}E-mF^{-m-1}H-m(m+1)F^{-m-2}F$ 与 $Eu=0$ 得
-$E(F^{-m}Xu)=F^{-m}(\ad E)(X)u-m(\mu+\deg X)F^{-m-1}Xu
--m(m+1)F^{-m-2}FXu$。在局部化中 $F^{-m-2}FXu=F^{-m-1}Xu$，且
-$(\ad E)(X)u\in M$ 在 $Q$ 中只贡献 $F^0$-部分，公式成立。括号关系
-$[e_0,f_j]=h_j$、$[e_0,h_r]=-2e_r$、$[e_0,e_i]=0$ 给出 $T$ 的字级描述；
-最后 $T(W)u=\pi_0E(Wu)$。
+写 $v=\sum_{m=1}^{N}f_0^{-m}x_m$，$x_m\in V_0$。在 pole $N+1$ 只有
+\eqref{eq:Eaction} 的对角项存活，迫使 $N=\nu+1$。
 \end{proof}
 
 \begin{theorem}\label{thm:P}
-对 $\nu\in\Z_{\ge0}$，
-\[
-P_\nu\;\cong\;
-\Big\{X\in\mathcal X:\ \deg X=-(\mu+\nu+2),\quad
-T^{\nu+1}(X)u=0\Big\},
-\]
-同构为 $v\mapsto$ 其在 pole $\nu+1$ 的顶层。特别地 $P_\nu\ne0$ 迫使
-$\mu+\nu$ 为偶数，且每个非零 $P_\nu$ 无穷维（乘 $h_{-1}$ 的幂）。
+非零向量 $v=\sum_{m=1}^{\nu+1}f_0^{-m}x_m\in Q_\nu$ 为原初，当且仅当其各层
+满足三角系统
+\begin{equation}\label{eq:recursion}
+ \sum_{m=k}^{\nu+1}A_{m-k}x_m=(k-1)(\nu-k+2)x_{k-1},
+ \qquad 1\le k\le\nu+1,\quad x_0=0,
+\end{equation}
+且 $k=1$ 处的相容条件为 $\sum_{m=1}^{\nu+1}A_{m-1}x_m=0$。$P_\nu$ 是该线性
+系统的解空间，一般不是单个 monomial 的集合；旧描述
+$P_\nu\cong\{X:T^{\nu+1}(X)u=0\}$ 错误。
 \end{theorem}
+
 \begin{proof}
-写 $v=\sum_{m=1}^{N}F^{-m}X_mu\in Q_\nu$，则 $\deg X_m=\nu-\mu-2m$。由引理
-\ref{lem:Eaction}，
-\[
-Ev=\sum_{m}F^{-m}T(X_m)u-\sum_{m}m(\nu-m+1)F^{-m-1}X_mu.
-\]
-在 pole $N+1$ 只有对角项，故 $Ev=0$ 迫使 $N=\nu+1$ 且 $X_{\nu+1}$ 无约束；
-pole $m=1,\dots,\nu+1$ 的方程为
-\[
-T(X_m)u=(m-1)(\nu-m+2)X_{m-1}u,\qquad X_0=0,\ X_{\nu+2}=0.
-\]
-对 $m\ge2$ 系数 $(m-1)(\nu-m+2)\ne0$，故各层由顶层唯一决定，而剩余条件
-$T(X_1)u=0$ 恰为 $T^{\nu+1}(X_{\nu+1})u=0$。
+用 \eqref{eq:Eaction} 比较 $Ev=0$ 中 $f_0^{-k}$ 的系数。$k=\nu+1$ 时右端
+为 $\nu x_\nu=A_0x_{\nu+1}$，故顶层向下逐层确定；$k=1$ 即剩余相容条件。
+$\nu=1$ 时系统为 $x_1=A_0x_2$ 与 $(A_0^2+A_1)x_2=0$。
 \end{proof}
 
-\begin{remark}\label{rem:checks}
-$\mu=-2$ 时 $P_0=\C w_1$（$X=1$），与 $Ew_1=0$ 一致；$e_{-1}w_1\in P_2$ 的
-顶层是 pole $3$ 处的 $-2f_{-1}$，且 $T^3(f_{-1})=0$。基本模型 $\lambda_0=0$
-时 $e_0^2f_1^2w_1\in P_2$，顶层为 $f_1^2$，$T^3(f_1^2)u=(-12h_1e_1+4e_2)u=0$。
-\end{remark}
+\begin{corollary}\label{cor:Zcounter}
+旧判据确有反例。元素
+\[
+ Z=h_{-1}^2+4f_{-1}e_{-1}+2h_{-2}
+ =h_{-1}^2+2(e_{-1}f_{-1}+f_{-1}e_{-1})
+\]
+与 $E$、$f_0$、$H$ 对易（不必在整个 $\g$ 中中心）。$\mu=-1$ 时
+$p=\lambda_1f_0^{-1}u+f_0^{-2}f_1u\in P_1$，且 $Zp\in P_1$ 的各层为
+$x_1=(\lambda_1Z-4h_{-1})u$、$x_2=(f_1Z-4(\kappa+1)f_{-1})u$，满足
+$A_0^2x_2=8e_{-1}u\ne0$；缺失项 $A_1x_2=-8e_{-1}u$ 恢复相容性（机器核验）。
+\end{corollary}
 
-\section{原初投影}
-设 $p\in P_\nu$ 的顶层为 $X$，各层为 $X_m$。
+\begin{corollary}\label{cor:P0}
+$\mu=-2$ 时 $\dim P_0=\infty$：向量 $Z^nw_1=f_0^{-1}Z^nu+M$（$n\ge0$）
+原初且线性无关，其最高 PBW 次数为 $2n$，主符号
+$(h_{-1}^2+4f_{-1}e_{-1})^n\ne0$。撤回旧断言 $P_0=\C w_1$。
+\end{corollary}
+
+\section{\texorpdfstring{$\slc$}{sl2}-分解与投影}
+
+\begin{theorem}\label{thm:sl2}
+$G$ 的每个向量落在有限维 $\slc(E,H,f_0)$-子模中，且作为横向 $\slc$-模
+\[
+ G\;\cong\;\bigoplus_{\nu\in\Z_{\ge0}}P_\nu\otimes L(\nu),
+\]
+其中 $L(\nu)$ 为 $(\nu+1)$ 维不可约模。此分解正确并保留；它不是
+$\g$-子模分解。
+\end{theorem}
+
+\begin{proof}
+$E$ 与 $f_0$ 在 $G$ 上局部幂零，故每个向量生成有限维 $\slc$-模；完全可约
+是 Weyl 定理，原初权为非负整数。
+\end{proof}
+
+全部投影的原理：current 模态在横向 $\slc$ 的伴随作用下构成 $L(2)$，而
+$L(2)\otimes L(\nu)\cong L(\nu+2)\oplus L(\nu)\oplus L(\nu-2)$
+（$\nu\ge2$）。
+
 \begin{proposition}\label{prop:proj}
-\begin{enumerate}[label=(\roman*)]
-\item $i\le A$：$e_ip\in P_{\nu+2}$，顶层为 $e_iX$；记 $\hat e_i(X)=e_iX$。
-\item $r<0$、$\nu\ge1$：
-$h_rp+\tfrac{2}{\nu+2}F e_r p\in P_\nu$，顶层为
+设 $p\in P_\nu$ 在 pole $\nu+1$ 的顶层为 $X$。
+\begin{enumerate}
+\item[(i)] $i\le A$：$e_ip\in P_{\nu+2}$；$\nu=0$ 时顶层为 $-2f_iu$
+（例：$\mu=-2$ 时 $e_{-1}w_1=f_0^{-1}e_{-1}u-f_0^{-2}h_{-1}u
+-2f_0^{-3}f_{-1}u$）；一般情形最高 pole $\nu+3$ 由 $[e_i,f_0^{-m}]$ 的修正层
+承载。
+\item[(ii)] $r<0$、$\nu\ge1$：$h_rp+\tfrac{2}{\nu+2}f_0e_rp\in P_\nu$，顶层
+为 $\tfrac{\nu}{\nu+2}(-h_rX+\tfrac1\nu f_rA_0X)$；$\nu=0$ 时
+$h_rp=-f_0e_rp$。
+\item[(iii)] $j\ge1$：$E^2f_jp=-2e_jp$，$f_jp$ 有 $P_{\nu+2}$ 与 $P_\nu$
+两个分量。
+\item[(iv)] $\nu\ge2$、任意 $j$：降权投影
+\begin{equation}\label{eq:lowering}
+ \ell_j(p)=f_jp-\tfrac1\nu f_0h_jp
+ -\tfrac{1}{\nu(\nu+1)}f_0^2e_jp\;\in\;P_{\nu-2},
+\end{equation}
+即上述张量积的 $L(\nu-2)$-分量。它确实非零：$\mu=-2$ 时对
+$p_2=e_{-1}w_1\in P_2$ 有
 \[
-\hat h_r(X)=\frac{\nu}{\nu+2}\Bigl(-h_rX+\tfrac{1}{\nu}f_rT(X)\Bigr).
+ \ell_1(p_2)=f_0^{-1}\Bigl(\tfrac13f_1e_{-1}+\tfrac{\lambda_1}{6}h_{-1}
+ +\tfrac{2\kappa-2}{3}\Bigr)u+M\in P_0\setminus\{0\}.
 \]
-$\nu=0$ 时 $h_rp=-Fe_rp$ 落在 $e_rp\in P_2$ 的 $L(2)$-块中，故 $h_rp$ 的
-$P_0$-分量为零。
-\item $j\ge1$：$f_jp\in G$，$E^2f_jp=-2e_jp$，其原初投影落在 $P_{\nu+2}$，
-顶层为 $e_jX$（低层由递推决定）。
 \end{enumerate}
-$G$ 作为 $\g$-模由 $P=\bigoplus_\nu P_\nu$ 生成；任一 $0\ne p\in P_\nu$
-生成的子模包含 $L(\nu)p$ 及 $p$ 在 $\{\hat e_i,\hat h_r,\hat f_j,E,F\}$
-所有字下的像。
 \end{proposition}
+
 \begin{proof}
-(i) $[E,e_i]=0$，对 $e_ip$ 应用定理 \ref{thm:P} 的 pole 分析即得。
-(ii) $[E,h_r]=-2e_r$、$[f_0,e_r]=-h_r$（$r<0$）给出
-$h_rp=e_rFp-Fe_rp$；$\nu=0$ 时 $Fp=0$，故 $h_rp=-Fe_rp$；$\nu\ge1$ 时
-$EFe_rp=(\nu+2)e_rp$，故 $E(h_rp+\tfrac{2}{\nu+2}Fe_rp)=0$，pole $\nu+2$
-层恰由 $[e_r,F^{-m}]=-mF^{-m-1}h_r-m(m+1)F^{-m-2}f_r$ 消去。
-(iii) $[E,f_j]=h_j$ 给出 $E^2f_jp=-2e_jp$，再由 $[E,e_j]=0$ 得
-$e_jp\in P_{\nu+2}$。
+(ii)(iii) 同前用 $[E,h_r]=-2e_r$、$[f_0,e_r]=-h_r$、$[E,f_j]=h_j$；(iv) 对
+\eqref{eq:lowering} 右端施加 $E$，并用 $p$ 的块上
+$Ef_0^s=s(\nu-s+1)f_0^{s-1}$ 验证。非零例机器核验。
 \end{proof}
 
-\section{权滤过与子模结构}
-定理 \ref{thm:P} 把 $G$ 的子模问题转化为权记簿问题。对 $\nu\ge0$ 定义
-\[
-G^{\ge\nu}\;=\;
-\bigoplus_{\nu'\ge\nu} P_{\nu'}\otimes L(\nu')\;\subseteq\;G ,
-\]
-即顶层权至少为 $\nu$ 的 $\slc$-块的张成。
+\section{子模结构：撤回与开放状态}
 
-\begin{lemma}\label{lem:stable}
-每个 $G^{\ge\nu}$ 是 $G$ 的 $\g$-子模。$P_\nu\ne0$ 当且仅当
-$\nu\ge\nu_0$ 且 $\nu\equiv\mu\pmod2$（$\nu_0$ 为允许顶层的极小 $\nu$），
-且对每个这样的 $\nu$，$e_1:P_\nu\to P_{\nu+2}$ 非零。
-\end{lemma}
-\begin{proof}
-生成元对块的作用：$e_r$ 把 $P_{\nu'}$ 映到 $P_{\nu'+2}$；$h_r$、$f_j$ 有
-$P_{\nu'}$-分量（命题 \ref{prop:proj} 的投影）与 $P_{\nu'+2}$-分量；
-$E,H,F$ 在块内作用，$K$ 为数乘。故 $G^{\ge\nu}$ 稳定。顶层之权迫使
-$\mu+\nu$ 为偶数；对 $0\ne p$，$e_1p$ 的顶层 $f_1X\ne0$，故支撑无空缺。
-\end{proof}
+\paragraph{权尾部不是仿射子模。}
+旧稿声称 $G^{\ge\nu}:=\bigoplus_{\nu'\ge\nu}P_{\nu'}\otimes L(\nu')$ 是
+$\g$-子模。这是错误的。
+\begin{enumerate}
+\item[(i)] 中心障碍：$\mu=-2$、$\kappa\ne0$ 时取 $p=w_1\in L(0)$。
+$h_{\pm1}p=-f_0e_{\pm1}p$ 落在顶层权为 $2$ 的块中，故 $h_1p$、$h_{-1}p$
+都在 $G^{\ge2}$ 内；若 $G^{\ge2}$ 是子模，则
+$[h_1,h_{-1}]p=2\kappa p\in G^{\ge2}$，与 $p\in L(0)$、$\kappa\ne0$
+矛盾（机器核验）。
+\item[(ii)] 降权通道：$\mu=-2$ 时 $\ell_1(e_{-1}w_1)\in P_0\setminus\{0\}$
+说明模态把 $P_2$ 映进 $P_0$，故 $\kappa=0$ 时尾部同样不稳定。
+\end{enumerate}
+因此在水平 $\kappa\ne0$ 时 $Q$ 没有非零平凡仿射商模：$K$ 作用为 $\kappa$，
+而所有 $h$-模态作用为零会迫使 $[h_1,h_{-1}]=2K$ 作用为零。
 
-\begin{theorem}\label{thm:weight}
-以 $\nu_0$ 如引理 \ref{lem:stable}，
-\[
-G=G^{\ge\nu_0}\;\supsetneq\;G^{\ge\nu_0+1}\;\supsetneq\;
-G^{\ge\nu_0+2}\;\supsetneq\;\cdots
-\]
-是 $\g$-子模的无限严格降链（$P_\nu=0$ 的层合并），其商为：
-\begin{enumerate}[label=(\roman*)]
-\item $\nu\ge1$ 时
-\[
-G^{\ge\nu}/G^{\ge\nu+1}
-\;\cong\;\bigoplus_{q\ge q_\nu}
-\bigl(P_\nu^{(q)}\otimes L(\nu)\bigr),
-\qquad
-P_\nu^{(q)}=\bigl\{X\in\mathcal X:\ p(X)=q+\tfrac{\mu+\nu+2}{2},\ 
-e(X)=q,\ T^{\nu+1}(X)u=0\bigr\},
-\]
-且每个直和项都是单 $\g$-模。
-\item 若 $P_0\ne0$，则 $G^{\ge0}/G^{\ge1}\cong P_0\otimes L(0)$ 是一维平凡
-$\g$-模的直和：对 $p\in P_0$ 有 $h_rp=-Fe_rp$、$h_jp=-Fe_jp$、
-$f_jp=-\tfrac12F^2e_jp$，故每个生成元都把 $P_0$ 映到 $\nu\ge2$ 部分，且
-$Fp=Ep=0$。
-\end{enumerate}
-因此：
-\begin{enumerate}[label=(\roman*)]
-\item $G$ 不单；
-\item $\operatorname{soc}(G)=0$，从而 $\operatorname{soc}(Q_c)=0$：$G_c$ 不是
-$Q_c$ 的 socle；
-\item $G$ 没有有限合成列（长度无限），合成因子为
-$P_\nu^{(q)}\otimes L(\nu)$ 与 $P_0\otimes L(0)$；
-\item $G$ 的头是 $\nu_0$-商：单模的直和（$\nu_0=0$ 时为平凡模的直和）。
-\end{enumerate}
-\end{theorem}
-\begin{proof}
-链的严格性与非空性来自引理 \ref{lem:stable}。商
-$G^{\ge\nu}/G^{\ge\nu+1}$ 中，$e_r$ 把直和项的顶向量送入 $G^{\ge\nu+2}$，
-并在低块层上经投影 $\hat h_r,\hat f_r$ 作用（由
-$[e_r,F^s]=sh_rF^{s-1}-s(s-1)f_rF^{s-2}$），故保持每个直和项。投影
-$\hat h_r,\hat h_j,\hat f_j$ 保持顶层的 $(p,e)$ 计数（其候选低计项因
-$\deg X=-(\mu+\nu+2)$ 而在 $P_\nu$ 内相消）。h-投影在
-$(h$-次数、e-次数$)$ 滤过下三角作用，首项 $h_rX$ 的非零系数为
-$-\nu/(\nu+2)$（$\nu\ge1$ 时成立），故由任一非零类可生成整个直和项
-$P_\nu^{(q)}\otimes L(\nu)$；$L(\nu)$-因子在 $E,H,F$ 下不可约。故每个直和项
-单，不同 $q$ 之间无交互。$\nu=0$ 时 (ii) 中的恒等式（基本模型情形已由
-(ii) 中的恒等式对一般情形成立：对 $p_0=F^{-1}Xu\in P_0$ 有
-$h_rp_0=F^{-1}h_rXu+2F^{-2}f_rXu=-Fe_rp_0$，且
-$f_jp_0+\tfrac12F^2e_jp_0=-\tfrac12h_jXu=
--\tfrac12(\lambda_jX+[h_j,X])u\in M$（$[h_j,X]u$ 被吸收进 $M$）；基本模型
-情形已由 \texttt{work/check\_gc\_filter.py} 验证。
-含原初向量，从而（由生成论证）含整个尾部 $G^{\ge\nu}$，故不存在单子模，
-socle 为零。
-\end{proof}
+\paragraph{撤回的断言。}
+以下由无效滤过推出的结论撤回为已证结果：$G$ 永不单；
+$\operatorname{soc}(G)=0$ 与 $\operatorname{soc}(Q)=0$；$G$ 合成长度无限；
+商 $G^{\ge\nu}/G^{\ge\nu+1}$ 单并构成 head。其否命题同样未证：$G_c$ 的
+内部分类为开放问题。
 
-\begin{remark}\label{rem:shallow}
-\begin{enumerate}[label=(\roman*)]
-\item 浅区 $-a\le c<b$ 中 $E=e_{-c}$ 在 $Q_c$ 上单射，故
-$G_c=\{v:E^nv=0\}=0$：以上结构论是对所有非边界指标的完整回答，只有深区
-带有非零局部幂零部分。
-\item 基本模型 $M_{-1,1}$ 在 $\lambda_0=0$ 时 $P_0=0$、$\nu_0=2$：链为
-$G\supsetneq G^{\ge4}\supsetneq G^{\ge6}\supsetneq\cdots$，典范向量
-$e_0^2f_1^2w_1$（顶层 $f_1^2$）生成第一个商的和项 $P_2^{(0)}\otimes L(2)$。
-\item $\mu=-2$ 且 $B=L$、各 $\lambda_j\ne0$（$1\le j\le L$）时
-$P_0=\C w_1$，链从 $\nu_0=0$ 开始，首个商为平凡模 $\C w_1$。
-\end{enumerate}
-\end{remark}
+\paragraph{保留的结论。}
+边界同构；深区单性判据 $\mathcal T_{f_c}M_{a,b}$ 单 $\iff
+\lambda_0-c\kappa\notin\Z$（在 $\lambda_L\ne0$、$\kappa\ne-2$ 下）；整数参数
+的唯一极大子模 $G_c$、simple head $Q_c/G_c$ 与不分裂扩张；代数中心约化的
+相容性；$G_c$ 的横向 $\slc$-分解；本文的修正递推与命题 \ref{prop:proj} 的
+投影。正确的 $G_c$ 子模分析必须同时追踪 $L(\nu+2)$、$L(\nu)$、$L(\nu-2)$
+三个通道；旧滤过弃用。
 
 \section{验证状态}
-以上结构结论直接来自统一笔记与 addendum 的 PBW 公式。E-作用公式（引理
-\ref{lem:Eaction}）与注记 \ref{rem:checks} 的一致性例子已由精确符号计算确认
-（\texttt{work/check\_gc\_sanity.py}、\texttt{work/check\_gc\_filter.py}）；
-本笔记不是独立审稿或形式化证书。
 
+审计 \texttt{audits/2026-09-22/}（报告、154 项独立精确检查、结果、日志）已
+纳入仓库。四类反例由 \texttt{work/check\_audit\_regressions.py} 复现
+（24 项）：E-作用残差 $-2w_1$；截断 $T$ 残差 $-4e_{-2}u$；$P_0$ 的 $Z$-族
+与 $\mu=-1$ 的修正递推例；障碍 $[h_1,h_{-1}]w_1=2\kappa w_1$；非零
+$\ell_1(p_2)$。这些是佐证而非形式证明；子模分类的开放状态应在任何项目摘要
+中如实反映。
+
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024), Theorem~1.1.
+\url{https://arxiv.org/abs/2404.03855v2}.
+
+\bibitem{Audit}
+2026-09-22 独立审计：\texttt{audits/2026-09-22/audit\_report\_cn.md} 与
+\texttt{audits/2026-09-22/independent\_pbw\_audit.py}（154 项精确检查）。
+
+\bibitem{Unified}
+项目笔记：\emph{Boundary and Nonboundary Localization Quotients of Smooth
+Affine Modules}（统一笔记，2026 年 9 月）及 2026-09-15 附录。
+\end{thebibliography}
 \end{document}

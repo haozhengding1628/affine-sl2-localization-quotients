@@ -1103,22 +1103,34 @@ does not imply this.
 \section{Open problems}\label{sec:open}
 
 \begin{enumerate}[leftmargin=*,label=\arabic*.]
-\item \textbf{Nonintegral simplicity in the basic case.}
-Under \(\lambda_1\ne0\) and \(\kappa\ne-2\), the natural candidate is
+\item \textbf{Nonintegral simplicity in the basic case. --- Resolved}
+by the addendum (2026-09-15): under \(\lambda_1\ne0\), \(\kappa\ne-2\),
 \[
 T_{f_0}M_{-1,1}(\chi)\text{ simple}
-\quad\Longleftrightarrow\quad \lambda_0\notin\Z.
+\quad\Longleftrightarrow\quad \lambda_0\notin\Z,
 \]
-Only the necessary direction is proved. The missing step is to reduce an
-arbitrary nonzero submodule vector to a pure fraction that generates the
-whole quotient.
-\item \textbf{The corresponding deep-region criterion.}
-Under \(\lambda_L\ne0\), \(\kappa\ne-2\), and \(d_*\ge L\), does
-\(\mu=\lambda_0-c\kappa\notin\Z\) imply simplicity?
-\item \textbf{The integral-parameter submodule structure.}
-Determine whether \(G_c\) and \(Q_c/G_c\) are simple, whether \(G_c\) is the
-socle, whether their extension splits, and whether \(Q_c\) has finite
-Jordan--H\"older length.
+via the rank-one containment argument (Theorem on the containment of all
+proper submodules).
+\item \textbf{The corresponding deep-region criterion. --- Resolved}
+by the same addendum: under \(\lambda_L\ne0\), \(\kappa\ne-2\),
+\(d_*\ge L\),
+\[
+\mathcal T_{f_c}M_{a,b}\text{ simple}
+\quad\Longleftrightarrow\quad \mu=\lambda_0-c\kappa\notin\Z.
+\]
+\item \textbf{The integral-parameter submodule structure. --- Partially
+resolved; internal structure of \(G_c\) still open.}
+The addendum proves that \(G_c\) is the unique maximal submodule,
+\(Q_c/G_c\) is simple, and the extension is nonsplit. The further
+questions (simplicity of \(G_c\), whether it is the socle, its Jordan--
+H\"older length) were addressed in a note of 2026-09-22; an independent
+audit of that date (\texttt{audits/2026-09-22/}) found counterexamples to
+several of its claims (E-action formula, primitive-space description, the
+weight-filtration), which have been withdrawn in the corrected notes
+\texttt{gc\_structure\_advisor\_en} and \texttt{gc\_structure\_research\_cn}.
+The internal classification of \(G_c\) remains open; what is retained is
+the transverse \(\mathfrak{sl}_2\)-decomposition and the corrected
+primitive recursion.
 \item \textbf{Simplicity in the shallow region.}
 Here \(e_{-c}\) is injective for all \(\mu\), so the deep-region integral
 obstruction disappears. Does simplicity of the original module suffice?

@@ -1007,18 +1007,26 @@ Z_i^{a,b}=T(q-i)=Z_i^{a+1,b-1},
 \section{开放问题}\label{sec:open}
 
 \begin{enumerate}[leftmargin=*,label=\arabic*.]
-\item \textbf{基本模的非整数单性。} 在 \(\lambda_1\ne0\)、\(\kappa\ne-2\)
-下，最自然的候选判据是
+\item \textbf{基本模的非整数单性。--- 已由 2026-09-15 附录解决。} 在
+\(\lambda_1\ne0\)、\(\kappa\ne-2\) 下，
 \[
-T_{f_0}M_{-1,1}(\chi)\ \text{单}\ \Longleftrightarrow\ \lambda_0\notin\Z.
+T_{f_0}M_{-1,1}(\chi)\ \text{单}\ \Longleftrightarrow\ \lambda_0\notin\Z,
 \]
-目前只证明了必要方向。缺的一步是把任意非零子模中的向量降到能生成整个商
-的纯分式。
-\item \textbf{深区的对应判据。} 在 \(\lambda_L\ne0\)、\(\kappa\ne-2\)、
-\(d_*\ge L\) 下，\(\mu=\lambda_0-c\kappa\notin\Z\) 是否推出单性？
-\item \textbf{整数参数的子模层。} 判定 \(G_c\)、\(Q_c/G_c\) 是否单、
-\(G_c\) 是否 socle、扩张是否分裂、\(Q_c\) 是否有有限
-Jordan--H\"older 长度。
+证明为秩一子模包含论证（一切真子模含于 \(E\)-局部幂零部分的定理）。
+\item \textbf{深区的对应判据。--- 已由同一附录解决。} 在
+\(\lambda_L\ne0\)、\(\kappa\ne-2\)、\(d_*\ge L\) 下，
+\[
+\mathcal T_{f_c}M_{a,b}\ \text{单}\ \Longleftrightarrow\
+\mu=\lambda_0-c\kappa\notin\Z.
+\]
+\item \textbf{整数参数的子模层。--- 部分解决；\(G_c\) 内部结构仍开放。}
+附录证明 \(G_c\) 是唯一极大子模、\(Q_c/G_c\) 单、扩张不分裂。其余问题
+（\(G_c\) 是否单、是否 socle、Jordan--H\"older 长度）在 2026-09-22 的笔记
+中处理过，但当日独立审计（\texttt{audits/2026-09-22/}）发现其中若干断言
+的反例（E-作用公式、原初空间描述、权滤过），已在修正笔记
+\texttt{gc\_structure\_advisor\_en} 与
+\texttt{gc\_structure\_research\_cn} 中撤回。\(G_c\) 的内部分类仍开放；
+保留的是横向 \(\mathfrak{sl}_2\)-分解与修正后的原初递推。
 \item \textbf{浅区的单性。} 此区 \(e_{-c}\) 对一切 \(\mu\) 单射，深区的整
 数障碍消失。原模单是否已经足够？
 \item \textbf{参数同构与退化。} level \(\kappa\)、权支撑
