@@ -1,0 +1,772 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,microtype,xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,
+  citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{3pt}
+\setlist{itemsep=3pt,topsep=5pt}
+\allowdisplaybreaks[2]
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\g}{\mathfrak g}
+\newcommand{\slc}{\mathfrak{sl}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\T}{\mathcal T}
+\newcommand{\I}{\mathcal I}
+\newtheoremstyle{plainupright}{6pt}{5pt}{\normalfont}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{plainupright}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\hypersetup{
+  pdftitle={Additional Progress on Localization Quotients},
+  pdfsubject={Deep-region simplicity, the unique maximal submodule,
+    and compatibility with central reduction}}
+\title{Additional Progress on Localization Quotients\\[4pt]
+  \large Deep-region simplicity, the unique maximal submodule,\\
+  and compatibility with central reduction}
+\author{}
+\date{September 15, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+This addendum completes the nonintegral simplicity arguments for
+\(\T_{f_0}M_{-1,1}\) and, more generally, for the deep-region quotients
+\(\T_{f_c}M_{a,b}\) of simple induced modules.
+The main new argument shows that every proper submodule of such a quotient
+is contained in its \(e_{-c}\)-locally nilpotent part.
+At integral parameters this part is therefore the unique maximal submodule;
+the corresponding quotient is simple, the extension is nonsplit, and the
+localization quotient is indecomposable.
+We also prove that algebraic Sugawara central reduction commutes with
+quotient localization, including at nonboundary modes.
+Simplicity of the maximal submodule itself and shallow-region simplicity
+are not established here.
+\end{abstract}
+
+\section{Definitions, assumptions, and the new statements}
+
+We work over \(\C\), write \(\N=\{1,2,\ldots\}\), and initially omit
+the degree derivation. Set
+\[
+\g=(\slc\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g),
+\]
+where \(x_r=x\otimes t^r\), with brackets
+\begin{align*}
+[e_r,f_s]&=h_{r+s}+r\delta_{r+s,0}K,&
+[h_r,h_s]&=2r\delta_{r+s,0}K,\\
+[h_r,e_s]&=2e_{r+s},&
+[h_r,f_s]&=-2f_{r+s}.
+\end{align*}
+The \(e\)'s commute, the \(f\)'s commute, and \(K\) is central.
+
+Fix \(a,b\in\Z\) with \(a+b\ge0\), put \(L=a+b+1\ge1\), and define
+\[
+S_{a,b}=\Span\{K,\ h_i\ (i\ge0),\ e_i\ (i>a),\ f_j\ (j>b)\}.
+\]
+Let \(\chi:S_{a,b}\to\C\) be the character with
+\[
+\chi(K)=\kappa,\qquad \chi(h_i)=\lambda_i,\qquad
+\chi(e_i)=\chi(f_j)=0,\qquad \lambda_i=0\quad(i>L).
+\]
+Let \(\C_\chi\) denote the corresponding one-dimensional module, and set
+\[
+M=M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad u=1\otimes1_\chi.
+\]
+If the notation \(M^c_{a,b}\) from the unified note \cite{Unified} is used,
+it means this same module \(M_{a,b}\), without the derivation.
+
+For a root mode \(F=f_c\), the powers of \(F\) form an Ore set:
+\(\ad F\) is locally nilpotent on \(U\).
+Write
+\[
+U_F=U[F^{-1}],\qquad D_FV=U_F\otimes_U V,\qquad
+\T_FV=\operatorname{coker}(V\longrightarrow D_FV).
+\]
+When \(F\) is injective on \(V\), we identify \(V\) with its image and
+write \(\T_FV=D_FV/V\). Negative powers act on \(D_FV\), not on
+\(\T_FV\).
+
+For the simplicity results in Sections~2--4, our affine hypotheses are
+\begin{equation}\label{eq:affine-assumptions}
+\lambda_L\ne0,\qquad \kappa\ne-2,\qquad
+c<b,\qquad c\le-a-1.
+\end{equation}
+The last condition is the \emph{deep-region} condition
+\[
+d_*:=b-c\ge L.
+\]
+Put
+\[
+E=e_{-c},\qquad F=f_c,\qquad H=h_0-cK,\qquad
+\mu=\lambda_0-c\kappa.
+\]
+Then
+\[
+[H,E]=2E,\qquad [H,F]=-2F,\qquad [E,F]=H,\qquad
+Eu=0,\qquad Hu=\mu u.
+\]
+By the FGXZ simplicity criterion, the first two conditions in
+\eqref{eq:affine-assumptions} make \(M\) simple
+\cite[Theorem 1.1]{FGXZ}.
+
+Order PBW with \(F\) first, followed by the remaining free \(f\)-modes,
+the free \(e\)-modes, the negative \(h\)-modes, and finally \(S_{a,b}\).
+PBW then makes \(M\) free over \(\C[F]\), so \(F\) is injective. Define
+\[
+D=D_FM,\qquad Q_c=D/M,\qquad
+w_m=F^{-m}u+M\quad(m\ge1).
+\]
+The localized PBW basis shows that the \(w_m\) are nonzero and that
+\(F\) on \(Q_c\) is surjective and locally nilpotent. The operator \(H\)
+is semisimple on \(M,D,Q_c\), with weights in \(\mu+2\Z\).
+An operator is \emph{locally nilpotent} if every vector is killed by
+some power of it; it is \emph{locally finite} if every vector generates
+a finite-dimensional module for the polynomial algebra in that operator.
+
+Set
+\[
+G_c=\{v\in Q_c:E^nv=0\text{ for some }n\ge1\}.
+\]
+The new conclusions will be
+\[
+Q_c\text{ is simple}\quad\Longleftrightarrow\quad\mu\notin\Z,
+\]
+and, when \(\mu\in\Z\), that \(G_c\) is the unique maximal submodule,
+\(Q_c/G_c\) is simple, and their extension is nonsplit.
+The argument is first proved in a general rank-one setting.
+
+\section{A rank-one submodule argument}
+
+\subsection{General hypotheses and Casimir local finiteness}
+
+In this section let \(\mathfrak a\) be a complex Lie algebra containing
+an \(\slc\)-triple \((E,H,F)\), with the brackets displayed above.
+Write \(A=U(\mathfrak a)\), and assume:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item \(\ad E\) and \(\ad F\) are locally nilpotent on \(A\), and
+the Ore localization \(A_F\) at the powers of \(F\) exists;
+\item \(M\) is a simple \(A\)-module on which \(H\) acts semisimply,
+\(E\) acts locally nilpotently, and \(F\) acts injectively.
+\end{enumerate}
+Let
+\[
+D=A_F\otimes_A M,\qquad Q=D/M,\qquad
+G=\{q\in Q:E^nq=0\text{ for some }n\ge1\}.
+\]
+The \(H\)-action on \(D\) and \(Q\) is semisimple because
+\([H,F^{-m}]=2mF^{-m}\).
+The subspace \(G\) is an \(A\)-submodule: if \(E^nq=0\), the finite
+Leibniz expansion
+\[
+E^r(sq)=\sum_{j=0}^r\binom rj(\ad E)^j(s)E^{r-j}q
+\]
+vanishes for sufficiently large \(r\), for every \(s\in A\).
+
+Define the rank-one Casimir
+\begin{equation}\label{eq:rank-one-C}
+C=H^2+2H+4FE.
+\end{equation}
+It commutes with \(E,H,F\). We do \emph{not} assume that it is central
+in \(A\). In particular, it is not the completed affine Casimir
+\(\Omega\) involving the degree derivation.
+
+\begin{lemma}[Casimir factorization]\label{lem:casimir}
+For \(Hz=\nu z\) and \(n\ge0\),
+\begin{equation}\label{eq:factorization}
+\begin{aligned}
+F^nE^nz&=A_n(C;\nu)z,\\
+A_n(t;\nu)&=4^{-n}\prod_{j=0}^{n-1}
+\bigl(t-(\nu+2j)(\nu+2j+2)\bigr),
+\end{aligned}
+\end{equation}
+where \(A_0=1\). Consequently, \(C\) acts locally finitely on \(M\)
+and on \(D\).
+\end{lemma}
+\begin{proof}
+For \(n=1\), the identity is \(FE=(C-H^2-2H)/4\).
+If it holds for \(n\), apply it to the weight vector \(Ez\), whose
+weight is \(\nu+2\), and then multiply by \(F\). Since \(C\) commutes
+with \(F\) and \(E\), this gives the next factor and proves
+\eqref{eq:factorization}.
+
+For a weight vector \(z\in M\), choose \(n\ge1\) with \(E^nz=0\).
+Then the nonzero polynomial \(A_n(t;\nu)\) annihilates \(z\) when
+evaluated at \(C\). Every vector of \(M\) has finitely many weight
+components, so a product of such polynomials annihilates it.
+Thus \(C\) acts locally finitely on \(M\).
+Every vector of \(D\) can be written \(F^{-m}z\), and \(C\) commutes
+with \(F^{-1}\). The same annihilating polynomial works in \(D\).
+\end{proof}
+
+\subsection{The infinitely divisible subspace}
+
+\begin{lemma}\label{lem:divisible}
+For an \(A\)-submodule \(P\subseteq D\), define
+\[
+W(P)=\bigcap_{n\ge0}F^nP.
+\]
+Then \(W(P)\) is an \(A\)-submodule and is stable under \(F^{-1}\).
+If \(W(P)\ne0\), then \(P=D\).
+\end{lemma}
+\begin{proof}
+Fix \(s\in A\), and choose \(\ell\ge0\) with
+\((\ad F)^{\ell+1}(s)=0\). For every \(n\ge0\),
+\[
+sF^{n+\ell}
+=\sum_{j=0}^{\ell}(-1)^j\binom{n+\ell}{j}
+F^{n+\ell-j}(\ad F)^j(s).
+\]
+If \(w\in W(P)\), write \(w=F^{n+\ell}p\) with \(p\in P\).
+Every term in the displayed expansion belongs to \(F^nP\), since
+each \((\ad F)^j(s)\) preserves \(P\).
+Hence \(sw\in F^nP\) for every \(n\), proving \(A\)-stability.
+Notice that the individual spaces \(F^nP\) need not be \(A\)-submodules.
+
+For \(w\in W(P)\), write \(w=F^{n+1}p\) for each \(n\ge0\).
+Since \(F\) is invertible on \(D\), this gives \(F^{-1}w=F^np\).
+Thus \(F^{-1}w\in W(P)\).
+
+If \(0\ne w\in W(P)\), multiplication by a sufficiently large power
+of \(F\) yields a nonzero vector of \(M\). It follows that
+\(W(P)\cap M\ne0\). Simplicity of \(M\) gives \(M\subseteq W(P)\);
+stability under \(F^{-1}\) then gives
+\(D=D_FM\subseteq W(P)\subseteq P\subseteq D\).
+\end{proof}
+
+\begin{theorem}[Containment of all proper submodules]\label{thm:containment}
+Under the general hypotheses of this section, every proper
+\(A\)-submodule \(N\subsetneq Q\) is contained in \(G\).
+If \(G\ne Q\), then \(G\) is the unique maximal submodule of \(Q\),
+the quotient \(Q/G\) is simple, and \(Q\) is indecomposable.
+If moreover \(G\ne0\), the sequence
+\[
+0\longrightarrow G\longrightarrow Q\longrightarrow Q/G
+\longrightarrow0
+\]
+is nonsplit.
+\end{theorem}
+\begin{proof}
+Let \(N\subseteq Q\) be a submodule not contained in \(G\), and let
+\(P\subseteq D\) be its inverse image, so \(M\subseteq P\) and \(P/M=N\).
+We show \(N=Q\).
+
+Choose \(q\in N\) on which \(E\) is not locally nilpotent.
+Since \(H\) is semisimple and every vector has finitely many weight
+components, one weight component also has this property.
+Each component belongs to \(N\), being obtainable by a polynomial
+in \(H\). We may therefore assume that \(q\) is a weight vector.
+Lift it to a weight vector \(w\in P\), say \(Hw=\eta w\).
+By Lemma~\ref{lem:casimir}, choose a nonzero polynomial \(p(t)\)
+such that \(p(C)w=0\).
+
+There are only finitely many nonnegative integers \(k\) for which
+\[
+p\bigl((\eta+2k)(\eta+2k+2)\bigr)=0:
+\]
+each root of \(p\) gives at most two possible complex values of \(k\).
+Choose an integer \(r\ge0\) larger than all such nonnegative integers,
+and set
+\[
+v=E^rw,\qquad \nu=\eta+2r.
+\]
+Its image \(E^rq\) in \(Q\) is nonzero, so \(v\ne0\).
+Also \(Hv=\nu v\) and \(p(C)v=0\), since \(C\) commutes with \(E\).
+By the choice of \(r\),
+\[
+p\bigl((\nu+2j)(\nu+2j+2)\bigr)\ne0\qquad(j\ge0).
+\]
+
+For every \(n\ge1\), the polynomials \(p(t)\) and \(A_n(t;\nu)\)
+are therefore relatively prime. Choose \(B_n(t),R_n(t)\in\C[t]\)
+with
+\[
+A_n(t;\nu)B_n(t)+p(t)R_n(t)=1.
+\]
+The vector \(B_n(C)v\) has weight \(\nu\). Applying
+\eqref{eq:factorization} to it gives
+\[
+F^n\bigl(E^nB_n(C)v\bigr)
+=A_n(C;\nu)B_n(C)v=v.
+\]
+Since \(P\) is an \(A\)-submodule, \(E^nB_n(C)v\in P\).
+Thus \(0\ne v\in W(P)\), and Lemma~\ref{lem:divisible} gives
+\(P=D\), hence \(N=Q\).
+This proves the containment assertion.
+
+If \(G\ne Q\), it is itself a proper submodule and contains every
+proper submodule. Hence it is the unique maximal submodule, and
+\(Q/G\) is simple.
+In a nontrivial direct sum decomposition of \(Q\), both summands
+would be proper and therefore contained in \(G\), an impossibility.
+This proves indecomposability.
+When \(0\ne G\ne Q\), a splitting of the displayed exact sequence
+would give such a nontrivial direct sum decomposition.
+\end{proof}
+
+\begin{remark}
+The proof starts with an arbitrary submodule vector and constructs an
+actual nonzero \(A\)-submodule \(W(P)\) inside the full localization.
+This is the step not supplied by cyclicity of a chosen pure fraction.
+No equivalence of BGG categories, finite weight multiplicity, or
+centrality of \(C\) in \(A\) is used.
+\end{remark}
+
+\section{Application to the deep-region affine quotients}
+
+Return to the affine notation of Section~1.
+Both \(\ad E\) and \(\ad F\) are locally nilpotent on \(U\), as follows
+directly from the current brackets and the Leibniz rule.
+Since \(Eu=0\),
+\[
+E^n(su)=(\ad E)^n(s)u\qquad(s\in U),
+\]
+so \(E\) is locally nilpotent on the entire original module \(M\).
+Thus all hypotheses of Section~2 hold under
+\eqref{eq:affine-assumptions}.
+
+For completeness, we include the rank-one calculation from the
+unified note that determines when \(G_c\) is zero or proper.
+This calculation itself does not require simplicity of \(M\).
+
+\begin{proposition}[The locally nilpotent part]\label{prop:G}
+Assume only \(c<b\) and \(c\le-a-1\), with the induced module and
+character defined in Section~1. Then \(G_c\) is always a proper
+submodule of \(Q_c\), and
+\[
+G_c=0\quad\Longleftrightarrow\quad \mu\notin\Z.
+\]
+If \(\mu\in\Z\) and \(k\) is any integer with
+\(k\ge\max(1,\mu+2)\), then
+\[
+0\ne f_b^kw_1\in G_c,\qquad
+E^{\,2k-\mu-1}(f_b^kw_1)=0.
+\]
+\end{proposition}
+\begin{proof}
+The rank-one commutation identity gives
+\begin{equation}\label{eq:pure-recursion}
+Ew_m=-m(\mu+m+1)w_{m+1},\qquad Hw_m=(\mu+2m)w_m.
+\end{equation}
+Choose a positive integer \(m\) such that
+\(\mu+m+j+1\ne0\) for every \(j\ge0\).
+Then all successive \(E\)-images of \(w_m\) are nonzero by PBW.
+Hence \(w_m\notin G_c\), so \(G_c\ne Q_c\).
+
+Suppose \(\mu\notin\Z\) and \(G_c\ne0\).
+Taking a weight component and then its last nonzero \(E\)-image
+produces a nonzero weight vector \(v\in\ker E\cap G_c\).
+Write \(Hv=\nu v\). Since \(F\) is locally nilpotent on \(Q_c\),
+choose the least \(n\ge1\) with \(F^nv=0\).
+The rank-one identity yields
+\[
+0=EF^nv=n(\nu-n+1)F^{n-1}v.
+\]
+Minimality implies \(\nu=n-1\in\Z\), contradicting
+\(\nu\in\mu+2\Z\). Thus \(G_c=0\).
+
+Now let \(\mu\in\Z\), fix \(k\ge\max(1,\mu+2)\), and put
+\[
+Y=f_b,\qquad \eta=\lambda_{d_*}.
+\]
+On \(\C[F,Y]u\), direct commutation gives
+\begin{equation}\label{eq:two-variable}
+\begin{aligned}
+E(F^jY^\ell u)
+&=j(\mu-j+1-2\ell)F^{j-1}Y^\ell u\\
+&\quad+\ell\eta F^jY^{\ell-1}u.
+\end{aligned}
+\end{equation}
+Indeed, \([E,Y]=h_{d_*}\), the \(H\)-weight of \(Y^\ell u\) is
+\(\mu-2\ell\), and the further commutators introduce
+\(f_{b+d_*}\), which annihilates \(u\).
+
+Define
+\[
+v_k=\sum_{j=0}^k a_jF^jY^{k-j}u,\qquad a_0=1,\qquad
+a_j=-\frac{(k-j+1)\eta}{j(\mu-2k+j+1)}a_{j-1}.
+\]
+The denominators are nonzero because
+\(\mu-2k+j+1\le\mu-k+1<0\).
+In \eqref{eq:two-variable}, the coefficient of
+\(F^{j-1}Y^{k-j}u\) in \(Ev_k\) is
+\[
+j(\mu-2k+j+1)a_j+(k-j+1)\eta a_{j-1}=0.
+\]
+Thus \(Ev_k=0\) and \(Hv_k=\nu v_k\), where \(\nu=\mu-2k\le-2\).
+For every \(m\ge1\), in the full localization,
+\[
+E(F^{-m}v_k)=-m(\nu+m+1)F^{-m-1}v_k.
+\]
+At \(m=-\nu-1\) the coefficient is zero, and hence
+\[
+E^{-\nu-1}(F^{-1}v_k)=0.
+\]
+Passing to the quotient gives
+\[
+F^{-1}v_k+M=Y^kw_1\ne0.
+\]
+All terms with \(j\ge1\) lie in \(M\) after multiplication by \(F^{-1}\);
+the remaining term is a nonzero localized PBW basis vector.
+This proves the claimed nonzero element of \(G_c\).
+If \(d_*>L\), then \(\eta=0\) and the construction simplifies to
+\(v_k=Y^ku\).
+\end{proof}
+
+\begin{theorem}[Deep-region simplicity and the simple head]\label{thm:deep}
+Assume \eqref{eq:affine-assumptions}. Then
+\[
+\boxed{\quad
+\T_{f_c}M_{a,b}(\chi)\text{ is simple}
+\quad\Longleftrightarrow\quad
+\lambda_0-c\kappa\notin\Z.
+\quad}
+\]
+For every value of \(\mu=\lambda_0-c\kappa\), \(G_c\) is the unique
+maximal submodule of \(Q_c\), \(Q_c/G_c\) is simple, and \(Q_c\)
+is indecomposable. When \(\mu\in\Z\), one has \(0\ne G_c\ne Q_c\),
+every proper submodule is contained in \(G_c\), and
+\begin{equation}\label{eq:nonsplit}
+0\longrightarrow G_c\longrightarrow Q_c\longrightarrow Q_c/G_c
+\longrightarrow0
+\end{equation}
+does not split.
+\end{theorem}
+\begin{proof}
+The FGXZ criterion supplies simplicity of \(M\); PBW supplies
+injectivity of \(F\) and semisimplicity of \(H\); the beginning of
+this section supplies local nilpotence of \(E\).
+Apply Theorem~\ref{thm:containment}, and then
+Proposition~\ref{prop:G}.
+If \(\mu\notin\Z\), every proper submodule is contained in
+\(G_c=0\), so \(Q_c\) is simple.
+If \(\mu\in\Z\), the nonzero proper submodule \(G_c\) rules out
+simplicity, and the remaining assertions follow from the same theorem.
+\end{proof}
+
+\begin{remark}[Where simplicity of the original module enters]
+The only use of simplicity of \(M\) in the new submodule argument is
+the implication
+\[
+W(P)\cap M\ne0\quad\Longrightarrow\quad M\subseteq W(P).
+\]
+The pure-fraction recurrence and the construction of \(G_c\) are
+valid without \(\lambda_L\ne0\) or \(\kappa\ne-2\).
+Theorem~\ref{thm:deep}, however, is stated for the simple original
+modules and must not be asserted for the raw critical or degenerate
+induced modules on the basis of this proof.
+\end{remark}
+
+\section{The basic case and the extent of the integral classification}
+
+\begin{corollary}\label{cor:basic}
+For \(M=M_{-1,1}(\chi)\), assume
+\(\lambda_1\ne0\) and \(\kappa\ne-2\). Then
+\[
+\boxed{\quad
+\T_{f_0}M_{-1,1}(\chi)\text{ is simple}
+\quad\Longleftrightarrow\quad \lambda_0\notin\Z.
+\quad}
+\]
+For \(\lambda_0\in\Z\), the submodule
+\[
+G_0=\{v:e_0^nv=0\text{ for some }n\ge1\}
+\]
+is the unique maximal submodule, \(Q_0/G_0\) is simple, \(Q_0\) is
+indecomposable, and its extension by \(G_0\) is nonsplit.
+\end{corollary}
+\begin{proof}
+Here \(L=d_*=1\), \(E=e_0\), \(F=f_0\), \(H=h_0\), and
+\(\mu=\lambda_0\), so Theorem~\ref{thm:deep} applies.
+\end{proof}
+
+The cyclicity statements in the unified note remain unchanged:
+\[
+Q_0=Uw_1\quad\Longleftrightarrow\quad
+\lambda_0\notin\{-2,-3,\ldots\};
+\]
+if \(\lambda_0=-s\) with \(s\ge2\), then \(Q_0=Uw_s\).
+Indeed, the recurrence
+\[
+e_0w_m=-m(\lambda_0+m+1)w_{m+1}
+\]
+produces the pure fractions in the indicated ranges, and
+\(f_0w_m=w_{m-1}\) supplies the lower ones.
+To pass from pure fractions to arbitrary localized PBW vectors,
+give numerator words degree \(2\#e+\#h\).
+Commuting a word \(X\) past \(F^{-m}\) gives
+\[
+Xw_m=F^{-m}Xu+M+
+\text{terms of strictly lower numerator degree}.
+\]
+Induction on this degree, simultaneously for all \(m\), shows that
+all pure fractions generate the whole quotient.
+When \(\lambda_0=-s\), \(w_1\in G_0\) but \(w_s\notin G_0\), so
+\(Uw_1\) is proper.
+
+Cyclicity and simplicity therefore have different exceptional sets.
+For example, at \(\lambda_0=0\) the vector \(w_1\) generates \(Q_0\),
+but \(Q_0\) is reducible, with
+\[
+0\ne f_1^2w_1\in G_0,\qquad e_0^3f_1^2w_1=0.
+\]
+
+For integral \(\mu\), the additional progress determines the
+\emph{head} \(Q_c/G_c\), meaning its maximal semisimple quotient,
+which here is simple. It does not determine the internal structure
+of \(G_c\). In particular, the following remain open in this note:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item whether \(G_c\) is simple;
+\item whether \(G_c\) is the socle of \(Q_c\), the sum of its simple
+submodules;
+\item whether \(Q_c\) has finite composition length, and specifically
+whether that length is two.
+\end{enumerate}
+The existence of a unique maximal submodule must not be confused
+with any of these stronger assertions.
+
+\section{Central reduction commutes with quotient localization}
+
+The results of this section do not require the simplicity or deep-region
+hypotheses \eqref{eq:affine-assumptions}.
+
+\begin{proposition}[Algebraic reduction by commuting endomorphisms]
+\label{prop:reduction}
+Let \(V\) be a \(U\)-module, let \(U_F\) be an Ore localization flat
+as a right \(U\)-module, and let a commutative algebra \(R\) act on
+\(V\) by \(U\)-module endomorphisms. This action extends naturally
+to \(D_FV\) and descends to \(\T_FV\).
+For any algebraic ideal \(I\subseteq R\), there are natural
+isomorphisms
+\[
+D_F(V/IV)\cong D_FV/I(D_FV),
+\qquad
+\boxed{\quad
+\T_F(V/IV)\cong(\T_FV)/I(\T_FV).
+\quad}
+\]
+In particular, injectivity of \(F\) on \(V/IV\) is not required.
+\end{proposition}
+\begin{proof}
+For \(z\in R\), the extension is
+\[
+z(s\otimes v)=s\otimes zv\qquad(s\in U_F,\ v\in V).
+\]
+It is well defined because \(z\) commutes with the \(U\)-action.
+The localization map \(\ell:V\to D_FV\) is \(R\)-linear.
+
+Localizing \(0\to IV\to V\to V/IV\to0\) and using flatness yields
+\[
+D_F(V/IV)\cong D_FV/\operatorname{im}D_F(IV).
+\]
+The image in the denominator equals \(I(D_FV)\): for instance,
+\(F^{-m}(zv)=z(F^{-m}v)\), and every vector in an algebraic ideal
+multiple is a finite sum of such terms.
+This proves the first isomorphism.
+
+The image of \(V/IV\) in \(D_FV/I(D_FV)\) is
+\[
+\bigl(\ell(V)+I(D_FV)\bigr)/I(D_FV).
+\]
+Its cokernel is therefore
+\[
+\frac{D_FV}{\ell(V)+I(D_FV)}.
+\]
+On the other hand, \(\T_FV=D_FV/\ell(V)\), and quotienting this
+module by \(I(\T_FV)\) gives precisely the same expression.
+No embedding of \(V/IV\) into its localization was used.
+\end{proof}
+
+\subsection{The actual Sugawara action on the localization}
+
+A \(\g\)-module \(V\) is \emph{smooth} if, for each \(v\in V\),
+there is \(N\) with
+\[
+(\slc\otimes t^N\C[t])v=0.
+\]
+For \(F=f_c\), localization preserves smoothness.
+Indeed, for \(m\ge1\),
+\begin{align}
+h_rF^{-m}
+&=F^{-m}h_r+2mF^{-m-1}f_{r+c},\label{eq:smooth-h}\\
+e_rF^{-m}
+&=F^{-m}e_r
+-mF^{-m-1}(h_{r+c}+r\delta_{r+c,0}K)\notag\\
+&\quad-m(m+1)F^{-m-2}f_{r+2c}.\label{eq:smooth-e}
+\end{align}
+The \(f_r\)'s commute with \(F\). For a fixed numerator \(v\), choose
+\(r,r+c,r+2c\) sufficiently large that every resulting current
+annihilates \(v\) and the central delta vanishes.
+The formulas apply to the image of \(V\) in \(D_FV\) even when the
+localization map is not injective.
+
+At level \(K=-2\), the Segal--Sugawara modes are the normally ordered
+operators
+\begin{equation}\label{eq:sugawara}
+T(n)=\frac14\sum_{j\in\Z}
+\bigl(2:e_{-j}f_{n+j}:
+     +2:f_{-j}e_{n+j}:
+     +:h_{-j}h_{n+j}:\bigr).
+\end{equation}
+For current modes, the convention is
+\[
+:x_p y_q:=
+\begin{cases}
+x_p y_q,&p<0,\\
+y_q x_p,&p\ge0.
+\end{cases}
+\]
+The sums in \eqref{eq:sugawara} are finite on each vector of a smooth
+module. At critical level they commute with the \(\g\)-action
+\cite[Section 2.5]{FGXZ}.
+They are operators from a completion, not ordinary finite sums in \(U\).
+
+\begin{lemma}[Agreement of the extended and completed actions]
+\label{lem:completed-action}
+Let \(V\) be a smooth module of level \(-2\) and \(F=f_c\).
+The natural extension of the \(U\)-endomorphism \(T(n)\) from \(V\)
+to \(D_FV\) agrees with its actual Sugawara action there. In particular,
+\[
+T(n)(F^{-m}v)=F^{-m}T(n)v.
+\]
+\end{lemma}
+\begin{proof}
+The module \(D_FV\) is smooth by
+\eqref{eq:smooth-h}--\eqref{eq:smooth-e}, so its Sugawara action is
+defined. The map \(V\to D_FV\) intertwines \(T(n)\): it intertwines
+each finite current product, and normal ordering makes the relevant
+sums finite on each vector.
+On \(D_FV\), \(T(n)\) commutes with \(F\).
+Since \(F\) is invertible there, it also commutes with \(F^{-1}\).
+This gives the displayed formula and determines its value on every
+localized vector, exactly as in Proposition~\ref{prop:reduction}.
+\end{proof}
+
+\begin{corollary}[Critical central reduction, at any root-mode index]
+\label{cor:critical-reduction}
+Let \(V\) be a smooth module of level \(-2\). Fix integers \(n_i\)
+and scalars \(\theta_i\), indexed by any set \(J\), and let
+\[
+R=\C[z_i:i\in J],\qquad z_i\text{ act as }T(n_i),\qquad
+I=(z_i-\theta_i:i\in J).
+\]
+For every \(c\in\Z\),
+\[
+\boxed{\quad
+\T_{f_c}(V/IV)\cong(\T_{f_c}V)/I(\T_{f_c}V).
+\quad}
+\]
+The same assertion holds for any algebraic ideal in \(R\).
+\end{corollary}
+\begin{proof}
+Apply Proposition~\ref{prop:reduction} and
+Lemma~\ref{lem:completed-action}.
+\end{proof}
+
+For the critical modules in the unified note, take
+\[
+V=M_{a,b}(\chi),\qquad \kappa=-2,\qquad
+n_i=L-i,\qquad i\in\N.
+\]
+Then the corollary supplies the missing compatibility justification
+for the displayed central-reduction formulas, including nonboundary
+indices \(c<b\).
+Together with the previously proved boundary isomorphism and critical
+spectral-flow invariance of \(T(n)\), it recovers the unchanged
+\(\boldsymbol\theta\)-parameters in the boundary flow.
+Those boundary results are recalled from \cite{Unified}, not reproved
+here.
+
+\begin{remark}[What is not asserted]
+The corollary is an isomorphism of cokernels; it does not by itself
+prove that either side is nonzero, that \(f_c\) is injective on the
+centrally reduced module, or that the resulting quotient is simple.
+Also, ideal multiplication here uses finite algebraic sums.
+No assertion is made about arbitrary topologically closed ideals,
+completed tensor products, or additional completion procedures.
+The ordinary-enveloping-algebra annihilator equality from the earlier
+note is not used in this argument.
+\end{remark}
+
+\section{Scope, remaining questions, and verification status}
+
+Relative to the open problems in \cite{Unified}, the progress is:
+\begin{enumerate}[leftmargin=*,label=\arabic*.]
+\item \textbf{Basic and deep-region nonintegral simplicity.}
+The sufficient directions are now supplied by
+Theorem~\ref{thm:containment}. Combined with the explicit integral
+obstruction, this gives the exact criteria in
+Theorem~\ref{thm:deep} and Corollary~\ref{cor:basic}.
+\item \textbf{Integral-parameter structure.}
+The unique maximal submodule, the simple head, indecomposability,
+and nonsplitting are determined. Simplicity of \(G_c\), the socle,
+and composition length remain unresolved.
+\item \textbf{Critical central reduction.}
+Compatibility with quotient localization is proved for the algebraic
+ideals generated by Sugawara operators, at any root-mode index.
+This does not give a classification of the resulting simple modules.
+\end{enumerate}
+
+In the \emph{shallow region}
+\[
+-a\le c<b,\qquad\text{equivalently }1\le b-c<L,
+\]
+the opposite root \(E=e_{-c}\) is a free PBW mode of \(M\);
+it is not locally nilpotent on \(M\).
+Thus the hypotheses behind Lemma~\ref{lem:casimir} are unavailable.
+Injectivity of \(E\) on the quotient, proved in the unified note,
+does not replace this missing hypothesis.
+Shallow-region simplicity is not settled by the present argument.
+Full parameter isomorphism and multiple-mode simplicity classifications
+also remain open.
+
+The new simplicity statements concern the algebra without the degree
+derivation. If
+\(\widetilde{\g}=\g\rtimes\C d\), with \([d,x_r]=rx_r\), then induction
+\[
+\I(V)=U(\widetilde{\g})\otimes_U V
+\]
+is exact and commutes with the localization quotients discussed earlier.
+It does not generally preserve simplicity. In particular, the raw
+induced modules at noncritical level admit further Casimir reductions.
+Neither the simple-head conclusion nor indecomposability is being
+transferred to \(\I(Q_c)\) without a separate argument.
+
+The definitions and integer-parameter construction recalled above come
+from the unified note; the FGXZ simplicity criterion is an external
+input. The new proofs are the rank-one containment argument and the
+central-reduction compatibility argument.
+In the preceding review, the existing Takiff script passed 5,866 exact
+finite checks, and the rank-one factorization was also checked by
+exact polynomial expansion for the first twelve positive exponents.
+These checks are corroboration only; the proofs above apply to all
+parameters and all exponents under their stated hypotheses.
+No independent peer review, Danus certification of these new results,
+or Lean/Coq formal verification is claimed.
+This addendum is supplied as LaTeX source without compilation.
+
+\begingroup
+\raggedright
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue, and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024).
+\href{https://arxiv.org/html/2404.03855v2}{Full text}.
+
+\bibitem{Unified}
+Project working note,
+\emph{Boundary and Nonboundary Localization Quotients of Smooth
+Affine Modules}, September 2026.
+Source: \texttt{localization\_quotients\_unified\_en.tex}.
+\end{thebibliography}
+\endgroup
+\end{document}

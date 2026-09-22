@@ -1,0 +1,1012 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,microtype,xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Nonboundary localization quotients}
+\fancyhead[R]{\small Research note}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{3pt}
+\setlist{itemsep=3pt,topsep=5pt}
+\allowdisplaybreaks[2]
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\g}{\mathfrak g}
+\newcommand{\slc}{\mathfrak{sl}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\Ann}{\operatorname{Ann}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\Supp}{\operatorname{Supp}}
+\newcommand{\pole}{\operatorname{pole}}
+\newcommand{\I}{\mathcal I}
+\newcommand{\X}{\mathcal X}
+\newtheoremstyle{plainupright}{6pt}{5pt}{\normalfont}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{plainupright}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{corollary}[proposition]{Corollary}
+\newtheorem{remark}[proposition]{Remark}
+\hypersetup{pdftitle={Nonboundary Localization Quotients of Smooth Affine sl2 Modules},
+ pdfsubject={Definitions, proofs, and open problems for quotient localizations}}
+\title{\vspace{-14mm}Nonboundary Localization Quotients\\
+of Smooth Affine \(\slc\)-Modules\\[3pt]
+\large The basic module \(T_{f_0}M_{-1,1}\) and the family \(T_{f_c}M_{a,b}\), \(c<b\)}
+\author{}
+\date{September 11, 2026}
+\begin{document}
+\maketitle
+\vspace{-9mm}
+\begin{abstract}
+We collect the currently established structural properties of nonboundary
+localization quotients. These include PBW bases, exact root-mode and positive
+Cartan profiles, cyclicity, an explicit proper submodule at integral rank-one
+parameters in the deep region, annihilator preservation, and compatibility
+with further localization and adjoining the degree derivation.
+The basic example \(T_{f_0}M_{-1,1}\) is treated explicitly.
+Simplicity at nonintegral parameters and a full submodule classification remain
+open here. The propositions below have direct proofs; this note is not a claim
+of independent peer review or formal verification.
+\end{abstract}
+
+\section{Definitions, conventions, and hypotheses}
+
+All vector spaces and tensor products are over \(\C\). We initially work
+without the degree derivation:
+\[
+\g=(\slc\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g).
+\]
+Write \(e_r=e\otimes t^r\), \(f_r=f\otimes t^r\), and \(h_r=h\otimes t^r\).
+Our normalization is
+\begin{align*}
+[e_r,f_s]&=h_{r+s}+r\delta_{r+s,0}K,&
+[h_r,h_s]&=2r\delta_{r+s,0}K,\\
+[h_r,e_s]&=2e_{r+s},&
+[h_r,f_s]&=-2f_{r+s}.
+\end{align*}
+The \(e\)'s commute with one another, the \(f\)'s commute with one another,
+and \(K\) is central. Here \(\delta\) denotes the Kronecker delta.
+
+Fix \(a,b\in\Z\) with \(a+b\ge0\), and set \(L=a+b+1\ge1\). Let
+\[
+S_{a,b}=\Span\{K,\ h_i\ (i\ge0),\ e_i\ (i>a),\ f_j\ (j>b)\}.
+\]
+Fix the character \(\chi:S_{a,b}\to\C\) specified by
+\[
+\chi(e_i)=\chi(f_j)=0,\qquad
+\chi(K)=\kappa,\qquad \chi(h_i)=\lambda_i,\qquad
+\lambda_i=0\quad(i>L).
+\]
+These conditions make \(\chi\) a Lie algebra character.
+Let \(\C_\chi\) be the one-dimensional \(S_{a,b}\)-module defined by \(\chi\), and put
+\[
+M=M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad u=1\otimes1_\chi.
+\]
+The notation \(\kappa\) distinguishes the central parameter from the
+localization index \(c\).
+
+Fix an integer \(c<b\), and write
+\[
+F=f_c,\qquad d_*=b-c\ge1,\qquad
+U_F=U[F^{-1}],\qquad D_FM=U_F\otimes_U M.
+\]
+The powers of \(F\) form an Ore set, since \(\ad F\) is locally nilpotent on
+\(U\). PBW shows that \(F\) is injective on \(M\), so we identify \(M\)
+with its image in \(D_FM\) and define
+\[
+Q_c=T_FM=D_FM/M,\qquad w_m=F^{-m}u+M\quad(m\ge1).
+\]
+Negative powers are interpreted in \(D_FM\).
+\emph{There is no operator \(F^{-1}\) on \(Q_c\).}
+
+A module is \emph{smooth} if each vector is annihilated by
+\(\slc\otimes t^N\C[t]\) for some \(N\).
+An operator \(x\) is locally nilpotent if each vector is killed by a power of
+\(x\); it is locally finite if each vector spans a finite-dimensional
+\(\C[x]\)-module. We call \(v\) \(F\)-torsion if \(F^n v=0\) for some \(n\).
+Weights below refer to \(\C h_0\oplus\C K\), not to all \(h_i\).
+
+Unless explicitly stated otherwise, no assumption is made on
+\(\lambda_L\) or \(\kappa\). For comparison, the original induced module
+satisfies \cite[Theorem 1.1]{FGXZ}
+\begin{equation}\label{eq:original-simple}
+M_{a,b}(\chi)\text{ is simple}\quad\Longleftrightarrow\quad
+\lambda_L\ne0\ \text{ and }\ \kappa\ne-2.
+\end{equation}
+This criterion cannot be transferred directly to \(Q_c\).
+
+\section{PBW structure, root modes, and weights}
+
+\begin{proposition}[PBW model and pole filtration]\label{prop:pbw}
+Choose a PBW order with \(F\) first, followed by the families
+\[
+f_j\ (j\le b,\ j\ne c),\qquad e_i\ (i\le a),\qquad h_r\ (r<0),
+\]
+and finally a basis of \(S_{a,b}\). Let \(\X\) denote the ordered monomials
+in the three middle families, including the empty monomial. Then
+\begin{align*}
+M &: \quad \{F^qXu:q\ge0,\ X\in\X\},\\
+D_FM &: \quad \{F^qXu:q\in\Z,\ X\in\X\},\\
+Q_c &: \quad \{F^{-m}Xu+M:m\ge1,\ X\in\X\}
+\end{align*}
+are bases. In particular, \(Q_c\) is nonzero and countably infinite-dimensional.
+The operator \(F\) on \(Q_c\) is surjective and locally nilpotent, and
+\[
+\ker F^r=\Span\{F^{-m}Xu+M:1\le m\le r,\ X\in\X\}\qquad(r\ge1).
+\]
+Every nonzero \(\g\)-submodule of \(Q_c\) meets \(\ker F\) nontrivially.
+\end{proposition}
+\begin{proof}
+The first basis is the induced-module PBW theorem. It makes \(M\) free
+over \(\C[F]\), hence \(F\) acts injectively. Localization gives the second
+basis: spanning follows by moving denominators to the left, and linear
+independence follows by multiplying a putative relation by a common power
+of \(F\) and using the first basis. Taking the quotient gives the third.
+The formulas for \(F\) and its kernels are now immediate.
+For a nonzero vector in a submodule, apply the highest power of \(F\)
+whose value is still nonzero.
+\end{proof}
+
+The kernels above are vector-space filtration terms, not generally
+\(\g\)-submodules. As a module over the commuting algebra
+\(\C[f_j:j\le b]\), the quotient is a direct sum of copies of
+\[
+\bigl(\C[F,F^{-1}]/\C[F]\bigr)
+\otimes\C[f_j:j\le b,\ j\ne c],
+\]
+indexed by the \(e,h\) PBW monomials. This is the usual first local
+cohomology model for a principal ideal; it does not describe the full
+\(\g\)-action by polynomial multiplication.
+
+\begin{lemma}[Commutation and generation by pure fractions]\label{lem:fractions}
+For \(s\in U\) and \(m\ge1\), one has the finite identity
+\begin{equation}\label{eq:commute}
+sF^{-m}=\sum_{j\ge0}\binom{m+j-1}{j}F^{-m-j}(\ad F)^j(s).
+\end{equation}
+Moreover, \(Q_c=\sum_{m\ge1}Uw_m\).
+\end{lemma}
+\begin{proof}
+For \(m=1\), commute \(s\) past \(F^{-1}\) repeatedly; the process terminates
+because \(\ad F\) is locally nilpotent. Induction on \(m\) gives the
+binomial coefficient in \eqref{eq:commute}.
+
+For the generation assertion, give a numerator PBW word the degree
+\(\rho=2\#e+\#h\); \(f\)-factors have degree zero. Reordering does not
+increase this degree, and every nonzero application of \(\ad F\) lowers
+it strictly. Inducing-subalgebra factors are evaluated on \(u\) after
+reordering. Thus
+\[
+Xw_m=F^{-m}Xu+M+
+  \text{a finite sum of terms of strictly smaller numerator degree}.
+\]
+Induct on \(\rho(X)\), simultaneously for all denominator orders \(m\).
+At degree zero the numerator contains only commuting \(f\)'s, so the
+claim is immediate. Every correction term at the next degree belongs to
+\(\sum_{n\ge1}Uw_n\) by induction. Subtracting the corrections yields
+\(F^{-m}Xu+M\), proving the assertion for every basis vector.
+\end{proof}
+
+\begin{proposition}[The negative-root profile]\label{prop:root}
+On \(Q_c\), the root modes have the following properties:
+\[
+\begin{array}{c|l}
+\text{index}&\text{action}\\ \hline
+j=c&f_j\text{ is surjective and locally nilpotent},\\
+j\le b,\ j\ne c&f_j\text{ is injective and not surjective},\\
+j>b&f_j\text{ is locally nilpotent}.
+\end{array}
+\]
+Consequently, the set of locally nilpotent negative-root modes is exactly
+\(\{c\}\cup\{j:j>b\}\).
+\end{proposition}
+\begin{proof}
+The first assertion is Proposition~\ref{prop:pbw}. For the second, \(f_j\)
+is multiplication by a free polynomial variable in the commuting-algebra
+model. This is injective and does not hit the constant term in that variable.
+For \(j>b\), use \(f_ju=0\) and local nilpotence of \(\ad f_j\) to obtain
+local nilpotence on \(M\). Since \(f_j\) commutes with \(F\), it remains
+locally nilpotent on \(D_FM\) and on \(Q_c\).
+\end{proof}
+
+\begin{corollary}[Nonisomorphism and Hom vanishing]\label{cor:hom}
+For \(c<b\), \(Q_c\) is not isomorphic to any standard module
+\(M_{a',b'}(\psi)\) of the form defined in Section~1.
+For a fixed \(M\) and distinct \(c,c'\le b\),
+\[
+\Hom_\g(T_{f_c}M,T_{f_{c'}}M)=0.
+\]
+\end{corollary}
+\begin{proof}
+The negative-root local-nilpotence set of a standard module is the half-line
+\(\{j:j>b'\}\), never \(\{c\}\cup\{j:j>b\}\) for \(c<b\).
+For the Hom assertion, \(f_c\) is locally nilpotent on the source and
+injective on the target. The image of every vector must therefore be zero.
+This argument also covers comparison with the boundary quotient \(c'=b\).
+\end{proof}
+
+\begin{proposition}[Smoothness and weight structure]\label{prop:smooth}
+The module \(Q_c\) is smooth, \(K\) acts by \(\kappa\), and \(h_0\) acts
+semisimply with
+\[
+\Supp_{h_0}Q_c=\lambda_0+2\Z.
+\]
+Every nonzero weight space is countably infinite-dimensional.
+The module has no nonzero finite-dimensional submodules or quotients,
+and is not integrable for the full affine algebra.
+\end{proposition}
+\begin{proof}
+If \(X\) has \(r_e\) \(e\)-factors and \(r_f\) \(f\)-factors, then
+\[
+h_0(F^{-m}Xu+M)
+=(\lambda_0+2m+2r_e-2r_f)(F^{-m}Xu+M).
+\]
+All weights in the stated coset occur by varying \(m\ge1\) and the power
+of any \(f_j\) with \(j\le b,\ j\ne c\).
+Appending arbitrary powers of \(h_{-1}\) gives infinitely many linearly
+independent vectors of each weight. PBW also gives countability.
+
+The induced module \(M\) is smooth: commute a sufficiently high current
+mode through any fixed finite PBW word until it annihilates \(u\).
+Formula \eqref{eq:commute} gives
+\begin{align}
+h_rF^{-m}
+ &=F^{-m}h_r+2mF^{-m-1}f_{r+c},\label{eq:hcomm}\\
+e_rF^{-m}
+ &=F^{-m}e_r-mF^{-m-1}(h_{r+c}+r\delta_{r+c,0}K)\notag\\
+ &\hspace{18mm}-m(m+1)F^{-m-2}f_{r+2c}.\label{eq:ecomm}
+\end{align}
+For a fixed numerator, choose \(r,r+c,r+2c\) sufficiently large; all
+terms vanish and the central delta is zero. The \(f_r\)'s commute with
+\(F\). Hence \(D_FM\), and therefore \(Q_c\), is smooth.
+
+Surjectivity and local nilpotence of \(F\) descend to every quotient.
+On a finite-dimensional vector space these properties force the space
+to be zero. A finite-dimensional smooth \(\g\)-module is trivial:
+there is a common high-mode annihilation bound, and the Lie ideal
+generated by those high modes is all of \(\g\), including \(K\).
+But a trivial submodule of \(Q_c\) is impossible because \(f_{c+1}\)
+is injective. Finally, a free root mode \(f_j\), \(j\le b,\ j\ne c\),
+is not locally nilpotent, excluding integrability.
+\end{proof}
+
+Thus \(Q_c\) is a weight module, but not a finite-weight-multiplicity
+Harish--Chandra module. The behavior of positive Cartan modes below
+does not contradict semisimplicity of \(h_0\).
+
+\section{Positive Cartan modes and localization depth}
+
+\begin{proposition}[Strict growth of pole order]\label{prop:pole}
+For \(1\le i\le d_*\), \(\zeta\in\C\), and \(0\ne v\in Q_c\),
+\[
+\pole_F((h_i-\zeta)v)=\pole_F(v)+1,
+\]
+where pole order means the largest denominator exponent in the PBW
+expansion. In particular,
+\[
+\ker p(h_i)=0\qquad(0\ne p\in\C[t]).
+\]
+Thus \(h_i\) has no nonzero locally finite vectors, eigenvectors,
+or generalized eigenvectors.
+\end{proposition}
+\begin{proof}
+Write the top pole term of \(v\) as \(F^{-m}v_m+M\), with \(v_m\ne0\)
+in the span of the numerator PBW monomials containing no \(F\).
+The term \(F^{-m}h_i v_m\) in \eqref{eq:hcomm} has pole order at most \(m\).
+The coefficient of pole order \(m+1\) is
+\[
+2m f_{c+i}v_m\pmod{FM}.
+\]
+Since \(c+i\le b\) and \(c+i\ne c\), multiplication by \(f_{c+i}\)
+is injective on the vector-space quotient \(M/FM\).
+This coefficient is therefore nonzero. Lower-pole terms and \(-\zeta v\)
+cannot cancel it. Iteration shows that the vectors
+\(v,h_iv,\ldots,h_i^nv\) have distinct pole orders. Hence no nonzero
+polynomial in \(h_i\) annihilates \(v\).
+\end{proof}
+
+\begin{corollary}\label{cor:no-whittaker}
+For every standard induced module as in Section~1,
+\[
+\Hom_\g(M_{a',b'}(\psi),Q_c)=0.
+\]
+More generally, \(Q_c\) has no nonzero character vector for a Lie
+subalgebra containing \(h_1\).
+\end{corollary}
+\begin{proof}
+Such a character vector would be an \(h_1\)-eigenvector.
+A homomorphism from the induced module is determined by the image
+of its generating character vector, which must therefore be zero.
+\end{proof}
+
+This is not a claim that \(Q_c\) has no Whittaker vectors for
+\emph{every} possible subalgebra; the condition that the subalgebra
+contain \(h_1\) is essential to this argument.
+
+\begin{proposition}[High Cartan modes]\label{prop:high}
+If \(i>d_*\), then \(h_iw_m=\lambda_iw_m\) for every \(m\ge1\),
+and \(h_i-\lambda_i\) is locally nilpotent on all of \(Q_c\).
+\end{proposition}
+\begin{proof}
+Since \(c+i>b\), the correction term in \eqref{eq:hcomm} kills \(u\).
+For a general smooth module, if \(i>0\) and \(h_iw=\lambda w\), then
+\[
+(h_i-\lambda)^N Xw=(\ad h_i)^N(X)w.
+\]
+For a fixed finite word \(X\), each commutator with \(h_i\) either raises
+the index of a root factor by \(i\), or replaces a Cartan factor by a
+central term, which admits no further nonzero commutator.
+For sufficiently large \(N\), every nonzero term contains a root factor
+with arbitrarily high index. Moving it to the right can decrease its
+index only by sums of the fixed negative indices in the original word.
+It therefore still has sufficiently high index to annihilate \(w\).
+This proves local nilpotence on \(Uw\). Apply it to all \(w_m\) and use
+Lemma~\ref{lem:fractions}.
+\end{proof}
+
+Consequently, the positive Cartan modes with no nonzero locally finite
+vectors are precisely \(h_1,\ldots,h_{b-c}\). This gives a second
+intrinsic way to read off the localization depth.
+
+\section{The basic module \texorpdfstring{\(Q_0=T_{f_0}M_{-1,1}\)}{Q0 = T(f0) M(-1,1)}}
+
+Here \(a=-1\), \(b=1\), \(c=0\), and \(L=d_*=1\).
+All statements in this section allow arbitrary
+\(\lambda_0,\lambda_1,\kappa\). The pure fractions satisfy
+\begin{align}
+f_0w_1&=0,\qquad f_0w_m=w_{m-1}\quad(m>1),\notag\\
+h_0w_m&=(\lambda_0+2m)w_m,\label{eq:basic}\\
+e_0w_m&=-m(\lambda_0+m+1)w_{m+1},\label{eq:basic-e}\\
+h_1w_m&=\lambda_1w_m+2m f_1w_{m+1},\notag\\
+e_1w_m&=-m\lambda_1w_{m+1}-m(m+1)f_1w_{m+2}.\notag
+\end{align}
+Unlike boundary localization at \(f_1\), the pure-fraction recursion
+is controlled by \(\lambda_0\), not by \(\lambda_1\).
+
+\subsection{A canonical submodule at integral parameters}
+
+\begin{proposition}[The \(e_0\)-locally nilpotent part]\label{prop:integer}
+Let
+\[
+G=\{v\in Q_0:e_0^Nv=0\text{ for some }N\ge1\}.
+\]
+This is a \(\g\)-submodule, and
+\[
+\begin{cases}
+0\ne G\ne Q_0,&\lambda_0\in\Z,\\
+G=0,&\lambda_0\notin\Z.
+\end{cases}
+\]
+Thus \(Q_0\) is reducible for every integral \(\lambda_0\).
+For nonintegral \(\lambda_0\), \(e_0\) is injective; simplicity is not
+asserted.
+\end{proposition}
+\begin{proof}
+Set \(E=e_0\). If \(E^Nv=0\) and \((\ad E)^r(s)=0\) for all sufficiently
+large \(r\), the expansion
+\[
+E^n(sv)=\sum_{r=0}^n\binom nr(\ad E)^r(s)E^{n-r}v
+\]
+vanishes for sufficiently large \(n\). Since \(\ad E\) is locally
+nilpotent on \(U\), this proves \(UG\subseteq G\).
+
+Suppose first that \(p=\lambda_0\in\Z\). Choose an integer
+\(k\ge\max(1,p+2)\), and put \(x=f_0\), \(y=f_1\), \(\eta=\lambda_1\).
+The subspace \(\C[x,y]u\) is stable under \(e_0,h_0,f_0\), with
+\begin{equation}\label{eq:polynomial-e}
+e_0(x^jy^\ell u)
+=j(p-j+1-2\ell)x^{j-1}y^\ell u
+ \ell\eta x^jy^{\ell-1}u.
+\end{equation}
+Define
+\begin{equation}\label{eq:highest-vector}
+v_k=\sum_{j=0}^k a_jx^jy^{k-j}u,\qquad
+a_0=1,\qquad
+a_j=-\frac{(k-j+1)\eta}{j(p-2k+j+1)}a_{j-1}.
+\end{equation}
+All denominators are nonzero, since
+\(p-2k+j+1\le p-k+1<0\). In \eqref{eq:polynomial-e}, the coefficient of
+\(x^{j-1}y^{k-j}u\) in \(e_0v_k\) is
+\[
+j(p-2k+j+1)a_j+(k-j+1)\eta a_{j-1}=0.
+\]
+Hence \(e_0v_k=0\), and \(h_0v_k=\nu v_k\), where \(\nu=p-2k\le-2\).
+The rank-one commutation formula gives
+\[
+e_0(f_0^{-m}v_k)=-m(\nu+m+1)f_0^{-m-1}v_k.
+\]
+The coefficient vanishes at \(m=-\nu-1\). In \(Q_0\),
+\[
+f_0^{-1}v_k+M=f_1^kw_1\ne0,\qquad
+e_0^{-\nu-1}(f_1^kw_1)=0.
+\]
+The first equality holds because every term of \eqref{eq:highest-vector}
+with \(j\ge1\) lies in \(M\) after multiplication by \(f_0^{-1}\);
+nonvanishing follows from PBW. Thus \(G\ne0\).
+On the other hand, take \(m\ge\max(1,-p)\). Every coefficient in the
+successive applications of \eqref{eq:basic-e} to \(w_m\) is nonzero.
+Thus \(w_m\notin G\), proving that \(G\) is proper.
+
+Now suppose \(\lambda_0\notin\Z\) and \(G\ne0\).
+Because \(G\) is \(h_0\)-stable and \(h_0\) is semisimple, it contains
+a nonzero weight vector. Applying a suitable power of \(e_0\) produces
+a nonzero weight vector \(v'\in\ker e_0\). Write \(h_0v'=\nu v'\),
+and choose the least \(N\ge1\) with \(f_0^Nv'=0\).
+The \(\slc\) identity implies
+\[
+0=e_0f_0^Nv'=N(\nu-N+1)f_0^{N-1}v'.
+\]
+By minimality, \(\nu=N-1\in\Z\). This contradicts
+\(\nu\in\lambda_0+2\Z\). Therefore \(G=0\).
+\end{proof}
+
+\begin{remark}[What this submodule does and does not prove]\label{rem:G}
+The submodule \(G\) is the largest submodule on which \(e_0\) is locally
+nilpotent. Its restriction to
+\(\langle e_0,h_0,f_0\rangle\cong\slc\) is locally finite:
+both root operators are locally nilpotent and \(h_0\) acts semisimply,
+so the rank-one PBW theorem gives finite-dimensional cyclic submodules.
+The quotient \(Q_0/G\) is nonzero and \(e_0\) acts injectively on it,
+since \(e_0v\in G\) implies \(v\in G\).
+Neither simplicity of \(G\) or \(Q_0/G\), nor length two or
+indecomposability of \(Q_0\), has been proved here.
+\end{remark}
+
+\subsection{Cyclicity, including the exceptional parameters}
+
+\begin{proposition}[Exact cyclicity statement]\label{prop:cyclic}
+The module \(Q_0\) is cyclic for all parameters, and
+\[
+Q_0=Uw_1\quad\Longleftrightarrow\quad
+\lambda_0\notin\{-2,-3,-4,\ldots\}.
+\]
+If \(\lambda_0=-s\) with \(s\ge2\), then \(Q_0=Uw_s\), while \(Uw_1\)
+is a proper submodule.
+\end{proposition}
+\begin{proof}
+If \(\lambda_0\) is not a negative integer at most \(-2\), every
+coefficient in \eqref{eq:basic-e}, starting at \(m=1\), is nonzero.
+Induction on \(m\) gives \(w_m\in Uw_1\) for all \(m\ge1\).
+Lemma~\ref{lem:fractions}, whose induction covers every numerator and
+every denominator order, then gives \(Q_0=Uw_1\).
+
+If \(\lambda_0=-s\), the coefficient vanishes precisely at \(m=s-1\).
+Starting instead at \(w_s\), repeated applications of \(e_0\) produce
+all \(w_m\) with \(m\ge s\), and applications of \(f_0\) produce
+\(w_{s-1},\ldots,w_1\). The same numerator-degree induction yields
+\(Q_0=Uw_s\). However, \(e_0^{s-1}w_1=0\), so
+\(Uw_1\subseteq G\), whereas \(w_s\notin G\).
+Proposition~\ref{prop:integer} proves that \(Uw_1\ne Q_0\).
+\end{proof}
+
+Two examples distinguish cyclicity from simplicity.
+If \(\lambda_0=-2\), then \(e_0w_1=f_0w_1=h_0w_1=0\), but the affine
+submodule \(Uw_1\) is infinite-dimensional: the vectors \(f_1^kw_1\)
+are independent. If \(\lambda_0=0\), then \(Q_0=Uw_1\), yet
+\[
+0\ne f_1^2w_1\in G,\qquad e_0^3f_1^2w_1=0.
+\]
+Thus a cyclic generator need not generate a simple module.
+
+\subsection{An exact Takiff model}
+
+The subspace
+\[
+V=\Span\{f_1^kw_m:m\ge1,\ k\ge0\}
+\cong \C[x,x^{-1},y]/\C[x,y]
+\]
+is stable under the nonnegative current algebra \(\slc[t]\), with all
+modes of degree at least two acting by zero. It is therefore a module
+for the Takiff algebra \(\slc[t]/t^2\slc[t]\).
+Under \(f_1^kw_m\leftrightarrow x^{-m}y^k\), the action is
+\begin{align*}
+f_0&=x,\qquad f_1=y,\\
+h_0&=\lambda_0-2x\partial_x-2y\partial_y,\\
+h_1&=\lambda_1-2y\partial_x,\\
+e_0&=\lambda_0\partial_x+\lambda_1\partial_y
+      -x\partial_x^2-2y\partial_x\partial_y,\\
+e_1&=\lambda_1\partial_x-y\partial_x^2.
+\end{align*}
+These formulas follow by commuting the six modes through \(x^jy^\ell u\);
+they preserve \(\C[x,y]\), hence descend to the quotient.
+They are exact formulas, not a degree truncation.
+The subspace \(V\) is not a submodule for the full affine algebra
+(for example, negative Cartan modes leave it).
+One cannot promote an arbitrary Takiff submodule to an affine submodule;
+the definition of \(G\) above is what guarantees affine stability.
+
+\section{General nonboundary indices: deep and shallow regions}
+
+\subsection{Spectral-flow normalization}
+
+For \(k\in\Z\), define the automorphism
+\[
+\sigma_k(e_i)=e_{i+k},\quad
+\sigma_k(f_i)=f_{i-k},\quad
+\sigma_k(h_i)=h_i+k\delta_{i,0}K,\quad
+\sigma_k(K)=K.
+\]
+Our twist convention is \(x\cdot_{\rm new}v=\sigma_k(x)v\).
+Tracking the inducing conditions and the localization element gives
+\begin{equation}\label{eq:spectral}
+(Q_c)^{\sigma_{-c}}\cong
+T_{f_0}M_{a+c,b-c}(\chi'),
+\qquad
+\chi'(h_0)=\mu:=\lambda_0-c\kappa,
+\end{equation}
+with \(\chi'(K)=\kappa\) and \(\chi'(h_i)=\lambda_i\) for \(i>0\).
+This is an isomorphism \emph{after twisting}, not an untwisted
+isomorphism of the original modules.
+Such automorphisms also appear in \cite[Section 3.1]{FGXZ}.
+The useful normalized coordinates are
+\[
+A=a+c,\qquad B=b-c=d_*,\qquad A+B=L-1,\qquad \mu=\lambda_0-c\kappa.
+\]
+
+\begin{proposition}[The deep region]\label{prop:deep}
+Suppose \(c\le-a-1\), equivalently \(d_*\ge L\). Put
+\[
+E=e_{-c},\qquad H=h_0-cK,\qquad F=f_c.
+\]
+These elements form an \(\slc\)-triple, \(Eu=0\), \(Hu=\mu u\), and
+\[
+Ew_m=-m(\mu+m+1)w_{m+1}.
+\]
+The following statements hold without assuming \(\lambda_L\ne0\):
+\begin{enumerate}[label=(\roman*)]
+\item \(Q_c=Uw_1\) if and only if \(\mu\notin\{-2,-3,\ldots\}\).
+If \(\mu=-s\), \(s\ge2\), then \(Q_c=Uw_s\ne Uw_1\).
+\item The subspace
+\[
+G_c=\{v\in Q_c:E^Nv=0\text{ for some }N\ge1\}
+\]
+is a \(\g\)-submodule. It is nonzero and proper when \(\mu\in\Z\),
+and is zero when \(\mu\notin\Z\).
+\item The operator \(E\) acts injectively on the nonzero quotient
+\(Q_c/G_c\).
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+The commutator \([e_{-c},f_c]=h_0-cK\) gives the rank-one triple.
+The deep-region assumption is exactly \(-c>a\), so \(Eu=0\).
+The formula for \(Ew_m\) follows from the rank-one commutation identity.
+
+Here is the explicit integral-parameter construction needed to generalize
+Proposition~\ref{prop:integer}; the pure-fraction recursion alone is not
+sufficient for all integral parameters.
+Set \(Y_b=f_b\). On \(\C[F,Y_b]u\), direct commutation gives
+\begin{align}
+E(F^jY_b^\ell u)
+&=j(\mu-j+1-2\ell)F^{j-1}Y_b^\ell u\notag\\
+&\hspace{12mm}+\ell\lambda_{d_*}F^jY_b^{\ell-1}u.\label{eq:deep-poly}
+\end{align}
+Indeed, \([E,Y_b]=h_{d_*}\), the \(H\)-weight of \(Y_b^\ell u\)
+is \(\mu-2\ell\), and the further commutators involve \(f_{b+d_*}\),
+which annihilates \(u\). Thus \eqref{eq:deep-poly} is exactly
+\eqref{eq:polynomial-e} with
+\((p,\eta,x,y)\) replaced by \((\mu,\lambda_{d_*},F,Y_b)\).
+
+When \(\mu\in\Z\), choose an integer \(k\ge\max(1,\mu+2)\) and form
+the highest vector \eqref{eq:highest-vector} with these replacements.
+It gives
+\[
+0\ne f_b^kw_1\in G_c,\qquad
+E^{\,2k-\mu-1}(f_b^kw_1)=0.
+\]
+If \(d_*>L\), then \(\lambda_{d_*}=0\), and that highest vector
+simply equals \(f_b^ku\). Pure fractions with
+\(m\ge\max(1,-\mu)\) are not \(E\)-locally nilpotent, so \(G_c\) is proper.
+Stability follows from local nilpotence of \(\ad E\).
+
+For \(\mu\notin\Z\), the weight support for \(H\) is \(\mu+2\Z\).
+The highest-vector argument with the least \(N\) such that \(F^Nv'=0\)
+in Proposition~\ref{prop:integer} again forces an integral highest weight,
+a contradiction. Thus \(G_c=0\). Injectivity on \(Q_c/G_c\) follows from
+\(Ev\in G_c\Rightarrow v\in G_c\).
+Finally, the proof of Proposition~\ref{prop:cyclic} applies with \(\mu\)
+in place of \(\lambda_0\), using Lemma~\ref{lem:fractions} to pass
+from all pure fractions to the whole module.
+\end{proof}
+
+\begin{proposition}[The shallow region]\label{prop:shallow}
+Suppose \(-a\le c<b\), equivalently \(1\le d_*<L\).
+Then \(E=e_{-c}\) acts injectively on \(Q_c\), for every value of \(\mu\).
+If \(\lambda_L\ne0\), the vector \(w_1\) generates \(Q_c\).
+\end{proposition}
+\begin{proof}
+In this region \(e_{-c}\) belongs to the free PBW complement, so
+\(Eu=0\) cannot be used. Instead set \(Y=e_{L-c}\).
+Since \(L-c>a\) and \(L+c>b\), one has
+\[
+Yu=0,\qquad [Y,F]=h_L,\qquad f_{L+c}u=0.
+\]
+There is no central term in the middle identity because \(L\ge1\).
+Formula \eqref{eq:ecomm} therefore yields
+\[
+Yw_m=-m\lambda_Lw_{m+1}.
+\]
+For \(\lambda_L\ne0\), induction produces every \(w_m\) from \(w_1\);
+Lemma~\ref{lem:fractions} then proves cyclicity.
+
+For injectivity of \(E\), use numerator degree \(\rho=2\#e+\#h\).
+On the highest-degree part of a nonzero PBW expansion in \(Q_c\),
+left multiplication by \(E\) adds a free \(e_{-c}\)-factor, increasing
+degree by two. Terms from commuting \(E\) past a numerator or a
+denominator have degree at most one above the original degree.
+In the associated graded PBW space the highest term is multiplication
+by a free polynomial variable, hence is injective. It cannot cancel.
+Therefore \(E\) is injective.
+\end{proof}
+
+The deep-region integral obstruction therefore does not extend to all
+indices \(c<b\). In the shallow region, whether
+\(\lambda_L\ne0\) and \(\kappa\ne-2\) imply simplicity remains open here.
+
+\section{Extensions, annihilators, and derived functors}
+
+\begin{proposition}[The natural extension is nonsplit]\label{prop:extension}
+The short exact sequence
+\[
+0\longrightarrow M\longrightarrow D_FM\longrightarrow Q_c\longrightarrow0
+\]
+does not split. In fact,
+\[
+\Hom_\g(Q_c,D_FM)=\Hom_\g(Q_c,M)=\Hom_\g(M,Q_c)=0.
+\]
+If \(M\) is simple, it is the unique simple submodule of \(D_FM\)
+and an essential submodule; consequently \(D_FM\) is indecomposable.
+\end{proposition}
+\begin{proof}
+The source \(Q_c\) is \(F\)-torsion, whereas \(F\) is injective on
+\(D_FM\) and on \(M\). This proves the first two Hom vanishings and
+excludes a section of the quotient map. The third is
+Corollary~\ref{cor:no-whittaker}.
+For any nonzero \(v\in D_FM\), a sufficiently large power of \(F\)
+lies in \(M\) and is nonzero. Hence every nonzero submodule of \(D_FM\)
+meets \(M\). If \(M\) is simple, this intersection equals \(M\),
+so every nonzero submodule contains \(M\).
+The remaining assertions follow.
+\end{proof}
+
+This proves indecomposability of \(D_FM\) when \(M\) is simple,
+not indecomposability of its quotient \(Q_c\).
+
+\begin{proposition}[Annihilator preservation]\label{prop:ann}
+In the ordinary universal enveloping algebra,
+\[
+\Ann_U M=\Ann_U D_FM=\Ann_U Q_c.
+\]
+\end{proposition}
+\begin{proof}
+Let \(\Delta=\ad F\). The two-sided ideal \(\Ann_U M\) is
+\(\Delta\)-stable. Thus \eqref{eq:commute} shows that every element of
+\(\Ann_U M\) annihilates \(D_FM\). The inclusion \(M\subseteq D_FM\)
+gives equality of the first two annihilators, and this common ideal
+is contained in \(\Ann_U Q_c\).
+
+For the reverse inclusion, let \(s\in\Ann_U Q_c\), and choose \(t\ge0\)
+with \(\Delta^{t+1}(s)=0\). For every \(v\in M\) and \(m\ge1\),
+we have \(sF^{-m}v\in M\). Multiplication by \(F^{m+t}\), using
+\eqref{eq:commute}, gives
+\begin{equation}\label{eq:ann-poly}
+P_v(m):=\sum_{j=0}^t\binom{m+j-1}{j}
+F^{t-j}\Delta^j(s)v\ \in F^{m+t}M.
+\end{equation}
+The left side is a vector-valued polynomial in \(m\).
+Its finitely many coefficients have finite PBW support, so there is
+a common upper bound on their nonnegative \(F\)-exponents.
+For all sufficiently large \(m\), their span has zero intersection
+with \(F^{m+t}M\). Therefore \(P_v(m)=0\) for all sufficiently large
+integers \(m\), and \(P_v\) is identically zero.
+Evaluating at \(m=0\), with binomial coefficients interpreted as
+polynomials, yields
+\[
+0=P_v(0)=F^tsv,
+\]
+because \(\binom{j-1}{j}=0\) for \(j\ge1\).
+Injectivity of \(F\) on \(M\) gives \(sv=0\). Since \(v\) was arbitrary,
+\(s\in\Ann_U M\).
+\end{proof}
+
+The proposition concerns ordinary \(U\)-elements. It does not establish
+an analogous statement for the completed center at the critical level.
+
+\begin{proposition}[Functorial and derived properties]\label{prop:derived}
+For an arbitrary \(U\)-module \(V\), define \(T_FV\) as the cokernel of
+the localization map, without assuming that this map is injective.
+Then
+\begin{align*}
+T_FV&=(U_F/U)\otimes_U V,\\
+L_1T_F(V)&\cong\{v\in V:F^nv=0\text{ for some }n\ge0\},\\
+L_jT_F(V)&=0\qquad(j\ge2).
+\end{align*}
+The functor is right exact and is exact on short exact sequences whose
+three terms are \(F\)-torsion-free. In particular,
+\[
+D_FQ_c=0,\qquad T_FQ_c=0,\qquad L_1T_F(Q_c)\cong Q_c.
+\]
+\end{proposition}
+\begin{proof}
+Ore localization is flat as a right \(U\)-module. The sequence
+\[
+0\longrightarrow U\longrightarrow U_F\longrightarrow U_F/U
+\longrightarrow0
+\]
+is therefore a flat resolution of the right module \(U_F/U\).
+Tensoring with \(V\) identifies its degree-one homology with
+\(\ker(V\to D_FV)\), which is precisely the \(F\)-torsion submodule.
+There is no higher homology. The long exact sequence gives the
+stated exactness on torsion-free sequences.
+Finally, every vector of \(Q_c\) is \(F\)-torsion.
+\end{proof}
+
+\section{Further localization and the boundary isomorphism}
+
+\begin{proposition}[Commuting quotient localizations]\label{prop:commuting}
+Let \(F=f_c\) and \(G=f_j\) with distinct \(c,j\le b\).
+Write \(D_{F,G}M\) for simultaneous localization at their powers.
+There are natural isomorphisms
+\[
+T_G(T_FM)\cong
+\frac{D_{F,G}M}{D_FM+D_GM}
+\cong T_F(T_GM).
+\]
+The analogous statement holds for any finite family of distinct
+free negative-root modes, independently of their order.
+\end{proposition}
+\begin{proof}
+The modes commute, their localizations commute, and PBW makes \(M\)
+free in the two independent polynomial variables \(F,G\).
+Inside \(D_{F,G}M\), it follows that
+\[
+D_FM\cap D_GM=M.
+\]
+Moreover, \(G\) is injective on \(T_FM\), since it still acts as a
+free polynomial variable. Localizing the exact sequence defining
+\(T_FM\) at \(G\) gives
+\[
+D_G(T_FM)\cong D_{F,G}M/D_GM.
+\]
+Taking the quotient by the image of \(T_FM\) gives the middle
+expression in the proposition. Its PBW basis consists exactly of
+terms with both exponents strictly negative. Interchanging \(F,G\)
+gives the other isomorphism. The same argument works for finitely
+many variables.
+\end{proof}
+
+Recall the boundary result established in the earlier notes \cite{Boundary}:
+if \(\lambda_L\ne0\), then
+\begin{equation}\label{eq:boundary}
+T_{f_b}M_{a,b}(\chi)\cong M_{a+1,b-1}(\chi^{(1)}),
+\qquad
+\chi^{(1)}(h_0)=\lambda_0+2,
+\end{equation}
+with the other character values unchanged. The present note uses this
+previously proved result; it does not replace its detailed isomorphism proof.
+
+\begin{corollary}[Filling the interval of missing modes]\label{cor:fill}
+Assume \(\lambda_L\ne0\). Applying one quotient localization at each of
+\[
+f_c,f_{c+1},\ldots,f_b
+\]
+in any order yields
+\[
+M_{a+b-c+1,c-1}\bigl(\chi^{(b-c+1)}\bigr),
+\qquad
+\chi^{(b-c+1)}(h_0)=\lambda_0+2(b-c+1),
+\]
+and all other character values are unchanged.
+\end{corollary}
+\begin{proof}
+By Proposition~\ref{prop:commuting}, arrange the operations in the
+order \(f_b,f_{b-1},\ldots,f_c\). At each step the next mode is a
+boundary mode for the resulting standard module.
+Apply \eqref{eq:boundary} repeatedly. The value of \(a+b+1=L\)
+and the nonzero parameter \(\lambda_L\) are unchanged throughout.
+\end{proof}
+
+For the basic example this reads
+\begin{align*}
+T_{f_1}\bigl(T_{f_0}M_{-1,1}(\chi)\bigr)
+&\cong T_{f_0}\bigl(T_{f_1}M_{-1,1}(\chi)\bigr)\\
+&\cong M_{1,-1}(\chi^{(2)}),\qquad \lambda_1\ne0.
+\end{align*}
+These are iterated \emph{quotient} localizations. They are not the
+quotient of simultaneous localization by \(M\) alone: one must divide
+by the sum of the relevant partial localizations.
+Even if the final module is simple, simplicity of the first quotient
+does not follow.
+
+\section{Adjoining the derivation and the vertex-algebra viewpoint}
+
+Let
+\[
+\widetilde{\g}=\g\rtimes\C d,\qquad
+[d,x_r]=r x_r,\qquad [d,K]=0,
+\]
+where \(x=e,f,h\). Put \(\widetilde U=U(\widetilde{\g})\) and
+\(\I(V)=\widetilde U\otimes_U V\). PBW gives
+\[
+\I(V)\cong\C[z]\otimes V,
+\]
+with actions
+\begin{align*}
+d(P(z)\otimes v)&=zP(z)\otimes v,\\
+x_r(P(z)\otimes v)&=P(z-r)\otimes x_rv,\\
+K(P(z)\otimes v)&=P(z)\otimes Kv.
+\end{align*}
+In particular, adjoining \(d\) is not the naive tensor-product action
+with unchanged current modes.
+
+\begin{proposition}[Compatibility with derivation induction]\label{prop:d}
+There is a natural \(\widetilde{\g}\)-module isomorphism
+\[
+\I(Q_c)\cong T_{f_c}\I(M).
+\]
+If \(0\ne N\ne Q_c\) is a \(\g\)-submodule, then
+\[
+0\ne\I(N)\ne\I(Q_c).
+\]
+\end{proposition}
+\begin{proof}
+The canonical map \(\I(M)\to\I(D_FM)\) has an \(F\)-invertible target:
+\[
+F(P(z)\otimes v)=P(z-c)\otimes Fv,\qquad
+F^{-1}(P(z)\otimes v)=P(z+c)\otimes F^{-1}v.
+\]
+The universal property of localization extends it uniquely to a
+\(\widetilde{\g}\)-module map
+\[
+\alpha:D_F\I(M)\longrightarrow\I(D_FM).
+\]
+Its explicit formula is
+\begin{equation}\label{eq:alpha}
+\alpha\bigl(F^{-m}(P(z)\otimes v)\bigr)
+=P(z+mc)\otimes F^{-m}v.
+\end{equation}
+The inverse sends
+\(P(z)\otimes F^{-m}v\) to \(F^{-m}(P(z-mc)\otimes v)\).
+These formulas respect equivalent fractions: replacing
+\(F^{-m}v\) by \(F^{-m-1}Fv\) is precisely compensated by the
+shift in the action of \(F\). Thus they define inverse maps.
+The map \(\alpha\) identifies the embedded copy of \(\I(M)\)
+on each side.
+
+The algebra \(\widetilde U\) is free as a right \(U\)-module, so
+\(\I\) is exact. Taking quotients therefore identifies the target
+quotient with \(\I(D_FM/M)=\I(Q_c)\), as required.
+Finally, \(\I\) is faithful because its underlying vector space is
+\(\C[z]\otimes V\). Applying exactness and faithfulness to
+\(0\to N\to Q_c\to Q_c/N\to0\) proves the last assertion.
+\end{proof}
+
+Thus the proper submodules \(G_c\) in the deep integral region remain
+proper and nonzero after adjoining \(d\). No general preservation
+of simplicity in the opposite situation is claimed.
+
+By smoothness and the fixed action of \(K\), each \(Q_c\) is a weak
+module for the universal affine vertex algebra \(V^\kappa(\slc)\);
+see \cite[Section 2]{FGXZ}. Descending to its simple quotient
+requires a separate check that the defining vertex ideal annihilates
+the module. Smoothness alone does not imply this.
+
+\section{Open problems and limits of the present results}
+
+The following are questions, not theorems of this note.
+
+\begin{enumerate}[leftmargin=*,label=\arabic*.]
+\item \textbf{Nonintegral simplicity in the basic case.}
+Under \(\lambda_1\ne0\) and \(\kappa\ne-2\), the natural candidate is
+\[
+T_{f_0}M_{-1,1}(\chi)\text{ simple}
+\quad\Longleftrightarrow\quad \lambda_0\notin\Z.
+\]
+Only the necessary direction is proved here. The missing step is
+to start with an arbitrary nonzero submodule and reduce one of its
+vectors to a pure fraction that generates the whole quotient.
+Cyclicity of \(w_1\) and injectivity of \(e_0\) do not establish this.
+
+\item \textbf{The corresponding deep-region criterion.}
+Under \(\lambda_L\ne0\), \(\kappa\ne-2\), and \(d_*\ge L\),
+does \(\mu=\lambda_0-c\kappa\notin\Z\) imply simplicity?
+A rank-one twisting or completion argument, or a direct PBW reduction,
+may be useful. Its applicability to these smooth modules must be proved;
+one cannot simply invoke a statement confined to BGG category
+\(\mathcal O\).
+
+\item \textbf{The integral-parameter submodule structure.}
+Determine whether \(G_c\) and \(Q_c/G_c\) are simple, whether \(G_c\)
+is the socle, whether their extension splits, and whether \(Q_c\)
+has finite Jordan--Hölder length. At present, neither length two
+nor indecomposability is asserted.
+
+\item \textbf{Simplicity in the shallow region.}
+Here \(e_{-c}\) is injective for all \(\mu\), so the deep-region
+integral obstruction disappears. Does simplicity of the original
+module suffice, or are there other resonance conditions?
+
+\item \textbf{Parameter isomorphisms and degenerations.}
+The level \(\kappa\), support \(\lambda_0+2\Z\), negative-root
+local-nilpotence set, and positive-Cartan local-finiteness profile
+give necessary invariants. For \(i>d_*\), the generalized eigenvalue
+\(\lambda_i\) is an additional invariant.
+A complete parameter classification, especially for \(\lambda_L=0\)
+or \(\kappa=-2\), remains unresolved.
+
+\item \textbf{Critical-level central reduction.}
+At \(\kappa=-2\), study the completed center, its central reductions,
+their compatibility with localization, and the resulting simple
+quotients. Proposition~\ref{prop:ann} does not settle completed-center
+questions.
+
+\item \textbf{Multiple missing modes and twisted localization.}
+Proposition~\ref{prop:commuting} suggests a family indexed by finite
+sets of free modes. One may also study generalized conjugation
+\[
+\Theta_\xi(s)=\sum_{j\ge0}\binom{\xi}{j}(\ad F)^j(s)F^{-j},
+\qquad \xi\in\C,
+\]
+on \(D_FM\), where the sum is finite for each \(s\in U\).
+This construction requires \(F\) to be invertible; it is not
+directly an operation on \(Q_c\).
+\end{enumerate}
+
+\clearpage
+\section{Sources and verification record}
+
+The original induced modules, their simplicity criterion, spectral-flow
+automorphisms, and the smooth-module vertex-algebra correspondence are
+drawn from \cite{FGXZ}. The localization results of \cite{FGM} provide
+relevant comparisons: Theorem~4.3 exhibits an integral rank-one
+reducibility condition \(J-iK\in\Z\) for imaginary Verma/free-field
+modules, and Section~5 constructs primitive vectors and proves
+the corresponding nonintegral simplicity statements.
+Those modules differ from the present ones, so their sufficiency
+theorems are not used as proofs of our open simplicity questions.
+
+The boundary isomorphism and the derivation-induction framework were
+established in the earlier project notes \cite{Boundary}.
+This document is an English organization of the current nonboundary
+results, not a revision of those earlier boundary proofs.
+
+The accompanying computation
+\texttt{work/check\_nonboundary\_takiff.py} recorded 5,866 exact
+rational checks of the six Takiff generators' bracket relations,
+the highest-vector recurrence at integral parameters, explicit
+locally nilpotent vectors, and pure-fraction resonance.
+The checks include \(\lambda_1=0\) and do not truncate polynomial
+degree in the action formulas. They nevertheless test only finitely
+many parameters and vectors and do not replace the general proofs.
+No new Danus run was used for these nonboundary results.
+No independent audit or Lean/Coq formal verification is claimed.
+
+\begingroup
+\raggedright
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue, and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024; journal version 2025).
+\href{https://arxiv.org/html/2404.03855v2}{arXiv full text}.
+
+\bibitem{FGM}
+V.~Futorny, D.~Grantcharov, and R.~A.~Martins,
+\emph{Localization of free field realizations of affine Lie algebras},
+arXiv:1404.7148v2 (2015).
+\href{https://arxiv.org/html/1404.7148v2}{arXiv full text}.
+
+\bibitem{Boundary}
+Earlier project working notes, \emph{Boundary localization: advisor note}
+(September 2026) and \emph{Boundary localization and derivation extension}
+(September 8, 2026). English source files:
+\texttt{boundary\_localization\_advisor\_note\_en.tex} and
+\texttt{boundary\_derivation\_extension\_en.tex}.
+\end{thebibliography}
+\endgroup
+\end{document}

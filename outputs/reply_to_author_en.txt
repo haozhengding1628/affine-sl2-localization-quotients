@@ -1,0 +1,18 @@
+Thank you for pointing this out. In the (-1,1) case, let u be the inducing vector of M=M_{-1,1}(varphi), let v be the inducing vector of M_{0,0}(psi), and write w_n=f_1^{-n}u+M. Our map satisfies Phi(v)=w_1.
+
+The required preimages follow from the exact identity
+
+  e_0 f_1^{-n}
+    = f_1^{-n}e_0 - n f_1^{-n-1}h_1
+      - n(n+1)f_1^{-n-2}f_2.
+
+Since e_0u=f_2u=0 and h_1u=lambda_1u, this gives
+
+  e_0w_n = -n lambda_1 w_{n+1}.
+
+Therefore, assuming lambda_1 is nonzero, for every n>=1,
+
+  w_n = Phi( (-1)^{n-1} e_0^{n-1}v
+             / ((n-1)! lambda_1^{n-1}) ).
+
+For the remaining PBW vectors f_1^{-n}Xu+M, we use strong induction on d(X)=2(number of e-factors)+(number of h-factors), simultaneously for all n. Commuting X past f_1^{-n} gives the desired vector plus a finite sum of terms of strictly smaller d. The degree-zero case consists of f-monomials, which commute with f_1. Subtracting preimages of the lower-degree terms then proves surjectivity. Sections 2.3-2.5 of the revised note spell out these steps.

@@ -1,0 +1,703 @@
+% !TEX program = xelatex
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black,citecolor=blue!50!black]{hyperref}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\g}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\gt}{\widetilde{\mathfrak{sl}}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\Span}{\operatorname{span}_{\C}}
+\newcommand{\I}{\mathcal I}
+\newcommand{\D}{\mathcal D}
+\newcommand{\wt}{\operatorname{wt}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{Remark}
+\setlength{\emergencystretch}{2em}
+\title{Boundary Localization and Adjoining\\the Degree Derivation}
+\author{Supplementary research note}
+\date{September 8, 2026}
+\begin{document}
+\maketitle
+
+\section{Definitions, hypotheses, and scope}
+
+All vector spaces and tensor products are over \(\C\). Write
+\[
+ \g=(\mathfrak{sl}_2\otimes\C[t,t^{-1}])\oplus\C K,
+ \qquad U=U(\g)
+\]
+for the affine algebra without the degree derivation. For
+\(x\in\{e,h,f\}\) and \(r\in\Z\), set \(x_r=x\otimes t^r\).
+Our bracket conventions are
+\begin{equation}\label{eq:brackets}
+\begin{aligned}
+ [e_r,f_s]&=h_{r+s}+r\delta_{r+s,0}K,
+ &[h_r,h_s]&=2r\delta_{r+s,0}K,\\
+ [h_r,e_s]&=2e_{r+s},
+ &[h_r,f_s]&=-2f_{r+s},
+\end{aligned}
+\end{equation}
+where \(\delta\) is the Kronecker delta, \(K\) is central, and
+\([e_r,e_s]=[f_r,f_s]=0\). Adjoining the degree derivation gives
+\[
+ \gt=\g\rtimes\C d,\qquad [d,x_r]=rx_r,\qquad[d,K]=0,
+ \qquad\widetilde U=U(\gt).
+\]
+
+Fix \(a,b\in\Z\) with \(a+b\ge0\), and put \(L=a+b+1\ge1\). Define
+\[
+ S_{a,b}=\Span\{K,h_i\ (i\ge0),e_i\ (i>a),f_j\ (j>b)\}.
+\]
+The bracket relations show that this is a Lie subalgebra and that
+\[
+ [S_{a,b},S_{a,b}]
+ =\Span\{e_i\ (i>a),f_j\ (j>b),h_k\ (k\ge L+1)\}.
+\]
+Choose \(c,\lambda_0,\ldots,\lambda_L\in\C\), and set \(\lambda_i=0\)
+for \(i>L\). These parameters define a character
+\(\chi:S_{a,b}\to\C\) by
+\[
+ \chi(K)=c,\qquad\chi(h_i)=\lambda_i\quad(i\ge0),\qquad
+ \chi(e_i)=\chi(f_j)=0,
+\]
+with the root indices restricted to those occurring in \(S_{a,b}\).
+Set
+\[
+ M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad
+ \C_\chi=\C1_\chi,\quad s1_\chi=\chi(s)1_\chi,\quad
+ u=1\otimes1_\chi.
+\]
+In particular, \(h_0\) belongs to the inducing subalgebra. These conventions
+agree with \cite[\S2.3]{FGXZ}. The main isomorphism requires
+\(\lambda_L\ne0\); the central parameter \(c\) is arbitrary.
+
+For \(F=f_n\), write
+\[
+ U_F=U[F^{-1}],\qquad
+ \D_FM=U_F\otimes_U M,\qquad
+ T_FM=\operatorname{coker}(M\longrightarrow\D_FM).
+\]
+The Ore localizations used here are justified in Section~4.
+When \(F\) acts injectively, we identify \(M\) with its image in
+\(\D_FM\) and write \(T_FM=\D_FM/M\). For \(\gt\)-modules, use
+\(\widetilde U_F\) in the same definitions. An expression \(F^{-m}u+M\)
+denotes a coset; it does \emph{not} assert that \(F^{-1}\) acts on the
+quotient module. A module \(V\) is called \emph{smooth} if, for each
+\(v\in V\), all sufficiently high modes \(e_r,h_r,f_r\) annihilate \(v\).
+
+\paragraph{Two distinct questions.}
+Replacing \(f_1\) by \(f_n\) may mean moving the inducing boundary along
+with \(n\), or keeping the original module \(M_{-1,1}\) fixed. The first
+interpretation admits a uniform isomorphism theorem; the second does not
+always do so. Likewise, adjoining \(\C[d]\) requires a specified action
+satisfying \([d,x_r]=rx_r\). An unshifted tensor-product action does not
+in general satisfy this relation.
+
+\section{Localization at an arbitrary boundary}
+
+\begin{theorem}\label{thm:boundary}
+Assume \(a+b\ge0\), \(L=a+b+1\), and \(\lambda_L\ne0\). Let
+\(M=M_{a,b}(\chi)\) and \(F=f_b\). Define a character on \(S_{a+1,b-1}\) by
+\[
+ \chi^+(K)=c,\qquad
+ \chi^+(h_i)=\lambda_i+2\delta_{i,0}\quad(i\ge0),
+\]
+with value zero on all root vectors in that subalgebra. Let \(v\) be the
+canonical inducing vector of \(M_{a+1,b-1}(\chi^+)\). There is a unique
+\(\g\)-module isomorphism
+\begin{equation}\label{eq:boundary-iso}
+ \Phi:M_{a+1,b-1}(\chi^+)\xrightarrow{\sim}T_{f_b}M_{a,b}(\chi),
+ \qquad \Phi(v)=F^{-1}u+M.
+\end{equation}
+This holds for every \(c\in\C\), including the critical level \(c=-2\),
+and also allows \(b\le0\).
+\end{theorem}
+
+\subsection{PBW bases and well-definedness}
+
+Put \(Y=e_{a+1}\) and \(A=M_{a+1,b-1}(\chi^+)\). Let \(\mathcal X\)
+consist of the finite ordered monomials
+\[
+ X=e(\alpha)h(\beta)f(\gamma),\qquad
+ \alpha_i\le a,\quad\beta_i\le-1,\quad\gamma_i\le b-1.
+\]
+Here \(\alpha,\beta,\gamma\) are finite nondecreasing sequences,
+\(e(\alpha)=e_{\alpha_1}\cdots e_{\alpha_{\ell(\alpha)}}\), and similarly
+for \(h(\beta)\) and \(f(\gamma)\). Empty products are allowed, and
+\(\ell\) denotes the number of factors. Define
+\[
+ \rho(X)=2\ell(\alpha)+\ell(\beta),\qquad
+ w_m=F^{-m}u+M,\qquad B_{m,X}=F^{-m}Xu+M\quad(m\ge1).
+\]
+For \(M\), choose a PBW order with \(F\) first, followed by the
+generators occurring in \(X\), and then a basis of \(S_{a,b}\). Thus
+\(\{F^qXu:q\ge0,\ X\in\mathcal X\}\) is a basis of \(M\), so \(F\)
+acts injectively. Clearing a common denominator and using this basis
+shows that \(\{F^qXu:q\in\Z,\ X\in\mathcal X\}\) is a basis of
+\(\D_FM\). Consequently,
+\begin{equation}\label{eq:pbw-bases}
+\begin{aligned}
+ &\{B_{m,X}:m\ge1,\ X\in\mathcal X\}
+     &&\text{is a basis of }T_FM,\\
+ &\{XY^pv:p\ge0,\ X\in\mathcal X\}
+     &&\text{is a basis of }A.
+\end{aligned}
+\end{equation}
+For the source basis, the PBW order places \(Y\) after every factor of
+\(X\) and before the inducing subalgebra. These complements are used
+only as vector spaces; they need not be Lie subalgebras.
+
+Write \(\Delta=\ad F\). The finite commutation formula
+\eqref{eq:finite-commutation} gives
+\[
+\begin{aligned}
+ h_iF^{-m}&=F^{-m}h_i+2mF^{-m-1}f_{i+b},\\
+ e_iF^{-m}&=F^{-m}e_i
+       -mF^{-m-1}(h_{i+b}+i\delta_{i+b,0}K)\\
+ &\hspace{2em}-m(m+1)F^{-m-2}f_{i+2b}.
+\end{aligned}
+\]
+It follows that
+\[
+ h_iw_1=(\lambda_i+2\delta_{i,0})w_1\quad(i\ge0),
+ \qquad Kw_1=cw_1:
+\]
+if \(i>0\), then \(f_{i+b}u=0\), whereas for \(i=0\) the correction
+term is \(2F^{-1}u\). Also, \(f_jw_1=0\) for \(j>b\), and at the
+boundary \(f_bw_1=u+M=0\). If \(i\ge a+2\), then
+\(i+b\ge L+1>0\), whence
+\[
+ e_iu=h_{i+b}u=f_{i+2b}u=0,\qquad\delta_{i+b,0}=0.
+\]
+Thus \(e_iw_1=0\). This verifies every inducing relation for
+\(S_{a+1,b-1}\).
+
+Extend \(\chi^+\) to the algebra character
+\(\chi_U^+:U(S_{a+1,b-1})\to\C\). By taking finite products and linear
+combinations of the verified relations, we obtain
+\(sw_1=\chi_U^+(s)w_1\) for every \(s\in U(S_{a+1,b-1})\). Hence the
+linear map
+\[
+ U\otimes_\C\C_{\chi^+}\longrightarrow T_FM,\qquad
+ x\otimes\zeta1_{\chi^+}\longmapsto\zeta xw_1
+\]
+annihilates every balancing relation, since
+\[
+ xs\otimes\zeta1_{\chi^+}-x\otimes s(\zeta1_{\chi^+})
+ \longmapsto
+ \zeta x\bigl(sw_1-\chi_U^+(s)w_1\bigr)=0.
+\]
+It therefore descends to a well-defined map \(\Phi:A\to T_FM\).
+The map commutes with left multiplication by every element of \(U\),
+so it is a module homomorphism. Uniqueness follows from \(A=Uv\).
+No use of \(\lambda_L\ne0\) has been made at this stage.
+
+\subsection{Explicit preimages of pure negative powers}
+
+Since \(Yu=0\), \([Y,F]=h_L\), and \(f_{b+L}u=0\), with no central
+term because \(L>0\), the preceding formulas yield
+\[
+ Yw_m=-m\lambda_Lw_{m+1},\qquad
+ Y^pw_1=(-1)^pp!\lambda_L^pw_{p+1}.
+\]
+Therefore
+\begin{equation}\label{eq:pure-preimage}
+ q_m=\frac{(-1)^{m-1}}{(m-1)!\lambda_L^{m-1}}Y^{m-1}v
+ \qquad(m\ge1)
+\end{equation}
+satisfies \(\Phi(q_m)=w_m\). In particular, every \(f_b^{-m}u+M\)
+already has an explicit preimage. This calculation does not assume
+surjectivity.
+
+\subsection{The surjectivity induction and injectivity}
+
+Assign weights to the generators of \(U\) by
+\[
+ \wt(e_i)=2,\qquad\wt(h_i)=1,\qquad\wt(f_i)=\wt(K)=0.
+\]
+Let \(U_{\le r}\) be the span of words of total weight at most \(r\),
+with \(U_{\le r}=0\) for \(r<0\). Every nonzero bracket of generators
+has weight at most the sum of their weights minus one, so PBW
+reordering does not increase weight. On each generator, \(\Delta\)
+lowers weight by at least one whenever its value is nonzero. The
+Leibniz rule therefore gives
+\[
+ \Delta^j(X)\in U_{\le\rho(X)-j},\qquad
+ \Delta^j(X)=0\quad(j>\rho(X)).
+\]
+Reorder \(\Delta^j(X)u\) in the PBW basis of \(M\). Inducing factors
+act by scalars or zero, which again cannot increase weight. Thus
+\[
+ \Delta^j(X)u=\sum_{q,X'}c_{j,q,X'}F^qX'u,\qquad
+ q\ge0,\quad
+ c_{j,q,X'}\ne0\ \Longrightarrow\ \rho(X')\le\rho(X)-j,
+\]
+where the sum is finite. Substitute this into
+\eqref{eq:finite-commutation}. The \(j=0\) term of \(Xw_m\) is
+exactly \(B_{m,X}\). For \(j\ge1\), a term with \(q\ge m+j\) vanishes
+in the quotient; otherwise it is a multiple of \(B_{m+j-q,X'}\)
+with \(\rho(X')<\rho(X)\). Hence
+\begin{equation}\label{eq:triangular}
+ Xw_m=B_{m,X}
+       +\text{a finite sum of terms of strictly smaller }\rho.
+\end{equation}
+
+We prove by induction on \(r\ge0\) that \(B_{m,X}\) lies in
+\(\operatorname{im}\Phi\) for \emph{every} \(m\ge1\) and
+\(\rho(X)\le r\).
+
+\emph{Base case \(r=0\).}
+Then \(X\) contains only \(f\)-factors and commutes with \(F\). Thus
+\[
+ B_{m,X}=Xw_m=\Phi(Xq_m).
+\]
+This includes every \(f\)-monomial, not only \(X=1\).
+
+\emph{Induction step.}
+Assume the assertion for \(r-1\). Fix any \(m\ge1\) and any \(X\)
+with \(\rho(X)=r\). By \eqref{eq:triangular},
+\[
+ \Phi(Xq_m)=B_{m,X}+\sum_{\nu=1}^{s}c_\nu B_{m_\nu,X_\nu},
+ \qquad m_\nu\ge1,\quad\rho(X_\nu)\le r-1.
+\]
+For each \(\nu\), the induction hypothesis supplies \(a_\nu\in A\)
+with \(\Phi(a_\nu)=B_{m_\nu,X_\nu}\). Therefore
+\[
+ B_{m,X}=\Phi\left(Xq_m-\sum_{\nu=1}^{s}c_\nu a_\nu\right).
+\]
+Each step involves only finitely many terms, and the nonnegative
+integer \(\rho\) strictly decreases in every correction term, so the
+recursion terminates. Crucially, the induction covers all denominator
+orders simultaneously; an increase in the denominator order causes
+no difficulty. By the target basis in \eqref{eq:pbw-bases}, \(\Phi\)
+is surjective.
+
+For injectivity, \eqref{eq:triangular} implies
+\[
+ \Phi(XY^pv)=(-1)^pp!\lambda_L^pB_{p+1,X}
+       +\text{terms of strictly smaller }\rho.
+\]
+In a nonzero finite linear combination of source basis vectors,
+consider the largest occurring value of \(\rho\). Its terms map to
+distinct target basis vectors, with coefficients multiplied by the
+nonzero scalars \((-1)^pp!\lambda_L^p\). They cannot cancel. The image
+is therefore nonzero, proving injectivity and completing the proof of
+Theorem~\ref{thm:boundary}. Neither finite-dimensional filtration
+pieces nor simplicity are needed.
+
+\subsection{Special cases, iteration, and the fixed-module obstruction}
+
+Taking \(a=-1\) and \(b=n\ge1\) gives the direct generalization
+\begin{equation}\label{eq:fn-special}
+ M_{0,n-1}(\chi^+)\cong T_{f_n}M_{-1,n}(\chi),
+ \qquad\lambda_n\ne0,
+\end{equation}
+with
+\[
+ q_m=\frac{(-1)^{m-1}}{(m-1)!\lambda_n^{m-1}}e_0^{m-1}v.
+\]
+For successive boundary moves, put
+\(N_0=M_{a,b}(\chi)\) and \(N_{r+1}=T_{f_{b-r}}N_r\). Then, for every
+finite \(r\ge0\),
+\[
+ N_r\cong M_{a+r,b-r}(\chi^{(r)}),\qquad
+ \chi^{(r)}(h_0)=\lambda_0+2r,
+\]
+with all other character values unchanged. Indeed, \(a+b\), \(L\),
+and the nonzero value \(\lambda_L\) are preserved at each step, so
+the theorem applies repeatedly. This is a statement about finitely
+many successive localization quotients of changing modules, not about
+infinite iteration or simultaneous localization.
+
+The situation differs if the original module
+\(M=M_{-1,1}(\chi)\) is kept fixed.
+
+\emph{If \(n\ge2\),} then \(F=f_n\) annihilates \(u\). For any
+\(Xu\), choose \(N\ge1\) with \((\ad F)^N(X)=0\). In the expansion
+of \(F^NXu\), each term with \(j<N\) contains a positive power of
+\(F\) acting on \(u\), while the term with \(j=N\) is zero.
+Thus \(F\) acts locally nilpotently, and \(\D_FM=T_FM=0\).
+
+\emph{If \(n\le0\),} then \(F=f_n\) belongs to the PBW complement.
+Placing it first shows that it acts injectively and that the quotient
+is nonzero. However,
+\[
+ h_1(F^{-1}u+M)
+ =\lambda_1(F^{-1}u+M)+2(F^{-2}f_{n+1}u+M).
+\]
+Since \(n+1\le1\) and \(n+1\ne n\), the correction term is a nonzero
+PBW basis vector, linearly independent of \(F^{-1}u+M\). Hence
+\(F^{-1}u+M\) is not an \(h_1\)-eigenvector and cannot be the image
+of the canonical inducing vector of a standard module of the above
+form. This rules out only the specified cyclic map: it neither
+classifies the quotient nor excludes an isomorphism using a different
+cyclic vector.
+
+Finally, if \(\lambda_L=0\), the cyclic map in
+Theorem~\ref{thm:boundary} remains well-defined, but
+\(\Phi(Yv)=0\) whereas \(Yv\ne0\). Thus that map is not an isomorphism.
+
+\section{Adjoining the derivation: the correct tensor action}
+
+For any \(\g\)-module \(M\), define
+\[
+ \I(M)=\widetilde U\otimes_U M.
+\]
+Ordering \(d\) before a basis of \(\g\) gives the right \(U\)-module
+decomposition
+\[
+ \widetilde U=\bigoplus_{k\ge0}d^kU,\qquad
+ \I(M)\cong\C[z]\otimes M,\qquad
+ P(z)\otimes m\longleftrightarrow P(d)\otimes_U m.
+\]
+Here \(z\) is a formal polynomial variable, distinguished from the
+derivation \(d\). Flipping the vector-space factors gives the proposed
+space \(M\otimes\C[d]\); we keep the polynomial factor on the left.
+The PBW decomposition also shows that \(\I\) is exact: kernels and
+images after induction are computed coefficientwise.
+
+\begin{lemma}\label{lem:shift-action}
+Under this identification, the induced action is
+\begin{equation}\label{eq:shift-action}
+\begin{aligned}
+ d(P(z)\otimes m)&=zP(z)\otimes m,\\
+ x_r(P(z)\otimes m)&=P(z-r)\otimes x_rm,\\
+ K(P(z)\otimes m)&=P(z)\otimes Km.
+\end{aligned}
+\end{equation}
+These formulas define a \(\gt\)-module and realize \(\I(M)\).
+\end{lemma}
+\begin{proof}
+The identity \(x_rd=(d-r)x_r\) gives
+\(x_rP(d)=P(d-r)x_r\) by induction, so the formulas follow from the
+induced action. They may also be checked directly. For homogeneous
+modes,
+\[
+ [x_r,y_s](P(z)\otimes m)=P(z-r-s)\otimes[x_r,y_s]m.
+\]
+The noncentral bracket term has degree \(r+s\), and a central term
+can occur only when \(r+s=0\), exactly as required. Moreover,
+\[
+\begin{aligned}
+ [d,x_r](P(z)\otimes m)
+ &=\bigl[zP(z-r)-(z-r)P(z-r)\bigr]\otimes x_rm\\
+ &=rP(z-r)\otimes x_rm.
+\end{aligned}
+\]
+Together with centrality of \(K\), this verifies all relations.
+\end{proof}
+
+The unshifted action \(x_r(P\otimes m)=P\otimes x_rm\) would give
+\([d,x_r]=0\), contradicting the required relation whenever a
+nonzero-degree mode acts nontrivially. Nor can one simply extend the
+one-dimensional inducing character to include \(d\): any such
+extension, denoted \(\widehat\chi\), would satisfy
+\[
+ 0=[\widehat\chi(d),\widehat\chi(h_L)]
+   =\widehat\chi([d,h_L])=L\lambda_L\ne0.
+\]
+Thus we retain \(S_{a,b}\), without \(d\), as the inducing subalgebra.
+Transitivity of induction gives
+\begin{equation}\label{eq:induction-transitivity}
+ \widetilde M_{a,b}(\chi)
+ :=\widetilde U\otimes_{U(S_{a,b})}\C_\chi
+ \cong\I(M_{a,b}(\chi)).
+\end{equation}
+
+\section{Localization commutes with adjoining the derivation}
+
+This section does not require \(M\) to be a particular induced module.
+Fix \(n\in\Z\) and \(F=f_n\). For \(\Delta=\ad F\), the brackets give
+\[
+\begin{gathered}
+ \Delta(f_r)=\Delta(K)=0,\qquad
+ \Delta(h_r)=2f_{r+n},\qquad \Delta(d)=-nF,\\
+ \Delta(e_r)=-(h_{r+n}+r\delta_{r+n,0}K),\qquad
+ \Delta^2(e_r)=-2f_{r+2n},\qquad \Delta^3(e_r)=0.
+\end{gathered}
+\]
+The Leibniz rule implies that \(\Delta\) is locally nilpotent on
+both \(U\) and \(\widetilde U\). Their PBW associated graded algebras
+are domains, so \(F\) is regular on both sides in each algebra.
+If \(\Delta^{t+1}(s)=0\), then for \(N\ge t\),
+\[
+ F^Ns=\sum_{j=0}^t\binom Nj\Delta^j(s)F^{N-j},\qquad
+ sF^N=\sum_{j=0}^t(-1)^j\binom NjF^{N-j}\Delta^j(s).
+\]
+Taking \(N\ge m+t\) gives the required right or left factor \(F^m\),
+proving both Ore conditions. Module localization can be represented
+by fractions, with
+\[
+ F^{-m}v=F^{-\ell}w
+ \quad\Longleftrightarrow\quad
+ F^{k-m}v=F^{k-\ell}w
+ \quad\text{for some }k\ge\max\{m,\ell\}.
+\]
+Thus finite sums admit a common denominator, and the kernel of
+\(M\to\D_FM\) consists exactly of vectors annihilated by some power
+of \(F\).
+
+\begin{theorem}\label{thm:commute}
+Suppose \(F=f_n\) acts injectively on the \(\g\)-module \(M\).
+There are natural \(\gt\)-module isomorphisms
+\[
+ \alpha_M:\D_F\I(M)\xrightarrow{\sim}\I(\D_FM),\qquad
+ \overline\alpha_M:T_F\I(M)\xrightarrow{\sim}\I(T_FM).
+\]
+The first isomorphism and its inverse are given by
+\begin{equation}\label{eq:alpha}
+\begin{aligned}
+ \alpha_M\bigl(F^{-m}(P(z)\otimes u)\bigr)
+   &=P(z+mn)\otimes F^{-m}u,\\
+ \alpha_M^{-1}\bigl(P(z)\otimes F^{-m}u\bigr)
+   &=F^{-m}(P(z-mn)\otimes u),
+\end{aligned}
+\end{equation}
+where \(m\ge0\), \(P\in\C[z]\), and \(u\in M\). The second
+isomorphism is obtained by passing to quotients.
+\end{theorem}
+
+\begin{proof}
+\emph{Injective action and construction.}
+On \(\I(M)\), the action of \(F\) is
+\[
+ P(z)\otimes u\longmapsto P(z-n)\otimes Fu.
+\]
+Polynomial translation is invertible and \(F\) is injective on \(M\);
+hence \(F\) is injective on \(\I(M)\). On \(\I(\D_FM)\), it is
+invertible, with
+\[
+ F^{-1}(P(z)\otimes v)=P(z+n)\otimes F^{-1}v.
+\]
+Iteration gives the positive shift \(+mn\) in \eqref{eq:alpha}.
+The basic fraction relation is respected because
+\[
+ P(z-n+(m+1)n)\otimes F^{-m-1}Fu
+ =P(z+mn)\otimes F^{-m}u.
+\]
+Together with common denominators, this proves that \(\alpha_M\)
+is well-defined.
+
+\emph{Module compatibility.}
+Local nilpotence gives the finite commutation identity
+\begin{equation}\label{eq:finite-commutation}
+ sF^{-m}
+ =\sum_{j\ge0}\binom{m+j-1}{j}F^{-m-j}\Delta^j(s)
+ \qquad(m\ge1).
+\end{equation}
+For \(m=1\), repeatedly substitute
+\(sF^{-1}=F^{-1}s+F^{-1}\Delta(s)F^{-1}\).
+The general case follows by induction using the binomial summation
+identity obtained from Pascal's identity. Each nonzero
+\(\Delta^j(x_r)\) is homogeneous of degree \(r+jn\); a possible
+central term has degree zero. Therefore, for \(m\ge1\),
+\begin{align*}
+ &\alpha_M\bigl(x_rF^{-m}(P(z)\otimes u)\bigr)\\
+ &\quad=\sum_{j\ge0}\binom{m+j-1}{j}
+ P\bigl(z-(r+jn)+(m+j)n\bigr)
+       \otimes F^{-m-j}\Delta^j(x_r)u\\
+ &\quad=P(z+mn-r)\otimes x_rF^{-m}u\\
+ &\quad=x_r\alpha_M\bigl(F^{-m}(P(z)\otimes u)\bigr).
+\end{align*}
+For \(m=0\), the assertion is immediate without commuting a
+denominator. Compatibility with \(K\) follows directly. For the
+derivation, \([d,F^{-m}]=-mnF^{-m}\), so
+\begin{align*}
+ \alpha_M\bigl(dF^{-m}(P(z)\otimes u)\bigr)
+ &=\alpha_M\bigl(F^{-m}((z-mn)P(z)\otimes u)\bigr)\\
+ &=zP(z+mn)\otimes F^{-m}u\\
+ &=d\alpha_M\bigl(F^{-m}(P(z)\otimes u)\bigr).
+\end{align*}
+
+\emph{Bijectivity and passage to quotients.}
+The second formula in \eqref{eq:alpha} supplies a preimage for every
+elementary tensor, proving surjectivity. If
+\(\alpha_M(F^{-m}w)=0\), apply \(F^m\) in the target: the image of
+\(w\) in \(\I(\D_FM)\) is zero. Since \(M\hookrightarrow\D_FM\)
+is injective and \(\I\) is exact,
+\(\I(M)\hookrightarrow\I(\D_FM)\) is injective. Thus \(w=0\),
+proving injectivity and the stated inverse formula.
+
+On elements with denominator exponent zero, \(\alpha_M\) is the
+induced inclusion. Applying \(\I\) to
+\[
+ 0\longrightarrow M\longrightarrow\D_FM
+ \longrightarrow T_FM\longrightarrow0
+\]
+therefore gives the quotient isomorphism. Finally, for a module map
+\(g:M\to N\), the localized and induced maps send
+\[
+ F^{-m}u\longmapsto F^{-m}g(u),\qquad
+ P\otimes u\longmapsto P\otimes g(u).
+\]
+Substitution in \eqref{eq:alpha} proves naturality.
+\end{proof}
+
+\begin{corollary}\label{cor:lift}
+Under the hypotheses of Theorem~\ref{thm:commute}, a \(\g\)-module
+isomorphism \(\Phi:A\xrightarrow{\sim}T_FM\) lifts to
+\[
+ \widetilde\Phi=\overline\alpha_M^{-1}\circ\I(\Phi):
+ \I(A)\xrightarrow{\sim}T_F\I(M).
+\]
+If \(\Phi(a)=F^{-m}u+M\), then
+\begin{equation}\label{eq:lift}
+ \widetilde\Phi(P(z)\otimes a)
+ =F^{-m}(P(z-mn)\otimes u)+\I(M).
+\end{equation}
+In particular, if \(\Phi(q_m)=F^{-m}u+M\), then
+\begin{equation}\label{eq:poly-preimage}
+ \boxed{\ 
+ \widetilde\Phi^{-1}\bigl(F^{-m}(P(z)\otimes u)+\I(M)\bigr)
+ =P(z+mn)\otimes q_m.\ }
+\end{equation}
+\end{corollary}
+
+The induced map \(\I(\Phi)\) itself is indeed
+\(\mathrm{id}_{\C[z]}\otimes\Phi\). However, identifying its target
+with \(T_F\I(M)\) requires the translation in \eqref{eq:alpha}.
+When \(n\ne0\), replacing \(P\otimes(F^{-m}u+M)\) by
+\(F^{-m}(P\otimes u)+\I(M)\) without this translation is generally
+incompatible with \(d\). When \(n=0\), the translations disappear.
+
+\section{The combined isomorphism}
+
+Apply Corollary~\ref{cor:lift} to Theorem~\ref{thm:boundary} and use
+\eqref{eq:induction-transitivity}.
+
+\begin{corollary}\label{cor:final}
+If \(a+b\ge0\), \(L=a+b+1\), and \(\lambda_L\ne0\), then for every
+central parameter \(c\),
+\begin{equation}\label{eq:full-iso}
+ \boxed{\ 
+ \widetilde M_{a+1,b-1}(\chi^+)
+ \xrightarrow[\ \widetilde\Phi\ ]{\ \sim\ }
+ T_{f_b}\widetilde M_{a,b}(\chi).\ }
+\end{equation}
+The map sends \(\widetilde v=1\otimes v\) to
+\(f_b^{-1}\widetilde u+\widetilde M_{a,b}(\chi)\), where
+\(\widetilde u=1\otimes u\). For \(q_m\) from
+\eqref{eq:pure-preimage},
+\begin{equation}\label{eq:full-preimage}
+\begin{aligned}
+ &\widetilde\Phi^{-1}
+ \bigl(f_b^{-m}(P(z)\otimes u)+\widetilde M_{a,b}(\chi)\bigr)\\
+ &\hspace{5em}=P(z+mb)\otimes q_m.
+\end{aligned}
+\end{equation}
+In particular, for \(a=-1\) and \(b=n\ge1\),
+\[
+ \widetilde M_{0,n-1}(\chi^+)
+ \cong T_{f_n}\widetilde M_{-1,n}(\chi),
+ \qquad\lambda_n\ne0.
+\]
+\end{corollary}
+
+This completes the proposed procedure. Well-definedness, the
+surjectivity induction, and injectivity first establish \(\Phi\)
+without \(d\). Exact induction gives \(\I(\Phi)\), and
+\(\overline\alpha_M^{-1}\) identifies its target with the localization
+quotient after adjoining \(d\). No new surjectivity induction on the
+polynomial degree is needed. Likewise, each finite sequence of
+boundary moves lifts step by step.
+
+\section{Smoothness and limitations}
+
+If \(M\) is smooth, the finitely many coefficients \(m_i\) in
+\(\sum_iP_i(z)\otimes m_i\) have a common bound above which all modes
+annihilate them. By \eqref{eq:shift-action}, the same bound works
+for this tensor. Thus \(\I(M)\) is smooth.
+
+For an element \(F^{-m}u\) of the localization, with \(m\ge1\),
+the finite commutation formula gives
+\[
+\begin{aligned}
+ h_rF^{-m}u&=F^{-m}h_ru+2mF^{-m-1}f_{r+n}u,\\
+ e_rF^{-m}u&=F^{-m}e_ru
+       -mF^{-m-1}(h_{r+n}+r\delta_{r+n,0}K)u\\
+ &\hspace{2em}-m(m+1)F^{-m-2}f_{r+2n}u,
+\end{aligned}
+\]
+while \(f_r\) commutes with \(F\). Choose \(r\) sufficiently large
+that \(r,r+n,r+2n\) exceed the annihilation bound for \(u\) and
+\(r+n\ne0\). All terms then vanish. Common denominators and finite
+sums show that \(\D_FM\), and hence \(T_FM\), are smooth. This
+argument also covers negative integers \(n\).
+
+The modules \(M_{a,b}(\chi)\) themselves are smooth: commuting a
+sufficiently high mode through a fixed finite PBW word introduces
+only finitely many index shifts, and the resulting high modes
+annihilate the inducing vector.
+
+An isomorphism statement does not by itself imply simplicity. In
+general, \(\I\) does not preserve simple modules: the trivial
+one-dimensional \(\g\)-module \(\C\) is simple, but
+\(\I(\C)=\C[z]\) has the nonzero proper submodule \(z\C[z]\),
+with all loop modes acting as zero and \(d\) acting by multiplication
+by \(z\). This example only shows that induction does not preserve
+simplicity in general; it does not satisfy the injectivity
+hypothesis on \(F\).
+
+For the noncritical induced modules considered here,
+\cite[\S4.1]{FGXZ} uses an additional Casimir central reduction to
+construct simple modules. The isomorphisms in this note alone do
+not establish simplicity of the entire induced module with \(d\).
+
+\appendix
+\section{Scope and record of the Danus trial}
+
+The trial used the public Codex release of Danus,
+\texttt{v0.1.0-codex}, through a bounded native Windows adaptation.
+It retained the upstream deterministic prechecks, verification entry
+point, candidate-submission gate, and fact graph, while replacing
+the Linux daemon launch mechanism with local read-only Codex calls.
+No unsandboxed launch script was run, no additional paid strategic
+consultation was enabled, and no global agent configuration was
+changed.
+
+Separate workers submitted candidates for the boundary isomorphism
+and for compatibility with the derivation. Each review used an
+independent cold-start verifier. The boundary candidate was accepted
+on its first submission, with fact identifier
+\texttt{d6bf6fef62dc8971}. The derivation candidate was initially
+rejected because its theorem statement did not fully define the
+ambient algebras and functor. After these definitions were supplied,
+it was accepted with fact identifier \texttt{b388fabb701946d3}.
+The second review confirmed consistency of the positive shift
+\(+mn\), inverse shift \(-mn\), and derivation correction.
+
+The two English proof candidates in the fact graph retain their
+submitted statements, proofs, and verification results. The present
+note is an edited English version of the integrated Chinese note:
+it uses unified notation and combines the results functorially in
+Corollary~\ref{cor:final}. Neither integrated version has undergone
+a separate whole-paper verifier review. All 67 offline tests for
+the adaptation and relevant upstream modules passed; dependency
+deprecation warnings and nonblocking heuristic symbol-recognition
+warnings were also recorded. These software tests are not
+mathematical proofs.
+
+The Danus verifier is an LLM, not Lean or Coq; acceptance does not
+constitute a formal proof certificate \cite{DanusTrust}. The arguments
+remain subject to author and advisor review. A complete classification
+of nonboundary quotients of the fixed original module, and further
+simplicity questions, lie outside the results established here.
+
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024), \S2.3 and \S4.
+\url{https://arxiv.org/abs/2404.03855v2}.
+\bibitem{DanusTrust}
+FrenzyMath, \emph{Danus: Security and Trust Model},
+\texttt{v0.1.0-codex}, \S1--4.
+\url{https://github.com/frenzymath/Danus/blob/v0.1.0-codex/docs/security-and-trust.md}.
+\end{thebibliography}
+\end{document}

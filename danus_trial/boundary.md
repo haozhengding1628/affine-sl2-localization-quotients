@@ -1,0 +1,43 @@
+# Research job: replace f_1 by f_n
+
+User question: If we replace f_1 by some f_n, can the earlier localization
+isomorphism be proved in a similar way? Determine both the valid generalization
+and the limitations of changing n while keeping the module fixed.
+
+Work over C. Let g be the affine sl2 algebra WITHOUT derivation, with generators
+e_i,f_i,h_i (i in Z), K central, and
+[e_i,f_j]=h_{i+j}+i delta_{i+j,0}K, [h_i,h_j]=2i delta_{i+j,0}K,
+[h_i,e_j]=2e_{i+j}, [h_i,f_j]=-2f_{i+j}, [e_i,e_j]=[f_i,f_j]=0.
+For integers a,b with a+b>=0 put L=a+b+1,
+S_ab=span(K,h_i for i>=0,e_i for i>a,f_j for j>b).
+Its character chi sends K to c, h_i to lambda_i (i=0,...,L), h_i to 0
+for i>L, all its root vectors to 0. Set U=U(g),
+M_ab(chi)=U tensor_{U(S_ab)} C_chi, u=1 tensor 1.
+For F=f_n write D_F M=U[F^{-1}] tensor_U M. When F is injective on M,
+write T_F M=D_F M/M; in general use the cokernel of M->D_F M.
+
+Investigate and prove/refute:
+
+1. For F=f_b and lambda_L!=0, T_F M_ab(chi) is isomorphic to
+   M_{a+1,b-1}(chi_plus), where chi_plus(h_0)=lambda_0+2 and other
+   Cartan/central values stay fixed. The cyclic vector v should map to
+   F^{-1}u+M. Include arbitrary integers a,b, not just positive b; c arbitrary.
+2. Specialize a=-1,b=n>=1. Give a completely explicit preimage of every
+   f_n^{-m}u+M, m>=1. General case should use Y=e_{a+1}.
+3. Give a full PBW proof of well-definedness, surjectivity and injectivity.
+   Promising ordering: common exterior X=e(alpha)h(beta)f(gamma), indices
+   alpha<=a, beta<=-1, gamma<=b-1. Target basis F^{-m}Xu; source XY^p v,
+   with Y placed after all factors of X. A possible weight is
+   wt(e)=2,wt(h)=1,wt(f)=wt(K)=0. Check all reorderings and all denominators,
+   not just the pure negative-power tower. Do not assume simple modules.
+4. With ORIGINAL M_-1,1 and lambda_1!=0 fixed, prove what happens for n>=2.
+   For n<=0, test whether f_n^{-1}u+M is an h_1 eigenvector, and whether
+   the same cyclic map from a standard M_ab can even be defined. Distinguish
+   failure of this map from a classification/nonexistence of all isomorphisms.
+5. If justified, state a finite iterated boundary-move corollary.
+
+Write a self-contained statement and proof in English mathematical Markdown.
+You may use PBW, explicitly identifying the relevant ordered basis and what it
+proves. Do not rely on an unverified source note or unspecified literature.
+All claims included in your statement must be proved. If an optional direction
+cannot be finished, omit it from the theorem and report the limitation in scope_notes.

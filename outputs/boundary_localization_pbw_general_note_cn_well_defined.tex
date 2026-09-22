@@ -1,0 +1,545 @@
+% !TEX program = xelatex
+\documentclass[UTF8,11pt]{ctexart}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black
+}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\G}{\Gamma}
+\newcommand{\slh}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\D}{\mathcal D}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\im}{\operatorname{Im}}
+
+\theoremstyle{plain}
+\newtheorem{proposition}{命题}
+\newtheorem{lemma}[proposition]{引理}
+\newtheorem{theorem}[proposition]{定理}
+
+\theoremstyle{definition}
+\newtheorem{remark}[proposition]{备注}
+
+\title{\(M_{-1,1}\) 的边界局部化与一般边界版本}
+\author{讨论笔记}
+\date{2026 年 9 月 2 日}
+
+\begin{document}
+\maketitle
+
+\section*{0. 基本记号}
+
+对 \(A_1^{(1)}\)，令 \(\slh=\widehat{\mathfrak{sl}}_2\)，其中
+\[
+  [e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K,\qquad
+  [h_i,e_j]=2e_{i+j},\qquad
+  [h_i,f_j]=-2f_{i+j},\qquad
+  [h_i,h_j]=2i\delta_{i+j,0}K.
+\]
+对整数 \(N_1,N_2\)，令
+\[
+  S_{N_1,N_2}
+  =
+  \operatorname{span}\{K,\ h(n_0),\ e(n_1),\ f(n_2):
+  n_0\ge0,\ n_1>N_1,\ n_2>N_2\}.
+\]
+特别地，\(h_0\in S_{0,0}\)。令
+\[
+  M=M_{N_1,N_2}(\varphi)=\Ind_{S_{N_1,N_2}}^{\slh}\C_\varphi,
+  \qquad
+  u=1\otimes1,
+\]
+并记 \(c=\varphi(K)\)，\(\lambda_i=\varphi(h_i)\)。则
+\[
+  e_iu=0\ (i>N_1),\qquad f_ju=0\ (j>N_2),
+\]
+\[
+  Ku=cu,\qquad h_iu=\lambda_iu\ (i\ge0).
+\]
+由于 \(\varphi\) 是 Lie 代数同态（到交换 Lie 代数 \(\C\)），由
+\([e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K\)（\(i>N_1\)，\(j>N_2\)）得
+\[
+  \lambda_i=0\qquad(i\ge N_1+N_2+2).
+\]
+
+记 \(\G_m\) 为所有有限非降整数列
+\[
+  \gamma=(m_1,\ldots,m_k),\qquad m_i\le m,\qquad m_1\le\cdots\le m_k
+\]
+的集合，并写 \(x(\gamma)=x(m_1)\cdots x(m_k)\)，\(x(\emptyset)=1\)（\(x=e,h,f\)）。
+
+\begin{proposition}[PBW 基]\label{prop:pbw}
+\(M_{N_1,N_2}(\varphi)\) 的一组 PBW 基为
+\[
+  \mathcal B_{N_1,N_2}
+  =
+  \{\,
+    e(\alpha)h(\beta)f(\gamma)u:
+    \alpha\in\G_{N_1},\ \beta\in\G_{-1},\ \gamma\in\G_{N_2}
+  \,\}.
+\]
+\end{proposition}
+
+\begin{proof}
+在向量空间上取 complement
+\[
+  \mathfrak a
+  =
+  \operatorname{span}\{e_i:i\le N_1\}
+  \oplus
+  \operatorname{span}\{h_i:i\le -1\}
+  \oplus
+  \operatorname{span}\{f_i:i\le N_2\},
+\]
+则
+\[
+  \slh=\mathfrak a\oplus S_{N_1,N_2}.
+\]
+由 PBW 定理，
+\[
+  U(\slh)\cong U(\mathfrak a)\otimes U(S_{N_1,N_2})
+\]
+作为向量空间。张量到一维 \(S_{N_1,N_2}\)-模 \(\C_\varphi\) 后，
+\(S_{N_1,N_2}\) 中的因子都化为标量，只剩下 \(\mathfrak a\) 的有序 PBW
+monomial。这正是上面的集合。
+\end{proof}
+
+\begin{lemma}[局部化作用公式]\label{lem:loc}
+对 \(F=f_b\) 与 \(s\in\Z\)，
+\[
+  f_nF^s=F^sf_n,
+\]
+\[
+  h_nF^s=F^sh_n-2sF^{s-1}f_{n+b},
+\]
+\[
+  e_nF^s
+  =
+  F^se_n
+  +sF^{s-1}\bigl(h_{n+b}+n\delta_{n+b,0}K\bigr)
+  -2\binom{s}{2}F^{s-2}f_{n+2b}.
+\]
+\end{lemma}
+
+\begin{proof}
+有
+\[
+  [F,f_n]=0,\qquad
+  [F,h_n]=2f_{n+b},\qquad
+  [F,e_n]=-(h_{n+b}+n\delta_{n+b,0}K),
+\]
+\[
+  (\ad F)^2(e_n)=-2f_{n+2b},\qquad
+  (\ad F)^3(e_n)=0.
+\]
+在局部化中，
+\[
+  xF^s=\sum_{j\ge0}(-1)^j\binom{s}{j}F^{s-j}(\ad F)^j(x),
+\]
+其中和式有限。
+\end{proof}
+
+\section*{1. \(N_1=-1\)，\(N_2=1\) 的情形}
+
+固定
+\[
+  M=M_{-1,1}(\varphi),\qquad F=f_1.
+\]
+因为 \(F\) 是 PBW 变量，\(F\) 在 \(M\) 上作用单射。令
+\[
+  \D_FM=\{F^m:m\ge0\}^{-1}M.
+\]
+由于所有 \(f_i\) 两两交换，\(\D_FM\) 的一组基为
+\[
+  \{F^s e(\alpha)h(\beta)f(\delta)u:
+  s\in\Z,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_0\},
+\]
+且 \(M\) 对应 \(s\ge0\) 的部分。localization quotient
+\[
+  T_FM=\D_FM/M
+\]
+的一组 PBW 基为
+\[
+  \mathcal C
+  =
+  \{F^{-m}e(\alpha)h(\beta)f(\delta)u+M:
+  m\ge1,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_0\}.
+\]
+记
+\[
+  \bar u_m=F^{-m}u+M\ (m\ge1),\qquad
+  \bar u=\bar u_1.
+\]
+定义 \(\psi:S_{0,0}\to\C\) 为
+\[
+  \psi(K)=c,\qquad
+  \psi(h_0)=\lambda_0+2,\qquad
+  \psi(h_1)=\lambda_1,\qquad
+  \psi(h_i)=0\ (i\ge2),
+\]
+\[
+  \psi(e_i)=0\ (i>0),\qquad
+  \psi(f_i)=0\ (i>0),
+\]
+并令
+\[
+  A=M_{0,0}(\psi)=\Ind_{S_{0,0}}^{\slh}\C_\psi,
+  \qquad
+  u'=1\otimes1.
+\]
+
+\begin{lemma}\label{lem:cyc}
+向量 \(\bar u\in T_FM\) 满足
+\[
+  x\bar u=\psi(x)\bar u\qquad(x\in S_{0,0}).
+\]
+\end{lemma}
+
+\begin{proof}
+取 \(s=-1\)，引理~\ref{lem:loc} 给出
+\[
+  f_nF^{-1}=F^{-1}f_n,
+\]
+\[
+  h_nF^{-1}=F^{-1}h_n+2F^{-2}f_{n+1},
+\]
+\[
+  e_nF^{-1}
+  =
+  F^{-1}e_n
+  -F^{-2}\bigl(h_{n+1}+n\delta_{n+1,0}K\bigr)
+  -2F^{-3}f_{n+2}.
+\]
+于是对 \(n>0\)，
+\[
+  f_n\bar u=0,\qquad e_n\bar u=0
+\]
+（\(n=1\) 时，\(f_1\bar u=F^{-1}f_1u+M=F^{-1}Fu+M=u+M=0\)）。对 Cartan
+部分，
+\[
+  h_0\bar u=(F^{-1}h_0+2F^{-2}f_1)u+M
+  =(\lambda_0+2)F^{-1}u+M
+  =(\lambda_0+2)\bar u
+  =\psi(h_0)\bar u,
+\]
+\[
+  h_1\bar u=(F^{-1}h_1+2F^{-2}f_2)u+M=\lambda_1\bar u=\psi(h_1)\bar u,
+\]
+而对 \(n\ge2\)，
+\[
+  h_n\bar u=(F^{-1}h_n+2F^{-2}f_{n+1})u+M=0=\psi(h_n)\bar u.
+\]
+又 \(K\bar u=c\bar u=\psi(K)\bar u\)。
+\end{proof}
+
+\begin{proposition}\label{prop:phi}
+存在唯一的 \(\slh\)-模同态
+\[
+  \Phi:A\longrightarrow T_FM,\qquad \Phi(u')=\bar u.
+\]
+若 \(\lambda_1\ne0\)，则 \(\Phi\) 满射。
+\end{proposition}
+
+\begin{proof}
+令
+\[
+  \psi_U:U(S_{0,0})\longrightarrow\C
+\]
+为 Lie 代数特征 \(\psi\) 的代数扩张。由引理~\ref{lem:cyc}，对每个
+\(a\in U(S_{0,0})\) 都有
+\[
+  a\bar u=\psi_U(a)\bar u.
+\]
+这里不仅是对 \(S_{0,0}\) 中的生成元成立：若
+\(a=s_1\cdots s_k\)（\(s_i\in S_{0,0}\)），则
+\(a\bar u=\psi(s_1)\cdots\psi(s_k)\bar u=\psi_U(a)\bar u\)，再由线性延拓即可。
+
+写 \(\C_\psi=\C\mathbf 1_\psi\)。在未平衡张量积上定义
+\[
+  \widetilde\Phi:U(\slh)\otimes\C_\psi\longrightarrow T_FM,
+  \qquad
+  \widetilde\Phi(x\otimes b\mathbf 1_\psi)=b\,x\bar u.
+\]
+对 \(x\in U(\slh)\)、\(a\in U(S_{0,0})\) 和 \(b\in\C\)，张量积的平衡关系被送到
+\[
+\begin{aligned}
+  &\widetilde\Phi\bigl(xa\otimes b\mathbf 1_\psi
+      -x\otimes a(b\mathbf 1_\psi)\bigr) \\
+  &\qquad=b\,xa\bar u-b\,\psi_U(a)x\bar u
+   =b\,x\bigl(a\bar u-\psi_U(a)\bar u\bigr)=0.
+\end{aligned}
+\]
+因此 \(\widetilde\Phi\) 消掉平衡子空间，下降为良定义的线性映射
+\[
+  \Phi:A=U(\slh)\otimes_{U(S_{0,0})}\C_\psi\longrightarrow T_FM,
+  \qquad \Phi(x\otimes_{U(S_{0,0})}b\mathbf 1_\psi)=b\,x\bar u.
+\]
+再对 \(y\in\slh\) 计算
+\[
+  \Phi\bigl(y\cdot(x\otimes_{U(S_{0,0})}b\mathbf 1_\psi)\bigr)
+  =b\,yx\bar u
+  =y\cdot\bigl(b\,x\bar u\bigr),
+\]
+故 \(\Phi\) 是 \(\slh\)-模同态。特别地，
+\(\Phi(u')=\bar u\)；而 \(A=U(\slh)u'\)，所以满足此条件的模同态唯一。
+
+对 \(m\ge1\)，
+\[
+  e_0F^{-m}=F^{-m}e_0-mF^{-m-1}h_1-m(m+1)F^{-m-2}f_2.
+\]
+于是
+\[
+  e_0\bar u_m=-m\lambda_1\bar u_{m+1},
+\]
+并且
+\[
+  e_0^r\bar u=(-1)^rr!\lambda_1^r\bar u_{r+1}\qquad(r\ge0).
+\]
+若 \(\lambda_1\ne0\)，则
+\[
+  \bar u_m=\frac{(-1)^{m-1}}{(m-1)!\lambda_1^{m-1}}e_0^{m-1}\bar u\in\im\Phi.
+\]
+\(T_FM\) 的一组 PBW 基为
+\[
+  B_{m,\eta}:=F^{-m}X_\eta u+M,
+  \qquad
+  X_\eta=e(\alpha)h(\beta)f(\delta),
+\]
+其中 \(m\ge1\)，\(\alpha,\beta\in\G_{-1}\)，\(\delta\in\G_0\)。在外指标
+\(\eta\) 上固定一个全序 PBW monomial 序 \(\prec\)，例如由所选 PBW 生成元序
+诱导的 degree-lexicographic 序。对
+\[
+  C_{m,\eta}=\frac{(-1)^{m-1}}{(m-1)!\lambda_1^{m-1}}X_\eta e_0^{m-1}u'\in A,
+\]
+有
+\[
+  \Phi(C_{m,\eta})=X_\eta\bar u_m.
+\]
+把 \(X_\eta\) 中的外因子移过 \(F^{-m}\) 得到有限的三角展开
+\[
+  \Phi(C_{m,\eta})
+  =
+  B_{m,\eta}
+  +
+  \sum_{\eta'\prec\eta,\,m'}a_{m',\eta'}B_{m',\eta'}
+  +
+  \sum_{i=0}^{N_\eta}r_i(m,\eta)\bar u_{m+i},
+\]
+其中 \(a_{m',\eta'},r_i(m,\eta)\in\C\)；最后的有限和正是外 PBW 指标为零的
+部分。
+对 \(\eta\) 归纳证明 \(B_{m,\eta}\in\im\Phi\)。\(\eta=0\) 的情形即
+\(\bar u_m\in\im\Phi\)。假设
+\[
+  B_{m',\eta'}\in\im\Phi\qquad(\eta'\prec\eta,\ m'\ge1),
+\]
+则由三角公式，
+\[
+  B_{m,\eta}
+  =
+  \Phi(C_{m,\eta})
+  -
+  \sum_{\eta'\prec\eta,\,m'}a_{m',\eta'}B_{m',\eta'}
+  -
+  \sum_{i=0}^{N_\eta}r_i(m,\eta)\bar u_{m+i}
+  \in\im\Phi.
+\]
+因此 \(T_FM\) 的每个 PBW 基向量都属于 \(\im\Phi\)。
+\end{proof}
+
+\begin{theorem}\label{thm:iso}
+设
+\[
+  \lambda_1=\varphi(h_1)\ne0.
+\]
+则
+\[
+  \Phi:M_{0,0}(\psi)\longrightarrow T_{f_1}M_{-1,1}(\varphi)
+\]
+是同构。
+\end{theorem}
+
+\begin{proof}
+由命题~\ref{prop:phi}，\(\Phi\) 满射。为证单射，对 \(A=M_{0,0}(\psi)\)
+取 PBW 基
+\[
+  \mathcal B_{0,0}
+  =
+  \{\,
+    e_0^pe(\alpha)h(\beta)f(\delta)u':
+    p\ge0,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_0
+  \,\},
+\]
+并把 \(\mathcal B_{0,0}\) 与 \(\mathcal C\) 分别按 \((p,\eta)\) 与
+\((m,\eta)\) 取字典序，其中 \(\eta\) 取所选 PBW 序诱导的
+degree-lexicographic 序，对应关系为
+\[
+  e_0^pe(\alpha)h(\beta)f(\delta)u'
+  \longleftrightarrow
+  F^{-p-1}e(\alpha)h(\beta)f(\delta)u+M.
+\]
+由引理~\ref{lem:loc}，
+\[
+  \Phi(e_0^pe(\alpha)h(\beta)f(\delta)u')
+\]
+的最高项为
+\[
+  (-1)^pp!\lambda_1^p\,F^{-p-1}e(\alpha)h(\beta)f(\delta)u+M;
+\]
+其余项来自交换 \(e_0,h_i,e_i,f_i\) 越过 \(F\) 的幂时产生的 commutators；
+这些项要么含更低的 PBW monomial，要么在相同 monomial 下落入较低过滤层。
+换言之，\(\Phi\) 在两组 PBW 基之间是上三角的，且对角系数
+\[
+  (-1)^pp!\lambda_1^p\ne0.
+\]
+故 \(\Phi\) 单射。
+\end{proof}
+
+\begin{remark}
+若 \(\lambda_1=0\)，上面的同构一般失败。此时
+\[
+  e_0\bar u=0,
+\]
+而 \(M_{0,0}(\psi)\) 中 \(e_0\) 是 PBW complement 中的自由变量，不能被
+生成向量杀掉。
+\end{remark}
+
+\begin{theorem}\label{thm:simple}
+设
+\[
+  \lambda_1=\varphi(h_1)\ne0,\qquad c=\varphi(K)\ne-2.
+\]
+则
+\[
+  T_{f_1}M_{-1,1}(\varphi)=\D_{f_1}M_{-1,1}(\varphi)/M_{-1,1}(\varphi)
+\]
+是单 \(\slh\)-模。
+\end{theorem}
+
+\begin{proof}
+FGXZ 不可约判据给出：当
+\[
+  \chi(h(N_1+N_2+1))\ne0,\qquad \chi(K)\ne-2
+\]
+时，\(M_{N_1,N_2}(\chi)\) 单。对 \(A=M_{0,0}(\psi)\)，这即是
+\[
+  \psi(h_1)=\lambda_1\ne0,\qquad \psi(K)=c\ne-2.
+\]
+故 \(A\) 单，且由定理~\ref{thm:iso} 它同构于
+\(T_{f_1}M_{-1,1}(\varphi)\)。因此后者单。
+\end{proof}
+
+\section*{2. 一般边界版本}
+
+\begin{theorem}\label{thm:general}
+令 \(N\ge1\)，
+\[
+  M=M_{-1,N}(\varphi),\qquad F=f_N,
+\]
+并设
+\[
+  \lambda_N=\varphi(h_N)\ne0.
+\]
+则
+\[
+  \D_{f_N}M_{-1,N}(\varphi)/M_{-1,N}(\varphi)
+  \cong
+  M_{0,N-1}(\psi),
+\]
+其中 \(\psi:S_{0,N-1}\to\C\) 由
+\[
+  \psi(K)=c,\qquad
+  \psi(h_0)=\lambda_0+2,\qquad
+  \psi(h_i)=\lambda_i\ (i\ge1)
+\]
+给出。若还有 \(c\ne-2\)，则此 quotient 是单 \(\slh\)-模。
+\end{theorem}
+
+\begin{proof}
+\(N=1\) 的证明原样照搬，只需替换 \(n+1\rightsquigarrow n+N\)，
+\(n+2\rightsquigarrow n+2N\)。引理~\ref{lem:loc} 给出（\(s=-1\)）
+\[
+  f_nF^{-1}=F^{-1}f_n,
+\]
+\[
+  h_nF^{-1}=F^{-1}h_n+2F^{-2}f_{n+N},
+\]
+\[
+  e_nF^{-1}
+  =
+  F^{-1}e_n
+  -F^{-2}\bigl(h_{n+N}+n\delta_{n+N,0}K\bigr)
+  -2F^{-3}f_{n+2N}.
+\]
+于是 \(x\bar u=\psi(x)\bar u\)（\(x\in S_{0,N-1}\)）：\(n=N\) 时用
+\[
+  f_N\bar u=F^{-1}f_Nu+M=F^{-1}Fu+M=u+M=0,
+\]
+Cartan 与 \(e\) 的余项由 \(\lambda_i=0\ (i>N)\) 消去，而
+\(h_0\bar u=(\lambda_0+2)\bar u\) 来自 \(2F^{-2}f_Nu=2F^{-2}Fu=2\bar u\)。
+又
+\[
+  e_0F^{-m}=F^{-m}e_0-mF^{-m-1}h_N-m(m+1)F^{-m-2}f_{2N},
+\]
+故
+\[
+  e_0\bar u_m=-m\lambda_N\bar u_{m+1}
+\]
+（因 \(f_{2N}u=0\)），从而 \(e_0^r\bar u=(-1)^rr!\lambda_N^r\bar u_{r+1}\)。
+quotient 与 \(M_{0,N-1}(\psi)\) 的 PBW 基分别为
+\[
+  \{F^{-m}e(\alpha)h(\beta)f(\delta)u+M:
+  m\ge1,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_{N-1}\}
+\]
+与
+\[
+  \{e_0^pe(\alpha)h(\beta)f(\delta)u':
+  p\ge0,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_{N-1}\},
+\]
+定理~\ref{thm:iso} 的三角论证给出同构，对角系数为
+\[
+  (-1)^pp!\lambda_N^p\ne0.
+\]
+单性由 FGXZ 判据作用于 \(M_{0,N-1}(\psi)\) 得到，其要求
+\[
+  \psi(h_N)=\lambda_N\ne0,\qquad \psi(K)=c\ne-2.
+\]
+\end{proof}
+
+\begin{remark}[一般 \((a,b)\)]
+对 \(M_{a,b}(\varphi)\) 在边界 \(f_b\) 上取 localization quotient，若
+\[
+  \varphi(h_{a+b+1})\ne0,
+\]
+预期并可由同样 PBW 三角论证得到
+\[
+  \D_{f_b}M_{a,b}(\varphi)/M_{a,b}(\varphi)
+  \cong
+  M_{a+1,b-1}(\psi),
+\]
+其中 \(\psi:S_{a+1,b-1}\to\C\) 由
+\[
+  \psi(K)=c,\qquad
+  \psi(h_0)=\lambda_0+2,\qquad
+  \psi(h_i)=\lambda_i\ (i\ge1),
+\]
+\[
+  \psi(e_i)=0\ (i>a+1),\qquad \psi(f_j)=0\ (j>b-1)
+\]
+给出。由 FGXZ 判据，当
+\[
+  \psi(h_{a+b+1})=\varphi(h_{a+b+1})\ne0,\qquad \psi(K)=c\ne-2
+\]
+时 \(M_{a+1,b-1}(\psi)\) 单，此时 localization quotient 单。
+\end{remark}
+
+\end{document}

@@ -1,0 +1,692 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,microtype,xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Boundary and iterated flows}
+\fancyhead[R]{\small Companion to the nonboundary note}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{3pt}
+\setlist{itemsep=3pt,topsep=5pt}
+\allowdisplaybreaks[2]
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\slc}{\mathfrak{sl}_2}
+\newcommand{\slh}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\slt}{\widetilde{\mathfrak{sl}}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\Ann}{\operatorname{Ann}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\I}{\mathcal I}
+\newcommand{\X}{\mathcal X}
+\newcommand{\D}{\mathcal D}
+\newcommand{\T}{\mathcal T}
+\newtheoremstyle{plainupright}{6pt}{5pt}{\normalfont}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{plainupright}
+\newtheorem{proposition}{Proposition}[section]
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{theorem}[proposition]{Theorem}
+\newtheorem{corollary}[proposition]{Corollary}
+\newtheorem{remark}[proposition]{Remark}
+\hypersetup{pdftitle={Boundary Localization, Simplicity, and Iterated Flows},
+ pdfsubject={Results of the living note v8 not contained in the nonboundary note}}
+\title{\vspace{-14mm}Boundary Localization, Simplicity, and Iterated Flows\\
+for Smooth Affine \(\slh\)-Modules\\[3pt]
+\large Companion to the nonboundary note: results of the living note v8 (2026-09-02)\\
+not contained in \emph{nonboundary\_localization\_results} (2026-09-11)}
+\author{}
+\date{September 2026}
+\begin{document}
+\maketitle
+\vspace{-9mm}
+\begin{abstract}
+The nonboundary note \cite{Nonboundary} studies the interior quotients
+\(T_{f_c}M_{a,b}\), \(c<b\), in depth, and uses the boundary results only as a
+black box. The present note collects the boundary-side results of the living
+note v8 \cite{LivingV8} that are \emph{not} contained in \cite{Nonboundary}:
+the detailed boundary isomorphism with its right-normal PBW base comparison,
+the simplicity flow through the FGXZ criterion, the Bernstein--Sato-type
+\(b\)-function, the full trichotomy for arbitrary modes, the version with the
+degree derivation, the iterated boundary chains, the non-critical
+\(\Omega\)-quotient flow, and the critical-level flow with preserved
+\(\theta\)-parameters. All statements are proved directly; this note is not a
+claim of independent peer review or formal verification.
+\end{abstract}
+
+\section{Setup and background}\label{sec:setup}
+
+All vector spaces and tensor products are over \(\C\). Let
+\[
+\slh=(\slc\otimes\C[t,t^{-1}])\oplus\C K,\qquad \slt=\slh\oplus\C d,
+\]
+with \(x_r=x\otimes t^r\) and the normalization
+\begin{align*}
+[e_r,f_s]&=h_{r+s}+r\delta_{r+s,0}K,&
+[h_r,h_s]&=2r\delta_{r+s,0}K,\\
+[h_r,e_s]&=2e_{r+s},&
+[h_r,f_s]&=-2f_{r+s},&
+[d,x_r]&=rx_r.
+\end{align*}
+The \(e\)'s commute with one another, the \(f\)'s commute with one another,
+and \(K\) is central. Fix \(a,b\in\Z\) with \(a+b\ge0\), set \(L=a+b+1\ge1\),
+and put
+\[
+S_{a,b}=\Span\{K,\ h_i\ (i\ge0),\ e_i\ (i>a),\ f_j\ (j>b)\}.
+\]
+For a character \(\varphi:S_{a,b}\to\C\) write
+\[
+M^c_{a,b}(\varphi)=\Ind_{S_{a,b}}^{\slh}\C_\varphi,
+\qquad
+M^f_{a,b}(\varphi)=\Ind_{S_{a,b}}^{\slt}\C_\varphi,
+\qquad u=1\otimes1_\varphi,
+\]
+and
+\[
+\kappa=\varphi(K),\qquad \lambda_i=\varphi(h_i),
+\qquad \lambda_\partial:=\lambda_L=\varphi(h_L).
+\]
+The character condition forces
+\[
+e_iu=0\ (i>a),\qquad f_ju=0\ (j>b),\qquad
+h_iu=\lambda_iu,\qquad \lambda_i=0\ (i>L).
+\]
+For an injective real root vector \(F\) on a module \(X\), set
+\[
+\D_FX=\D_FU(\slh)\otimes_{U(\slh)}X,\qquad
+\T_FX=\D_FX/X,
+\]
+where \(\D_FU(\slh)=\{F^m:m\ge0\}^{-1}U(\slh)\). We shall use the FGXZ
+irreducibility criterion \cite{FGXZ}:
+
+\begin{theorem}[FGXZ criterion]\label{thm:fgxz}
+The module \(M^c_{N_1,N_2}(\chi)\) is simple if and only if
+\[
+\chi\bigl(h(N_1+N_2+1)\bigr)\ne0\qquad\text{and}\qquad \chi(K)\ne-2.
+\]
+\end{theorem}
+
+\section{The right-normal localized PBW basis}\label{sec:pbw}
+
+The following normal form is the engine of the boundary isomorphism. It is the
+right-normal companion of the left-normal PBW model used in \cite{Nonboundary}.
+
+\begin{lemma}[Right-normal localized PBW]\label{lem:right-pbw}
+Let \(F=f_r\) with \(r\le b\). Choose a PBW order for \(M^c_{a,b}(\varphi)\) in
+which \(f_r\) is the \emph{last} free variable, and let \(\X_r\) be the
+ordered monomials in the remaining free families
+\(f_j\ (j\le b,\ j\ne r)\), \(e_i\ (i\le a)\), \(h_j\ (j<0)\). Then
+\[
+\{XF^qu:X\in\X_r,\ q\in\Z_{\ge0}\}
+\]
+is a basis of \(M^c_{a,b}(\varphi)\),
+\[
+\{XF^qu:X\in\X_r,\ q\in\Z\}
+\]
+is a basis of \(\D_FM^c_{a,b}(\varphi)\), and
+\[
+\{XF^{-m}u+M^c_{a,b}(\varphi):X\in\X_r,\ m\ge1\}
+\]
+is a basis of \(\T_FM^c_{a,b}(\varphi)\). Correspondingly,
+\[
+\{d^kXF^qu:k\ge0,\ X\in\X_r,\ q\in\Z\}
+\]
+is a basis of \(\D_FM^f_{a,b}(\varphi)\), and in the quotient only \(q<0\)
+remains.
+\end{lemma}
+
+\begin{proof}
+The operator \(\ad F\) is locally nilpotent on \(U(\slh)\) and \(U(\slt)\), and
+for the derivation \([F,d]=-rF\), so \(\{F^m:m\ge0\}\) is an Ore set. The first
+basis is the PBW theorem with \(f_r\) last. In the localization, the finite
+commutation formulas move any negative power of \(F\) to the right of every
+ordered monomial. Linear independence follows by passing to the associated
+graded: the associated graded of the localization is the localization of the
+polynomial ring at the symbol \(\operatorname{gr}F\), so the exponent set
+extends from \(\Z_{\ge0}\) to \(\Z\). Placing \(d\) first in the PBW order
+gives the last assertions.
+\end{proof}
+
+\section{The boundary localization theorem}\label{sec:boundary}
+
+Set
+\[
+F=f_b,\qquad E=e_{a+1},\qquad H=h_{a+b+1}.
+\]
+Define \(\psi:S_{a+1,b-1}\to\C\) by
+\begin{align*}
+\psi(K)=\varphi(K),\qquad
+\psi(h_0)=\varphi(h_0)+2,\qquad
+\psi(h_i)=\varphi(h_i)\ (i>0),
+\end{align*}
+and zero on the root vectors of \(S_{a+1,b-1}\). Thus \(\psi\) differs from
+\(\varphi\) only in the \(h_0\)-eigenvalue.
+
+\begin{lemma}[\(\psi\) is a character]\label{lem:char}
+The displayed assignment defines a Lie algebra character
+\(\psi:S_{a+1,b-1}\to\C\).
+\end{lemma}
+
+\begin{proof}
+Only brackets that can fail are \([e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K\) with
+\(i>a+1\), \(j>b-1\). Then \(i+j\ge a+b+2=L+1\), so the central term vanishes
+and \(\psi(h_{i+j})=\lambda_{i+j}=0\). The remaining brackets
+\([h_i,e_j]=2e_{i+j}\), \([h_i,f_j]=-2f_{i+j}\) land in the annihilated tails,
+and \([h_i,h_j]=2i\delta_{i+j,0}K\) with \(i,j\ge0\) is either zero or has
+coefficient zero.
+\end{proof}
+
+\begin{lemma}[Cyclic vector]\label{lem:cyc}
+The vector \(\bar u=F^{-1}u+M^c_{a,b}(\varphi)\in\T_FM^c_{a,b}(\varphi)\)
+satisfies
+\[
+x\bar u=\psi(x)\bar u\qquad(x\in S_{a+1,b-1}).
+\]
+\end{lemma}
+
+\begin{proof}
+For \(j>b-1\): if \(j=b\), then
+\(f_b\bar u=u+M^c_{a,b}(\varphi)=0\); if \(j>b\), then \(f_ju=0\). From
+\[
+h_iF^{-1}=F^{-1}h_i+2F^{-2}f_{i+b}
+\]
+one gets \(h_0\bar u=(\lambda_0+2)\bar u\), since
+\(2F^{-2}f_bu=2F^{-2}Fu=2\bar u\), and \(h_i\bar u=\lambda_i\bar u\) for
+\(i>0\), since \(f_{i+b}u=0\). For \(j>a+1\),
+\[
+e_jF^{-1}=F^{-1}e_j-F^{-2}h_{j+b}-2F^{-3}f_{j+2b};
+\]
+here \(j+b>a+b+1=L\), so \(h_{j+b}u=0\), and \(j+2b>b\), so \(f_{j+2b}u=0\).
+Hence \(e_j\bar u=0\), and \(K\bar u=\kappa\bar u\).
+\end{proof}
+
+\begin{theorem}[Boundary localization]\label{thm:boundary}
+If
+\[
+\lambda_\partial=\varphi(h_{a+b+1})\ne0,
+\]
+then there is a natural \(\slh\)-module isomorphism
+\[
+\boxed{\ \T_{f_b}M^c_{a,b}(\varphi)\cong M^c_{a+1,b-1}(\psi),\ }
+\]
+sending the standard generator \(u'\) of the target to
+\[
+\bar u=f_b^{-1}u+M^c_{a,b}(\varphi).
+\]
+The statement is independent of the level \(\kappa=\varphi(K)\).
+\end{theorem}
+
+\begin{proof}
+By Lemma~\ref{lem:cyc} and the universal property of induction, there is a
+unique \(\slh\)-module map
+\[
+\Phi:M^c_{a+1,b-1}(\psi)\longrightarrow\T_FM^c_{a,b}(\varphi),
+\qquad u'\longmapsto\bar u.
+\]
+Compare PBW bases directly. Let \(\X\) be the ordered monomials in
+\[
+e_i\ (i\le a),\qquad h_j\ (j<0),\qquad f_k\ (k\le b-1),
+\]
+and choose the PBW order of the source so that \(E=e_{a+1}\) is the last free
+variable. Then
+\[
+\{XE^pu':X\in\X,\ p\ge0\}
+\]
+is a basis of \(M^c_{a+1,b-1}(\psi)\), and by Lemma~\ref{lem:right-pbw}
+\[
+\{XF^{-p-1}u+M^c_{a,b}(\varphi):X\in\X,\ p\ge0\}
+\]
+is a basis of the localization quotient. The commutation relations give
+\[
+[E,F]=H,\qquad (\ad F)^2(E)=-2f_{a+2b+1}.
+\]
+Now \(Eu=0\), \(Hu=\lambda_\partial u\), and
+\(a+2b+1=b+(a+b+1)>b\), so \(f_{a+2b+1}u=0\). Thus for every \(s\in\Z\),
+\[
+EF^su=s\lambda_\partial F^{s-1}u,
+\]
+and in particular
+\[
+E^pF^{-1}u=(-1)^pp!\lambda_\partial^{\,p}F^{-p-1}u.
+\]
+Therefore
+\[
+\Phi(XE^pu')
+=(-1)^pp!\lambda_\partial^{\,p}XF^{-p-1}u+M^c_{a,b}(\varphi),
+\]
+and \(\Phi\) sends a PBW basis bijectively onto nonzero scalar multiples of a
+PBW basis. Hence \(\Phi\) is an isomorphism.
+\end{proof}
+
+\begin{remark}[Surjection plus simplicity shortcut]\label{rem:shortcut}
+One may avoid the base comparison when only simplicity is needed. The chain
+\(EF^{-m}u=-m\lambda_\partial F^{-m-1}u\) shows that every pure fraction
+\(F^{-m}u+M\) lies in the image of \(\Phi\); a numerator-degree induction as in
+\cite[Lemma 2.2]{Nonboundary} shows that \(\Phi\) is surjective. If
+\(\kappa\ne-2\), then by Theorem~\ref{thm:fgxz} the source
+\(M^c_{a+1,b-1}(\psi)\) is simple, because
+\[
+\psi(h_{(a+1)+(b-1)+1})=\psi(h_L)=\lambda_\partial\ne0,\qquad
+\psi(K)=\kappa\ne-2.
+\]
+A nonzero surjection from a simple module is an isomorphism, and the quotient
+is simple.
+\end{remark}
+
+\begin{corollary}[Simplicity of the boundary quotient]\label{cor:simple}
+If
+\[
+\lambda_\partial\ne0\qquad\text{and}\qquad \kappa\ne-2,
+\]
+then \(\T_{f_b}M^c_{a,b}(\varphi)\) is simple. More precisely, it is
+isomorphic to \(M^c_{a+1,b-1}(\psi)\), whose two irreducibility parameters are
+\[
+\psi(h_{a+b+1})=\varphi(h_{a+b+1})=\lambda_\partial,
+\qquad
+\psi(K)=\varphi(K)=\kappa.
+\]
+\end{corollary}
+
+\begin{remark}[Why not the full localization]\label{rem:full}
+The full localization \(\D_FM^c_{a,b}(\varphi)\) contains
+\(M^c_{a,b}(\varphi)\) as a nonzero \(\slh\)-submodule, so it cannot be simple
+as soon as the localization is strictly larger. The object carrying the
+standard-module structure is the quotient \(\T_FM=\D_FM/M\). This remains true
+for twisted localizations, which keep \(F\) invertible.
+\end{remark}
+
+\section{Bernstein--Sato-type computation}\label{sec:bsato}
+
+The chain used in Theorem~\ref{thm:boundary} is a rank-one \(b\)-function
+computation in the enveloping-algebra localization, not a \(D_X\)-module
+Bernstein--Sato polynomial.
+
+\begin{proposition}[Boundary \(b\)-function]\label{prop:bfun}
+With \(F=f_b\), \(E=e_{a+1}\) as above,
+\[
+EF^su=s\varphi(h_{a+b+1})F^{s-1}u\qquad(s\in\Z),
+\]
+equivalently
+\[
+EF^{s+1}u=(s+1)\varphi(h_{a+b+1})F^su,
+\]
+so the monic \(b\)-polynomial is
+\[
+b(s)=s+1,\qquad\text{or, with parameters,}\qquad
+b_\varphi(s)=(s+1)\varphi(h_{a+b+1}).
+\]
+The condition \(\lambda_\partial\ne0\) is exactly the absence of obstruction
+in the negative-power direction, and the recursion
+\[
+E^pF^{-1}u=(-1)^pp!\lambda_\partial^{\,p}F^{-p-1}u
+\]
+is the cyclicity of the pure fractions.
+\end{proposition}
+
+\begin{proof}
+From \([E,F]=H\) and \((\ad F)^2(E)=-2f_{a+2b+1}\) with
+\(Eu=0\), \(Hu=\lambda_\partial u\), \(f_{a+2b+1}u=0\), the finite expansion
+\[
+EF^s=F^sE+sF^{s-1}H-2\tbinom{s}{2}F^{s-2}f_{a+2b+1}
+\]
+gives the claim on \(u\). See also \cite[Section 5]{FGM} for the analogous
+role of such resonances for free-field modules.
+\end{proof}
+
+\section{Arbitrary modes: the trichotomy}\label{sec:trichotomy}
+
+\begin{proposition}[Arbitrary-mode trichotomy]\label{prop:trichotomy}
+Let \(M=M^c_{a,b}(\varphi)\) and consider \(F=f_r\).
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.8em]
+\item If \(r>b\), then \(F\) is locally nilpotent on \(M\), hence
+\(\D_FM=0\): there is no nontrivial localization.
+\item If \(r=b\) and \(\varphi(h_{a+b+1})\ne0\), then
+\[
+\T_{f_b}M^c_{a,b}(\varphi)\cong M^c_{a+1,b-1}(\psi)
+\]
+by Theorem~\ref{thm:boundary}.
+\item If \(r<b\), then \(\D_FM\ne0\), but \(\T_FM\) is not isomorphic to any
+standard module \(M^c_{a',b'}(\chi)\): the set of locally nilpotent negative
+root modes is \(\{r\}\cup\{j:j>b\}\), which has a gap, while every standard
+module has a full upper tail \(\{j:j>b'\}\).
+\end{enumerate}
+The same trichotomy holds for \(M^f_{a,b}(\varphi)\). The deep study of case
+(iii) is carried out in \cite{Nonboundary}; only the boundary cases (i) and
+(ii) are needed below.
+\end{proposition}
+
+\begin{proof}
+For \(r>b\), \(Fu=0\) and \(F^m(xu)=(\ad F)^m(x)u\) vanishes for \(m\gg0\)
+by local nilpotence of \(\ad F\), so \(F\) is locally nilpotent on \(M\) and
+inverting it kills everything. For \(r<b\), the localized PBW basis of
+Lemma~\ref{lem:right-pbw} shows that \(F\) is locally nilpotent on the
+quotient, while \(f_j\) for \(j\le b\), \(j\ne r\) acts as an injective free
+polynomial variable; for \(j>b\) the local nilpotence on \(M\) is inherited.
+\end{proof}
+
+\section{Adjoining the derivation}\label{sec:derivation}
+
+On the vector space \(M^f_{a,b}(\varphi)\cong\C[d]\otimes M^c_{a,b}(\varphi)\)
+the \(\slt\)-action is the semidirect one: for \(x_r=x\otimes t^r\) and
+\(p(d)\in\C[d]\),
+\[
+d\bigl(p(d)\otimes v\bigr)=dp(d)\otimes v,\qquad
+x_r\bigl(p(d)\otimes v\bigr)=p(d-r)\otimes x_rv.
+\]
+In particular, for \(F=f_b\),
+\[
+F^{-1}\bigl(p(d)\otimes v\bigr)=p(d+b)\otimes F^{-1}v.
+\]
+
+\begin{proposition}[Localization commutes with adjoining \(d\)]
+\label{prop:loc-induction}
+Let \(X\) be an \(F=f_b\)-torsion-free \(\slh\)-module. Then there are natural
+\(\slt\)-module isomorphisms
+\[
+\D_F\bigl(\Ind_{\slh}^{\slt}X\bigr)\cong\Ind_{\slh}^{\slt}(\D_FX),
+\qquad
+\boxed{\ \T_F\bigl(\Ind_{\slh}^{\slt}X\bigr)\cong\Ind_{\slh}^{\slt}(\T_FX).\ }
+\]
+As vector spaces the second isomorphism reads
+\[
+\T_F\bigl(\C[d]\otimes X\bigr)\cong\C[d]\otimes\T_FX.
+\]
+\end{proposition}
+
+\begin{proof}
+Set \(A=U(\slh)\), \(B=U(\slt)\). Since \([d,F]=bF\), the derivation \(\ad d\)
+extends to \(\D_FA\), and PBW gives the natural normal-form isomorphism
+\(\D_FB\cong B\otimes_A\D_FA\). Hence
+\(\D_F(B\otimes_AX)\cong B\otimes_A\D_FX\). Since \(B\) is free as a right
+\(A\)-module, \(B\otimes_A-\) is exact, and applying it to
+\(0\to X\to\D_FX\to\T_FX\to0\) gives the quotient isomorphism.
+\end{proof}
+
+\begin{theorem}[Boundary localization with the derivation]\label{thm:boundary-f}
+If \(\varphi(h_{a+b+1})\ne0\), then
+\[
+\boxed{\ \T_{f_b}M^f_{a,b}(\varphi)\cong M^f_{a+1,b-1}(\psi).\ }
+\]
+In the PBW normal form \(M^f\cong\C[d]\otimes M^c\), the isomorphism is termwise
+\[
+d^kXE^pu'\longmapsto
+(-1)^pp!\lambda_\partial^{\,p}\,d^kXF^{-p-1}u+M^f_{a,b}(\varphi).
+\]
+The iterated chains of Section~\ref{sec:iterated} hold verbatim for \(M^f\).
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:loc-induction} and Theorem~\ref{thm:boundary},
+\begin{align*}
+\T_{f_b}M^f_{a,b}(\varphi)
+&\cong\Ind_{\slh}^{\slt}\bigl(\T_{f_b}M^c_{a,b}(\varphi)\bigr)\\
+&\cong\Ind_{\slh}^{\slt}M^c_{a+1,b-1}(\psi)
+=M^f_{a+1,b-1}(\psi).
+\end{align*}
+The explicit formula is obtained by adjoining the powers \(d^k\) on the left
+of the base comparison in Theorem~\ref{thm:boundary}.
+\end{proof}
+
+\section{Iterated boundary localizations}\label{sec:iterated}
+
+For \(k\ge1\) define the character \(\varphi^{(k)}\) by
+\[
+\varphi^{(k)}(K)=\varphi(K),\qquad
+\varphi^{(k)}(h_0)=\varphi(h_0)+2k,\qquad
+\varphi^{(k)}(h_i)=\varphi(h_i)\ (i>0).
+\]
+
+\begin{theorem}[Iterated boundary chain]\label{thm:iterated}
+Assume \(\varphi(h_{a+b+1})\ne0\). Then, for every \(k\ge1\),
+\begin{equation}\label{eq:iterated}
+\boxed{\ \T_{f_{b-k+1}}\cdots\T_{f_{b-1}}\T_{f_b}
+M^c_{a,b}(\varphi)\cong M^c_{a+k,b-k}(\varphi^{(k)}).\ }
+\end{equation}
+Here the rightmost functor acts first. The same nondegeneracy condition
+\(\varphi(h_{a+b+1})\ne0\) is used at every step, because \(a+b\), the
+boundary character value at \(h_{a+b+1}\), and the level \(\kappa\) are
+preserved along the chain. In particular, for \(M^c_{-1,N}(\varphi)\) and
+\(n\le N\), taking \(k=N-n+1\),
+\begin{equation}\label{eq:iterated-special}
+\boxed{\ \T_{f_n}\T_{f_{n+1}}\cdots\T_{f_N}
+M^c_{-1,N}(\varphi)\cong M^c_{N-n,n-1}(\varphi^{(N-n+1)}).\ }
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Apply Theorem~\ref{thm:boundary} successively: after the first step the next
+mode \(f_{b-1}\) is the boundary mode of \(M^c_{a+1,b-1}(\psi)\), and the
+character has moved from \(\varphi\) to \(\varphi^{(1)}\); after \(k\) steps
+the indices and the \(h_0\)-shift are as displayed. For
+\eqref{eq:iterated-special}, apply \eqref{eq:iterated} to
+\((a,b)=(-1,N)\).
+\end{proof}
+
+This is the correct way to reach an interior mode \(f_n\) inside the standard
+family: move the boundary step by step, never skip the intermediate
+\(f\)-modes. A direct interior localization leaves the standard family; see
+Proposition~\ref{prop:trichotomy}(iii) and \cite{Nonboundary}.
+
+\section{Non-critical simple flow with the Casimir}\label{sec:omega}
+
+Assume \(\kappa\ne-2\). The Casimir element \(\Omega\) of \(\slt\) commutes
+with \(U(\slt)\), and for a fixed nonzero polynomial \(P\in\C[\Omega]\) and
+\(\mu\in\C\) the paper \cite{FGXZ} forms the central quotient; to simplify
+notation we take the representative \(P(\Omega)=1\) and write
+\[
+L_{a,b}(\varphi;\mu):=M^f_{a,b}(\varphi)/(\Omega-\mu)M^f_{a,b}(\varphi).
+\]
+
+\begin{theorem}[Non-critical simple flow]\label{thm:omega-flow}
+Assume
+\[
+\varphi(h_{a+b+1})\ne0,\qquad \varphi(K)\ne-2.
+\]
+Then \(f_b\) is injective on \(L_{a,b}(\varphi;\mu)\), and
+\[
+\boxed{\ \T_{f_b}L_{a,b}(\varphi;\mu)\cong L_{a+1,b-1}(\psi;\mu).\ }
+\]
+Both sides are simple \(\slt\)-modules, and the Casimir parameter \(\mu\) does
+not change. More generally,
+\[
+\T_{f_{b-k+1}}\cdots\T_{f_b}L_{a,b}(\varphi;\mu)
+\cong L_{a+k,b-k}(\varphi^{(k)};\mu).
+\]
+\end{theorem}
+
+\begin{proof}
+By \cite[formula (4.1)]{FGXZ}, at level \(\kappa\ne-2\) the restriction of
+\(L_{a,b}(\varphi;\mu)\) to \(\slh\) is isomorphic to \(M^c_{a,b}(\varphi)\);
+hence the boundary vector \(f_b\) remains injective. Since \(\Omega\) commutes
+with \(F=f_b\), exactness of Ore localization gives
+\[
+\T_F\bigl(M^f/(\Omega-\mu)M^f\bigr)
+\cong
+\bigl(\T_FM^f\bigr)/(\Omega-\mu)\bigl(\T_FM^f\bigr).
+\]
+Applying Theorem~\ref{thm:boundary-f}, the right side becomes
+\[
+M^f_{a+1,b-1}(\psi)/(\Omega-\mu)M^f_{a+1,b-1}(\psi)
+=L_{a+1,b-1}(\psi;\mu).
+\]
+The irreducibility parameters of \cite[Theorem 4.1]{FGXZ} are unchanged under
+the boundary move, so both sides are simple. Iterate.
+\end{proof}
+
+\begin{remark}[Why one cannot stop at \(M^f\)]\label{rem:omega}
+At non-critical level, \((\Omega-\mu)M^f\) is a proper submodule of \(M^f\),
+so the raw module \(M^f\) and the raw quotient
+\(\T_{f_b}M^f\cong M^f_{a+1,b-1}(\psi)\) are generally not simple. The complete
+simple flow is
+\[
+\boxed{\ \text{boundary localization quotient}\ +\ \Omega\text{-central reduction}.\ }
+\]
+The two operations commute, and \(\mu\) is preserved throughout.
+\end{remark}
+
+\section{Critical level: the \(\theta\)-parameters are preserved}\label{sec:critical}
+
+Throughout this section \(\kappa=\varphi(K)=-2\) and
+\(q:=a+b+1=L\). For the reduced case \((a,b)=(-1,q)\), the critical central
+modes used in \cite{FGXZ} are the Segal--Sugawara modes \(T(q-i)\).
+
+\begin{proposition}[Spectral flow on the Sugawara modes]\label{prop:spectral}
+Let \(\sigma_k\) be the automorphism
+\[
+\sigma_k(e_n)=e_{n+k},\qquad
+\sigma_k(f_n)=f_{n-k},\qquad
+\sigma_k(h_n)=h_n+kK\delta_{n,0},\qquad
+\sigma_k(K)=K.
+\]
+In the completed enveloping algebra,
+\[
+\boxed{\ \sigma_k(T(m))
+=T(m)+\frac{k}{2}(K+2)h_m+\frac{k^2}{4}K(K+2)\delta_{m,0}.\ }
+\]
+Consequently, at the critical level \(K=-2\),
+\[
+\boxed{\ \sigma_k(T(m))=T(m)\ }
+\]
+as operators on any smooth module.
+\end{proposition}
+
+\begin{proof}
+Write \(T(m)\) as the combination \(\tfrac14(2,2,1)\) of the three
+normal-ordered sums of \cite[formula (2.3)]{FGXZ}. For \(k>0\), spectral flow
+moves the normal-ordering cut of the first sum
+\(\sum_i:e_{-i}f_{m+i}:\) from \(i>0\) to \(i>-k\), producing
+\(kh_m+\tfrac{k(k-1)}{2}K\delta_{m,0}\); the second sum
+\(\sum_i:f_{-i}e_{m+i}:\) produces
+\(kh_m+\tfrac{k(k+1)}{2}K\delta_{m,0}\); the third sum
+\(\sum_i:h_{-i}h_{m+i}:\) produces
+\(2kKh_m+k^2K^2\delta_{m,0}\). Inserting the coefficients
+\(\tfrac14(2,2,1)\) gives the displayed formula. Negative \(k\) follows from
+\(\sigma_{k+\ell}=\sigma_k\sigma_\ell\), and setting \(K=-2\) gives the
+invariance.
+\end{proof}
+
+For the critical character \(\varphi(K)=-2\), define
+\[
+Z_i^{a,b}:=\sigma_{-a-1}\bigl(T(q-i)\bigr),\qquad i\in\N,
+\]
+and let \(I^{a,b}_{\boldsymbol\theta}\) be the ideal of the critical center
+generated by \(Z_i^{a,b}-\theta_i\) (\(i\in\N\)). Put
+\[
+\overline M^{\,c}_{a,b}(\varphi;\boldsymbol\theta)
+:=M^c_{a,b}(\varphi)/I^{a,b}_{\boldsymbol\theta}M^c_{a,b}(\varphi),
+\]
+and
+\[
+\overline M^{\,f}_{a,b}(\varphi;\boldsymbol\theta)
+:=\Ind_{\slh}^{\slt}\overline M^{\,c}_{a,b}(\varphi;\boldsymbol\theta).
+\]
+By Proposition~\ref{prop:spectral}, at level \(-2\)
+\[
+Z_i^{a,b}=T(q-i)=Z_i^{a+1,b-1},
+\]
+so the boundary move does not change \(\boldsymbol\theta=(\theta_i)\).
+
+\begin{theorem}[Critical simple flow]\label{thm:critical-flow}
+Assume
+\[
+\varphi(K)=-2,\qquad \varphi(h_q)\ne0.
+\]
+Then \(f_b\) is injective on \(\overline M^{\,c}_{a,b}(\varphi;\boldsymbol\theta)\), and
+\[
+\boxed{\ \T_{f_b}\overline M^{\,c}_{a,b}(\varphi;\boldsymbol\theta)
+\cong \overline M^{\,c}_{a+1,b-1}(\psi;\boldsymbol\theta),\ }
+\]
+both sides being simple \(\slh\)-modules. The same holds with \(f\) in place
+of \(c\) throughout, both sides being simple \(\slt\)-modules.
+\end{theorem}
+
+\begin{proof}
+The critical irreducibility theorem of \cite{FGXZ} (reduce to \((-1,q)\) and
+twist back) makes \(\overline M^{\,c}_{a,b}(\varphi;\boldsymbol\theta)\)
+simple. The \(F\)-torsion vectors of any module form a submodule because
+\(\ad F\) is locally nilpotent on \(U(\slh)\). On the other hand, the critical
+PBW basis of the paper contains the nonzero vectors \(f_q^{\,m}\bar u\);
+twisting back by \(\sigma_{a+1}\) shows that \(f_b\) is not locally nilpotent
+on the whole quotient. Hence the \(F\)-torsion submodule is zero and \(f_b\)
+is injective.
+
+Since each \(T(m)\) commutes with \(\slh\) and with \(F=f_b\), exactness of
+Ore localization gives
+\[
+\T_F\!\left(M^c_{a,b}/I^{a,b}_{\boldsymbol\theta}M^c_{a,b}\right)
+\cong
+\frac{\T_FM^c_{a,b}}{I^{a,b}_{\boldsymbol\theta}\bigl(\T_FM^c_{a,b}\bigr)}.
+\]
+Applying Theorem~\ref{thm:boundary} and
+\(Z_i^{a,b}=Z_i^{a+1,b-1}=T(q-i)\), the right side is exactly
+\(\overline M^{\,c}_{a+1,b-1}(\psi;\boldsymbol\theta)\), which is simple by the
+same irreducibility theorem. The \(f\)-version follows from
+Proposition~\ref{prop:loc-induction}, with simplicity on both sides from
+\cite[Theorem 4.2]{FGXZ}.
+\end{proof}
+
+Iterating,
+\[
+\T_{f_{b-k+1}}\cdots\T_{f_b}
+\overline M^{\,\bullet}_{a,b}(\varphi;\boldsymbol\theta)
+\cong
+\overline M^{\,\bullet}_{a+k,b-k}(\varphi^{(k)};\boldsymbol\theta),
+\qquad \bullet\in\{c,f\},
+\]
+with \(\boldsymbol\theta\) unchanged along the entire chain.
+
+\section{Verification status}\label{sec:verify}
+
+In the verification round of 2026-09-02 the key formulas underlying
+Sections~\ref{sec:pbw}, \ref{sec:boundary}, \ref{sec:derivation}, and
+\ref{sec:critical} were checked symbolically with three independent engines
+(Python/SymPy, Mathematica 14.3, GAP 4.15.1), 76 checks in total, all
+passing. These cover: the localization formulas \(xF^s=\sum_j(-1)^j\binom{s}{j}F^{s-j}(\ad F)^j(x)\)
+as a consistent Laurent action for all \(s,t\in\Z\) (both sides are
+polynomials of degree at most three in \(s,t\), so the symbolic identity is
+exact), the closed forms used in Lemma~\ref{lem:cyc} and
+Theorem~\ref{thm:boundary}, the \(\sigma_k\) automorphism on all defining
+relations, the character property of \(\psi\), the cyclic-vector relations,
+the chain \(E^pF^{-1}u=(-1)^pp!\lambda_\partial^{\,p}F^{-p-1}u\) for a grid
+of \((a,b)\), the derivation shifts \(F^{-1}p(d)=p(d+b)F^{-1}\), and the
+composition law plus \(K=-2\) invariance of the formula in
+Proposition~\ref{prop:spectral}. No Lean/Coq formalization is claimed, and
+the paper-level theorems (the FGXZ criterion, the critical irreducibility
+statement, and the completed-center computations) remain external inputs.
+
+\begingroup
+\raggedright
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue, and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024; journal version 2025).
+\href{https://arxiv.org/html/2404.03855v2}{arXiv full text}.
+
+\bibitem{FGM}
+V.~Futorny, D.~Grantcharov, and R.~A.~Martins,
+\emph{Localization of free field realizations of affine Lie algebras},
+arXiv:1404.7148v2 (2015).
+\href{https://arxiv.org/html/1404.7148v2}{arXiv full text}.
+
+\bibitem{Nonboundary}
+Project note, \emph{Nonboundary localization quotients of smooth affine
+\(\mathfrak{sl}_2\)-modules} (2026-09-11),
+\texttt{nonboundary\_localization\_results\_en.tex}.
+
+\bibitem{LivingV8}
+Project living note, \emph{Smooth representations of affine Kac--Moody
+algebras: PBW bases, irreducibility, and localization tasks},
+version v8 (2026-09-02),
+\texttt{smooth\_kac\_moody\_living\_note\_v8\_cn.tex}.
+\end{thebibliography}
+\endgroup
+\end{document}

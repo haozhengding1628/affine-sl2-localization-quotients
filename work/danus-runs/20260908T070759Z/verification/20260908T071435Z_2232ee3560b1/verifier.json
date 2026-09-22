@@ -1,0 +1,14 @@
+{
+  "verification_report": {
+    "summary": "The arguments in sections 1–6 are valid for the intended affine sl₂ algebra and its degree-derivation extension. The localization formulas, positive forward shift, negative inverse shift, and smoothness cutoffs are consistent. However, the statement omits the ambient algebraic hypotheses required for acceptance.",
+    "critical_errors": [],
+    "gaps": [
+      {
+        "location": "Statement",
+        "issue": "Hard Prohibition P6: statement is not self-contained; the reader cannot determine the hypotheses from the statement alone. It does not specify the Lie algebras g and tilde g, the induction functor I, or the range of n. The proof requires the affine sl₂ brackets, the extension satisfying [d,x_r]=r x_r and [d,K]=0, and integer mode indices. These are substantive ambient hypotheses, not consequences of F-injectivity."
+      }
+    ]
+  },
+  "verdict": "wrong",
+  "repair_hints": "Add the affine sl₂ presentation, including the central-term normalization, to the statement. Specify n∈Z, define the degree-derivation extension tilde g, and define I(N)=U(tilde g)⊗_{U(g)}N. With this setup explicit, the supplied proof requires no further mathematical repair."
+}

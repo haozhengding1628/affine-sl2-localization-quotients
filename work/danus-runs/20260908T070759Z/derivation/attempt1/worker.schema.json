@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "statement": {
+      "type": "string"
+    },
+    "proof": {
+      "type": "string"
+    },
+    "scope_notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "statement",
+    "proof",
+    "scope_notes"
+  ],
+  "additionalProperties": false
+}

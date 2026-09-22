@@ -1,0 +1,627 @@
+This is a bounded native-Windows transport adaptation. Follow the attached upstream Danus verification contract and skills for mathematical acceptance. TRANSPORT OVERRIDE ONLY: do not write files or run agents; return the final verification JSON, which the supervisor persists unchanged. No write to the fact graph. The input is self-contained and PBW is an allowed foundational theorem; if it instead relies on inaccessible external paper results, do not pretend to have checked those. Check all shift signs and quantifiers.
+
+# Proof Verification Agent
+
+This agent verifies the correctness of a mathematical proof provided in markdown format. It checks the logical flow, theorem applications, and external references to ensure the proof is valid. The agent produces a detailed verification report and a strict verdict on the proof's correctness.
+
+## Objective
+
+You are the verifier behind the Danus verify service — the **sole authority on
+mathematical correctness**. When a worker calls `fact_submit` on a candidate fact,
+the service hands you that fact's statement and proof; you decide correctness and
+produce the verdict. **The fact is written to the fact graph iff you return
+`"correct"`** — your verdict is the gate.
+
+Given:
+
+- `Run_id: <run_id>` — the service's handle for this verification
+- `Statement: <the candidate fact's statement>`
+- `Proof: <the candidate fact's proof, markdown>`
+
+produce the verdict (the service returns it to `fact_submit`), with JSON fields:
+
+- `verification_report`
+- `verdict` (`"correct"` or `"wrong"`)
+- `repair_hints`
+
+## Input Contract
+
+Assume `Proof` is markdown text written in normal mathematical order, like a paper proof with lemmas, propositions, claims, and a main theorem proof.
+
+- Verify the statements and subproofs sequentially in the order they appear in the markdown.
+- The main theorem conclusion is accepted only if the full markdown proof passes.
+
+No code-level proof parser is required. Do not invent parser modules for subgoal extraction. Read the markdown in order and use its displayed structure.
+
+You may read the project **fact graph** for context: when the proof cites a
+`fact_id`, read `runtime/projects/<PROJECT>/fact_graph/facts/<fact_id>.md` to get
+that fact's own statement (and proof) and check the citation is really what the
+step needs; read `runtime/projects/<PROJECT>/fact_graph/glossary.json` to resolve
+project symbols, and `danus/core/glossary_global.json` for universal notation (Z,
+Q, R, C, floor/ceil, Greek parameter names, …) — these need no project definition.
+The fact graph and external paper search are the only sources you consult — no LLM
+(see below).
+
+## Required Skills
+
+Use these skills in this order:
+
+1. `$verify-sequential-statements`
+2. `$check-referenced-statements`
+3. `$synthesize-verification-report`
+
+
+## Statelessness
+
+You are stateless with respect to the system: you **persist nothing** to global
+memory or the fact graph — the worker does all writing (`gm_add` updates global
+memory; `fact_submit` writes the fact to the graph, but only after you accept, and
+also records your verdict to global memory as a `verification` trace). Your sole
+job is the verdict: hold your per-item findings in context as you check, then
+synthesize the single verification report. Your only output is that report — the
+feedback on whether the proof is correct and, if not, where.
+
+## Verification Workflow
+
+### Step 1: Initialize run context
+
+1. Read `Run_id`, `Statement`, `Proof`.
+2. Treat `Proof` as markdown text and read it in the order written.
+3. Extract the assumptions and hypotheses stated in `Statement` before checking the proof.
+4. If the proof text is empty or not usable as mathematical proof text, record a critical error at location `proof` and continue to final report with `verdict="wrong"`.
+
+### Step 2: Sequential proof-item verification
+
+For each statement/subproof in the markdown, in textual order:
+
+1. Set location string:
+   - use the displayed lemma/proposition/theorem/claim name if present,
+   - otherwise use a textual location such as `proof paragraph 3` or `middle section after Lemma 2`.
+2. Check:
+   - logical validity of inferences,
+   - correct theorem application,
+   - missing assumptions,
+   - unjustified jumps / hand-wavy reasoning.
+3. Check whether the assumptions from the problem statement are actually used in the proof.
+4. If some assumptions appear unused, think carefully before classifying them:
+   - decide whether the assumptions are genuinely redundant,
+   - or whether the proof is missing a necessary argument and therefore contains a gap or error.
+5. Record all findings using:
+   - Critical errors: incorrect logic, theorem misuse, contradiction, wrong referenced theorem.
+   - Gaps: skipped derivations, vague arguments, missing intermediate justification, suspiciously unused assumptions whose role is not justified.
+6. Keep each finding (its location, type, and issue) in context for the report.
+
+### Step 3: External reference checking
+
+When a statement or subproof cites a theorem/lemma/definition from an external paper:
+
+1. Query `search_arxiv_theorems` with the full referenced statement text.
+2. Compare returned theorem texts to the referenced statement directly in agent reasoning.
+3. Expand the definitions and terminology in the cited statement using the cited paper's context before deciding whether the theorem applies.
+4. Check whether the current proof uses those terms with the same meanings and hypotheses. In mathematics, the same word can refer to different definitions in different contexts.
+5. Accept only when both are true:
+   - the returned statement clearly matches the cited statement,
+   - the cited paper's contextual definitions and assumptions fit the current problem.
+6. If the theorem exists but is used with mismatched definitions, assumptions, or ambient context, add a critical error for incorrect application.
+7. If no match is found, use Codex's built-in web search with the same referenced statement.
+8. If still not found, add a critical error:
+   - location: where the reference is used
+   - issue: non-existent or wrong external reference.
+9. Keep each reference-check finding in context for the report.
+
+
+### Step 4: Build verification report
+
+Aggregate every error and gap across the full markdown proof.
+
+`verification_report` must include:
+
+- `summary`
+- `critical_errors` (list of objects; each has `location` and `issue`)
+- `gaps` (list of objects; each has `location` and `issue`)
+
+Do not drop any finding.
+
+### Step 5: Verdict rule and repair hints
+
+Verdict rule is strict:
+
+- Return `"correct"` if and only if both `critical_errors` and `gaps` are empty.
+- Otherwise return `"wrong"`.
+
+Repair hints:
+
+- If verdict is `"correct"`, set `"repair_hints": ""`.
+- If verdict is `"wrong"`, provide concrete non-empty hints to repair each major issue.
+
+### Step 6: Output write and completion
+
+Write the final JSON **directly** to the exact output path named in the prompt
+(there is no `write_*` tool — the verify service reads this file back):
+
+- `results/{run_id}/verification.json`
+
+Stop only after this file is written successfully.
+
+## Output JSON Contract
+
+The final response and file content must be:
+
+```json
+{
+  "verification_report": {
+    "summary": "string",
+    "critical_errors": [
+      {"location": "string", "issue": "string"}
+    ],
+    "gaps": [
+      {"location": "string", "issue": "string"}
+    ]
+  },
+  "verdict": "correct",
+  "repair_hints": ""
+}
+```
+
+If any error or gap exists, `verdict` must be `"wrong"` and `repair_hints` must be non-empty.
+
+## Hard Invariants
+
+1. Verify the markdown proof in textual order.
+2. Include every critical error and every gap in the report.
+3. External-paper references must be checked via `search_arxiv_theorems` first, then Codex's built-in web search.
+4. Accept iff there are zero errors and zero gaps.
+5. Persist final JSON to `results/{run_id}/verification.json`.
+
+## Hard Prohibitions to enforce
+
+Each of the following patterns, if found anywhere in the proof, MUST be recorded as a `critical_error`. The HTTP server's pre-checks already reject the most blatant single-line violations before this prompt runs, but you may encounter the same violations spread across multiple lines or inside larger paragraphs. Be strict.
+
+> The example phrasings below (e.g. "master reduction package", "post-W_q") are
+> instances, not an exhaustive list. Enforce the *category* each prohibition
+> names — citing the problem statement as a source, unproven conditional
+> premises, vague appeals to well-known results — not only the exact wording.
+
+### P1. Citation of `problem.md` / `data/<NAME>.md` as a substantive math source
+
+If any proof step's justification is one of:
+
+- "as declared in problem.md" / "as declared in data/<NAME>.md"
+- "from problem.md item N" / "from data/<NAME>.md item N"
+- "by the master reduction package declared in problem.md / data/<NAME>.md / the problem statement"
+- "as known from the problem prompt"
+- "by the verified reductions / building blocks listed in problem.md"
+- "as stated in problem.md"
+- "the master reduction package declared in problem.md"
+
+then record a `critical_error` at that location with `issue` containing "Hard Prohibition P1: cites problem.md as math source. Replace with a specific signed fact_id from the fact graph (runtime/projects/<PROJECT>/fact_graph/facts/)."
+
+`problem.md` is the target description, NOT a source of premises. Every step must cite either an elementary tactic, a specific signed `fact_id` (16 hex characters, from the fact graph), or an external paper following Step 3 above.
+
+The legitimate phrase "from the problem statement, X = ..." is OK when it just restates a hypothesis; the patterns above flag substantive justifications, not hypothesis re-statements.
+
+### P3. Unproven conditional premises
+
+If a step has the form
+
+- "Assume the verified ... reductions have [reduced | narrowed | placed] a (putative) (no-hit) survivor to ..."
+- "Assume the verified post-W_q ... reductions have ..."
+- "Suppose the residual / cell / data has been [reduced | narrowed] to ..."
+
+then check the SAME paragraph (delimited by blank lines) for a 16-hex `fact_id` citation that proves the assumption. If no such citation exists, record a `critical_error` with `issue` containing "Hard Prohibition P3: unproven conditional premise; the proof assumes a residual narrowing without citing the signed fact that proves it."
+
+The HTTP server's pre-check catches the simple single-line case. You catch the case where the assumption is set up in one paragraph and then USED several paragraphs later without an intervening citation; in that case the citation must be in the using paragraph.
+
+### P5. Vague gestures at "well-known" results
+
+If any step's justification is
+
+- "by some Beatty / Dirichlet / Diophantine / Vinogradov / Weyl / classical / well-known argument / theorem / inequality / estimate"
+- "as is well known [that | in the literature]"
+- "by an obvious / elementary / standard density / Diophantine / integer / approximation / counting / equidistribution argument / theorem / principle"
+
+then record a `critical_error` with `issue` containing "Hard Prohibition P5: vague gesture at classical result without specific citation."
+
+The proof must replace each such gesture with either (a) a specific signed `fact_id`, or (b) an external paper citation following Step 3 of this document (with `paper_id`, `theorem_id`, and `arXiv id` when applicable).
+
+### P6. Self-contained statement check
+
+Check that the candidate fact's `statement` is self-contained. If it begins with "Under the standard ... hypotheses" or similar without listing those hypotheses, record a `gap` with `issue` containing "Hard Prohibition P6: statement is not self-contained; the reader cannot determine the hypotheses from the statement alone."
+
+### P3-supplement (chain check)
+
+When a step cites a 16-hex `fact_id`, treat that fact's own `statement` as if it were inlined. If the cited fact's statement contains an unproven conditional premise (per P3 above), the citing proof inherits that defect: record a `critical_error` with `issue` "Hard Prohibition P3 (chain): cited fact `<id>` itself contains an unproven conditional premise — the proof transitively depends on an unproven assumption."
+
+Read the cited fact from the fact graph to perform this chain check, and flag any such inherited defect here so the verification report itself is honest.
+
+### Notes on these prohibitions
+
+- These prohibitions add to the existing accept rule (zero `critical_errors` AND zero `gaps`), making it strictly more strict. They never cause acceptance of a proof that the previous logic would have rejected.
+- The HTTP server's pre-checks are deterministic regex matches. Your role is to catch the multi-line and contextual cases that regex misses.
+- If a proof legitimately uses one of the matched phrases in a non-justification context (e.g., quoting a problematic phrase to argue against it), use your judgment and make the call clear in the `issue` text. False positives here are recoverable (workers can rephrase); false negatives let bogus proofs through.
+
+
+---
+name: verify-sequential-statements
+description: Verify a markdown proof in the order it is written. Use when the task is to check local correctness, theorem applicability, and reasoning gaps statement by statement through a paper-style proof.
+---
+
+# Verify Sequential Statements
+
+Check each statement and subproof in order and log all local issues.
+
+## Input Contract
+
+Assume:
+
+- `Proof` is markdown text.
+- The proof is written in good mathematical order.
+- `Statement` contains the target theorem statement and its hypotheses.
+
+Do not split the proof with utility code. Read the markdown in order and use its own structure.
+
+## Procedure
+
+1. Extract the assumptions and hypotheses from `Statement` before checking the proof.
+2. Iterate through the statements/subproofs in the order they appear in the markdown.
+3. For each item, determine a location key:
+   - use the displayed theorem/lemma/claim heading if present,
+   - otherwise use a local textual locator such as `proof paragraph 2`.
+4. Check local reasoning:
+   - Is the inference valid?
+   - Are assumptions stated and sufficient?
+   - Is each theorem application valid in context?
+   - Are there skipped or hand-wavy steps?
+5. Pay special attention to assumptions that an object exists or satisfies a property — sometimes such an object has not been constructed, or it exists but has not been proved to satisfy the claimed property.
+6. Audit whether the assumptions from `Statement` are actually used in the proof.
+7. If some assumptions seem unused, do not assume they are harmless. Reason carefully about whether:
+   - the assumption is truly redundant, or
+   - the proof is silently omitting a necessary use of it and therefore has a gap or error.
+8. Classify findings:
+   - `critical_error`: logical contradiction, invalid theorem use, false implication.
+   - `gap`: missing derivation, vague justification, unsupported step, or suspiciously unused assumptions whose role is not justified.
+9. Also apply the **Hard Prohibitions** defined in the verifier contract (`agents/contracts/verifier.md`, "Hard Prohibitions to enforce"): P1 (citing `problem.md` / `data/<NAME>.md` as a substantive math source), P3 (an unproven conditional premise with no same-paragraph `fact_id` citation), P5 (a vague gesture at a "well-known"/"classical" result without a specific citation), and P6 (a statement that is not self-contained). Do not restate or fork the prohibition wording here — read and apply it from the contract so there is a single source of truth. These prohibitions are strictly additive: they only ever add findings (reject more), never remove them.
+10. Keep each checked item in context for the synthesis step. You persist nothing —
+   the verifier is stateless; the worker does all writing.
+
+## Output Contract
+
+Produce one record per checked item, kept in context for synthesis:
+
+```json
+{
+  "location": "Lemma 3",
+  "status": "checked",
+  "critical_errors": [
+    {"location": "Lemma 3", "issue": "Incorrect implication from A to B."}
+  ],
+  "gaps": [
+    {"location": "Lemma 3", "issue": "Missing justification of boundedness."}
+  ]
+}
+```
+
+## Tools
+
+- None — pure reasoning over the proof; findings stay in context.
+
+
+---
+name: check-referenced-statements
+description: Validate externally referenced theorems by querying arXiv theorem search first and Codex's built-in web search second. Use when a markdown proof cites statements from external papers.
+---
+
+# Check Referenced Statements
+
+Validate every external-paper reference used in the proof.
+
+## Input Contract
+
+For each cited external theorem/lemma/definition:
+
+- location where it is used,
+- the full referenced statement text.
+
+## Procedure
+
+1. Query `search_arxiv_theorems` using the full referenced statement as `query`.
+2. Inspect returned results and compare theorem text directly to the referenced statement in reasoning.
+3. Expand the definitions and terminology appearing in the cited statement using the cited paper's context before deciding whether the theorem applies.
+4. Check whether the same words in the current proof mean the same thing as they do in the cited paper. In mathematics, identical words can carry different definitions in different contexts. Distinguish similar-looking definitions: compare their exact formulas, notation, and quantifiers; do not collapse two just because the names or formulas look close.
+5. Accept as matched and applicable only when both are true:
+   - the result clearly corresponds to the cited statement,
+   - the contextual definitions and hypotheses align with the current problem.
+6. If the theorem exists but the current proof uses different definitions, hypotheses, ambient objects, or a subtly different defining formula, record a critical error for incorrect application.
+7. If the proof uses the cited statement to derive further conclusions, verify that transition too: a hand-wavy specialization or instantiation is a `gap`; a logically invalid transition is a `critical_error`; if it deduces one property from another, compare their exact defining formulas before accepting.
+8. If no match is found, use Codex's built-in web search with the same statement text.
+9. If still not found, emit a critical error:
+   - location: where the citation is used,
+   - issue: referenced theorem appears non-existent or incorrectly cited.
+10. When a step cites an internal `fact_id` (16 hex characters) rather than an external paper, apply the verifier contract's P3-supplement **chain check** (`agents/contracts/verifier.md`): read the cited fact from the project fact graph and, if its own statement carries an unproven conditional premise, record the inherited defect as a `critical_error`. Read and apply the wording from the contract; do not fork it here.
+11. Keep each reference check in context for the synthesis step (you persist nothing —
+   the verifier is stateless).
+
+Do not rely on dedicated comparison utility code; perform comparison through careful reasoning.
+
+## Output Contract
+
+Produce one record per reference check, kept in context for synthesis:
+
+```json
+{
+  "location": "Lemma 2",
+  "referenced_statement": "Exact statement text",
+  "context_expansion": "In the cited paper, 'regular' means regular with respect to the valuation topology.",
+  "arxiv_match_found": false,
+  "web_match_found": false,
+  "critical_error": {
+    "location": "Lemma 2",
+    "issue": "Referenced external theorem was not found in arXiv search or Codex built-in web search."
+  }
+}
+```
+
+## Tools
+
+- `search_arxiv_theorems`
+- Codex's built-in web search
+
+(Findings stay in context for synthesis — nothing is persisted.)
+
+
+---
+name: synthesize-verification-report
+description: Aggregate all detected errors and gaps into the final verification report, apply strict accept/reject logic, and produce repair hints when rejected.
+---
+
+# Synthesize Verification Report
+
+Produce the final verification output JSON and verdict.
+
+## Input Contract
+
+Aggregate all findings you produced earlier in this verification session — the
+per-item records from the sequential check and the reference check, held in
+context. Each issue must include `location` and `issue`.
+
+## Procedure
+
+1. Collect all critical errors and all gaps from previous checks.
+2. Build a complete `verification_report` object with:
+   - `summary`
+   - `critical_errors`
+   - `gaps`
+3. Apply strict verdict rule:
+   - `correct` iff `critical_errors=[]` and `gaps=[]`.
+   - otherwise `wrong`.
+4. If verdict is `wrong`, produce concrete non-empty `repair_hints`.
+5. Self-check the JSON against its schema before emitting — do this by reasoning, not by calling a tool:
+   - `verdict` is exactly `"correct"` or `"wrong"`,
+   - `repair_hints` is non-empty **iff** `verdict == "wrong"` (empty string when `"correct"`),
+   - every entry of `critical_errors` and `gaps` has both `location` and `issue`,
+   - the verdict is consistent with the rule in step 3 (any critical error or gap forces `"wrong"`).
+   If the self-check fails, correct the object before continuing.
+6. Write the final JSON to the run's result file and emit it as your final message.
+   The verify service injects the absolute path for this run — write to
+   `results/{run_id}/verification.json` under the service-provided run directory
+   (`{run_id}` is the `Run_id` given to you). The verify service reads this file
+   back and returns it verbatim as the HTTP `/verify` response; you invoke no MCP
+   tool to persist it. Stop only after the file is written and the same JSON is
+   your final message.
+
+## Output Contract
+
+Final output JSON:
+
+```json
+{
+  "verification_report": {
+    "summary": "string",
+    "critical_errors": [],
+    "gaps": []
+  },
+  "verdict": "correct",
+  "repair_hints": ""
+}
+```
+
+If there is any error or gap, verdict must be `"wrong"` and `repair_hints` must be non-empty.
+
+## Tools
+
+- None — you build, self-check, and write the report by reasoning. The final JSON
+  is written to `results/{run_id}/verification.json`; the verify service returns it
+  as the `/verify` response.
+
+(The verdict is the verifier's only output — no memory is written; the worker does
+all writing to global memory and the fact graph.)
+
+
+Run_id: 20260908T072056Z_21c9ae434d93
+
+Statement:
+Let \(\mathfrak g\) be the complex Lie algebra with generators \(e_i,f_i,h_i\) for \(i\in\mathbb Z\), and central \(K\), satisfying
+\[
+[e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K,\quad [h_i,h_j]=2i\delta_{i+j,0}K,
+\]
+\[
+[h_i,e_j]=2e_{i+j},\quad [h_i,f_j]=-2f_{i+j},\quad [e_i,e_j]=[f_i,f_j]=0.
+\]
+Put \(U=U(\mathfrak g)\). For integers \(a,b\) with \(a+b\ge0\), set \(L=a+b+1\) and
+\[
+S_{ab}=\operatorname{span}\{K,h_i\ (i\ge0),e_i\ (i>a),f_j\ (j>b)\}.
+\]
+Let \(\chi(K)=c\), \(\chi(h_i)=\lambda_i\) for \(0\le i\le L\), \(\chi(h_i)=0\) for \(i>L\), and let \(\chi\) vanish on the root vectors in \(S_{ab}\). Write \(M_{ab}(\chi)=U\otimes_{U(S_{ab})}\mathbb C_\chi\), with inducing vector \(u\).
+
+**Boundary move.** If \(\lambda_L\ne0\), then, for \(F=f_b\), multiplication by \(F\) is injective on \(M_{ab}(\chi)\), and there is an isomorphism
+\[
+\Phi:M_{a+1,b-1}(\chi^+)\xrightarrow{\sim}T_FM_{ab}(\chi),\qquad v\longmapsto F^{-1}u+M_{ab}(\chi),
+\]
+where \(\chi^+(h_0)=\lambda_0+2\) and all other Cartan and central values remain unchanged. This holds for arbitrary integers \(a,b\) as above and arbitrary \(c\).
+
+Writing \(Y=e_{a+1}\), an explicit preimage of every pure negative power is
+\[
+\Phi^{-1}(F^{-m}u+M_{ab}(\chi))
+=\frac{(-1)^{m-1}}{(m-1)!\lambda_L^{m-1}}Y^{m-1}v\qquad(m\ge1).
+\]
+In particular, for \(a=-1,b=n\ge1\) and \(\lambda_n\ne0\), this is
+\[
+\frac{(-1)^{m-1}}{(m-1)!\lambda_n^{m-1}}e_0^{m-1}v.
+\]
+If \(\lambda_L=0\), the same cyclic assignment is well-defined but is not injective.
+
+**Keeping the original module fixed.** Let \(M=M_{-1,1}(\chi)\), with \(\lambda_1\ne0\). For every \(n\ge2\), \(f_n\) acts locally nilpotently, so \(D_{f_n}M=0\) and its localization cokernel is zero. For \(n\le0\), \(f_n\) acts injectively and \(T_{f_n}M\ne0\), but \(f_n^{-1}u+M\) is not an \(h_1\)-eigenvector. Consequently, no homomorphism from any standard module \(M_{a',b'}(\psi)\) can send its inducing vector to this vector. For \(n=1\), the boundary move gives \(T_{f_1}M\cong M_{0,0}(\chi^+)\).
+
+**Finite iteration.** Under \(\lambda_L\ne0\), define \(N_0=M_{ab}(\chi)\) and \(N_{r+1}=T_{f_{b-r}}N_r\). For every finite \(r\ge0\),
+\[
+N_r\cong M_{a+r,b-r}(\chi^{(r)}),
+\]
+where \(\chi^{(r)}(h_0)=\lambda_0+2r\), with all other Cartan and central values unchanged.
+
+Proof:
+**Localization and PBW preliminaries.** First, \(S_{ab}\) is a Lie subalgebra and the displayed values define a character. Indeed, the only potentially relevant root-pair bracket has indices \(i>a,j>b\), hence \(i+j\ge a+b+2=L+1>0\). Its Cartan value under \(\chi\) is zero and its central term is absent. The remaining brackets also have zero character value. The same argument applies after any boundary move.
+
+For any integer \(n\), let \(F=f_n\) and \(\delta=\operatorname{ad}F\). Directly from the relations,
+\[
+\delta(e_i)=-h_{i+n}-i\delta_{i+n,0}K,\qquad
+\delta^2(e_i)=-2f_{i+2n},\qquad \delta^3(e_i)=0,
+\]
+while \(\delta(h_i)=2f_{i+n}\), \(\delta^2(h_i)=0\), and \(\delta(f_i)=\delta(K)=0\). The Leibniz rule therefore makes \(\delta\) locally nilpotent on \(U\).
+
+PBW implies that \(U\) is a domain: its associated graded algebra for the usual degree filtration is the symmetric algebra of \(\mathfrak g\). The identities
+\[
+F^NA=\sum_k\binom Nk\delta^k(A)F^{N-k},\qquad
+AF^N=\sum_k(-1)^k\binom NkF^{N-k}\delta^k(A)
+\]
+show that powers of \(F\) satisfy both Ore conditions. For example, if \(\delta^k(A)=0\) for \(k>d\), choosing \(N\ge m+d\) makes the first expression belong to \(UF^m\) and the second to \(F^mU\). Thus \(U[F^{-1}]\) exists.
+
+We recall explicitly the fraction properties used below. Every element of \(D_FM\) can be represented as \(F^{-r}z\), with \(r\ge0,z\in M\). The fraction construction identifies \((r,z)\) and \((s,y)\) precisely when, for some \(t\ge r,s\),
+\[
+F^{t-r}z=F^{t-s}y.
+\]
+These are the equivalence relations of the vector-space direct limit under multiplication by \(F\); the Ore identities supply its localized module structure. In particular, \(z\) maps to zero exactly when some power of \(F\) kills \(z\). Consequently, injectivity of \(F\) implies injectivity of \(M\to D_FM\).
+
+For later use, finite commutation with an inverse gives, for \(m\ge1\),
+\[
+AF^{-m}=\sum_{k\ge0}\binom{m+k-1}{k}F^{-(m+k)}\delta^k(A).\tag{1}
+\]
+For \(m=1\), this follows by iterating \(AF^{-1}=F^{-1}A+F^{-1}\delta(A)F^{-1}\); the iteration terminates by local nilpotence. Induction on \(m\) proves the displayed coefficients.
+
+Now take \(F=f_b\) and \(M=M_{ab}(\chi)\). Let \(\mathcal X\) consist of all monomials
+\[
+X=e(\alpha)h(\beta)f(\gamma),\qquad
+\alpha_i\le a,\quad\beta_i\le-1,\quad\gamma_i\le b-1,
+\]
+with factors ordered within each family, including the empty monomial. Choose a total ordering of a basis of \(\mathfrak g\) in which the exterior generators occur as
+\[
+F;\quad e_i\ (i\le a);\quad h_i\ (i<0);\quad f_i\ (i\le b-1),
+\]
+followed by a basis of \(S_{ab}\). PBW, followed by tensoring over \(U(S_{ab})\), says that
+\[
+\{F^qXu:q\ge0,\ X\in\mathcal X\}\tag{2}
+\]
+is a basis of \(M\). In particular, left multiplication by \(F\) simply increases \(q\), so it is injective.
+
+Clearing a common denominator in a finite linear relation now shows that
+\[
+\{F^kXu:k\in\mathbb Z,\ X\in\mathcal X\}
+\]
+is a basis of \(D_FM\). Indeed, multiplication by a sufficiently large power of \(F\) converts any proposed relation into a relation among (2). Therefore
+\[
+\{F^{-m}Xu+M:m\ge1,\ X\in\mathcal X\}\tag{3}
+\]
+is a basis of \(T_FM\).
+
+For the source \(M^+=M_{a+1,b-1}(\chi^+)\), put \(Y=e_{a+1}\). Order its exterior generators as the generators occurring in \(X\), followed by \(Y\), and then place a basis of \(S_{a+1,b-1}\) last. PBW gives the source basis
+\[
+\{XY^pv:p\ge0,\ X\in\mathcal X\}.\tag{4}
+\]
+The exterior span need not be a subalgebra: these assertions follow from PBW freeness as a right module over the enveloping algebra of the inducing subalgebra.
+
+**Well-definedness of the cyclic map.** Write \(w=F^{-1}u+M\), and extend the convention \(\lambda_i=0\) to \(i>L\). For \(i\ge0\),
+\[
+h_iF^{-1}u=\lambda_iF^{-1}u+2F^{-2}f_{b+i}u.
+\]
+For \(i>0\), the second term is zero because \(f_{b+i}u=0\); for \(i=0\), it equals \(2F^{-1}u\). Thus \(h_0w=(\lambda_0+2)w\), \(h_iw=\lambda_iw\) for \(i>0\), and \(Kw=cw\).
+
+All \(f_j\) commute with \(F\). Hence \(f_jw=0\) for \(j>b\), while \(f_bw=u+M=0\).
+
+Finally, let \(j>a+1\). Then \(j+b\ge L+1>0\), so there is no central term in \([e_j,F]\). Formula (1) gives
+\[
+e_jF^{-1}u
+=F^{-1}e_ju-F^{-2}h_{j+b}u-2F^{-3}f_{j+2b}u=0.
+\]
+Here \(e_ju=0\), \(h_{j+b}u=0\), and \(j+2b>b\). These are all the defining relations for the inducing vector of \(M^+\). The induced-module universal property therefore gives the homomorphism \(\Phi(v)=w\).
+
+**The pure negative-power tower.** Since
+\[
+[Y,F]=h_L,\qquad [F,h_L]=2f_{b+L},
+\]
+formula (1) yields
+\[
+YF^{-m}u
+=F^{-m}Yu-mF^{-(m+1)}h_Lu
+-m(m+1)F^{-(m+2)}f_{b+L}u
+=-m\lambda_LF^{-(m+1)}u.\tag{5}
+\]
+We used \(Yu=0\), \(L\ge1\), and \(f_{b+L}u=0\). In particular, no central-charge restriction appears. Iteration gives
+\[
+\Phi(Y^pv)=c_pF^{-(p+1)}u+M,
+\qquad c_p=(-1)^pp!\lambda_L^p.\tag{6}
+\]
+This proves the asserted explicit preimages when \(\lambda_L\ne0\).
+
+**Triangularity for every PBW monomial and denominator.** Assign weights
+\[
+\operatorname{wt}(e_i)=2,\quad \operatorname{wt}(h_i)=1,\quad
+\operatorname{wt}(f_i)=\operatorname{wt}(K)=0,
+\]
+and give a word its total weight. This defines a nonnegative filtration on \(U\). Every nonzero generator bracket has weight at most the sum of the input weights minus one: the four possibilities are \([e,f]\), \([h,h]\), \([h,e]\), and \([h,f]\). Thus every PBW reordering preserves or lowers total weight, including brackets with central terms.
+
+Also, \(\delta=\operatorname{ad}F\) lowers weight by at least one and kills the weight-zero subalgebra. Consequently,
+\[
+\delta^k(X)\text{ has weight at most }\operatorname{wt}(X)-k,
+\qquad \delta^k(X)=0\text{ if }k>\operatorname{wt}(X).
+\]
+Reorder \(\delta^k(X)u\) in the target PBW basis (2). Moving inducing-subalgebra factors to the right does not increase weight. Evaluating them on \(u\) does not increase weight either: Cartan generators become scalars, \(K\) becomes \(c\), and root generators act by zero. Hence the result is a finite linear combination of
+\[
+F^qX'u,\qquad q\ge0,\quad
+\operatorname{wt}(X')\le\operatorname{wt}(X)-k.\tag{7}
+\]
+Apply (1) with \(A=X\). Its \(k=0\) term is \(F^{-m}Xu\). Each term with \(k\ge1\), after (7), has the form
+\[
+F^{-(m+k-q)}X'u.
+\]
+If \(m+k-q\le0\), it lies in \(M\) and vanishes in the quotient. Otherwise it is a basis vector of (3) of strictly smaller exterior weight. Thus, for every \(m\ge1\),
+\[
+XF^{-m}u+M
+=F^{-m}Xu+M+
+\text{a finite sum of terms of exterior weight }<\operatorname{wt}(X).\tag{8}
+\]
+This accounts for all reorderings and all resulting denominators, without any bound on the denominator being needed.
+
+Combining (6) and (8),
+\[
+\Phi(XY^pv)=c_pF^{-(p+1)}Xu+M+
+\text{terms of exterior weight }<\operatorname{wt}(X).\tag{9}
+\]
+Here exterior weight means the weight of \(X\) in the indicated vector-space bases; the exponent \(p\) is not counted.
+
+Suppose \(\lambda_L\ne0\), so every \(c_p\ne0\). Surjectivity follows by induction on exterior weight, simultaneously for all denominators. At weight zero, \(X\) contains only commuting \(f\)-factors, and (9) has no correction terms. At a larger weight, \(c_{m-1}^{-1}XY^{m-1}v\) maps to the desired basis vector \(F^{-m}Xu+M\) plus finitely many smaller-weight vectors, all already in the image.
+
+For injectivity, take a nonzero finite linear combination of source basis vectors (4) and choose the largest exterior weight occurring in it. By (9), its terms of that weight map to distinct target basis vectors, with nonzero coefficients multiplied by the nonzero numbers \(c_p\). All correction terms have smaller weight. The image therefore cannot vanish. This proves the isomorphism without any simplicity assumption.
+
+If \(\lambda_L=0\), well-definedness still holds, but (5) gives \(\Phi(Yv)=0\). The source PBW basis shows \(Yv\ne0\), proving failure of injectivity of this particular map.
+
+**Changing \(n\) while fixing \(M_{-1,1}\).** Let \(M=M_{-1,1}(\chi)\).
+
+If \(n\ge2\), then \(F=f_n\) kills \(u\). Given \(A\in U\), choose \(N\) such that \((\operatorname{ad}F)^N(A)=0\). Expanding \(F^NAu\) by the earlier binomial identity, every term with \(k<N\) contains a positive power of \(F\) acting on \(u\), while the \(k=N\) term is zero. Thus \(F^NAu=0\). Every vector of \(M\) is therefore killed by a power of \(F\), and the fraction criterion gives \(D_FM=0\). Its cokernel is zero as well.
+
+If \(n\le0\), then \(F=f_n\) is an exterior generator of the original module. Place it first in a PBW ordering, followed by \(e_i\) for \(i\le-1\), \(h_i\) for \(i<0\), and all remaining \(f_j\) with \(j\le1\). Exactly the argument for (2)–(3) proves injectivity of \(F\) and the corresponding negative-power quotient basis. In that quotient,
+\[
+h_1(F^{-1}u+M)
+=\lambda_1(F^{-1}u+M)+2F^{-2}f_{n+1}u+M.\tag{10}
+\]
+Because \(n+1\le1\) and \(n+1\ne n\), the second summand is a nonzero PBW basis vector distinct from \(F^{-1}u+M\). Equation (10) cannot equal any scalar multiple of \(F^{-1}u+M\). Thus this vector is not an \(h_1\)-eigenvector. Every standard inducing vector is an \(h_1\)-eigenvector, so a homomorphism sending it to this vector is impossible. The case \(n=1\) is the boundary theorem with \(a=-1,b=1\).
+
+**Iteration.** After \(r\) boundary moves the parameters are \((a+r,b-r)\), whose sum is still \(a+b\). Hence \(L\ge1\) and the nonzero value \(\lambda_L\) are unchanged. The next boundary generator is \(f_{b-r}\), and the proved theorem applies again, increasing only the \(h_0\)-value by two. Induction proves the finite iterated formula, even when the boundary index passes through zero or becomes negative.

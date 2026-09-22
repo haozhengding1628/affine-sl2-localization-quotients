@@ -1,0 +1,554 @@
+% !TEX program = xelatex
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!60!black,
+  citecolor=blue!60!black,
+  urlcolor=blue!60!black
+}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\G}{\Gamma}
+\newcommand{\slh}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\D}{\mathcal D}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\im}{\operatorname{Im}}
+
+\theoremstyle{plain}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}[lemma]{Proposition}
+\newtheorem{theorem}[lemma]{Theorem}
+
+\theoremstyle{remark}
+\newtheorem{remark}[lemma]{Remark}
+
+\title{Boundary Localization of \(M_{-1,1}\), and the General Boundary Version}
+\author{Discussion note}
+\date{September 2, 2026}
+
+\begin{document}
+\maketitle
+
+\section*{0. Setup}
+
+For \(A_1^{(1)}\), let \(\slh=\widehat{\mathfrak{sl}}_2\), with
+\[
+  [e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K,\qquad
+  [h_i,e_j]=2e_{i+j},\qquad
+  [h_i,f_j]=-2f_{i+j},\qquad
+  [h_i,h_j]=2i\delta_{i+j,0}K.
+\]
+For integers \(N_1,N_2\), put
+\[
+  S_{N_1,N_2}
+  =
+  \operatorname{span}\{K,\ h(n_0),\ e(n_1),\ f(n_2):
+  n_0\ge0,\ n_1>N_1,\ n_2>N_2\}.
+\]
+In particular, \(h_0\in S_{0,0}\). Let
+\[
+  M=M_{N_1,N_2}(\varphi)=\Ind_{S_{N_1,N_2}}^{\slh}\C_\varphi,
+  \qquad
+  u=1\otimes1,
+\]
+and set \(c=\varphi(K)\), \(\lambda_i=\varphi(h_i)\). Then
+\[
+  e_iu=0\ (i>N_1),\qquad f_ju=0\ (j>N_2),
+\]
+\[
+  Ku=cu,\qquad h_iu=\lambda_iu\ (i\ge0).
+\]
+Since \(\varphi\) is a character, \([e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K\) with \(i>N_1\),
+\(j>N_2\) gives
+\[
+  \lambda_i=0\qquad(i\ge N_1+N_2+2).
+\]
+
+Let \(\G_m\) be the set of finite nondecreasing sequences
+\[
+  \gamma=(m_1,\ldots,m_k),\qquad m_i\le m,\qquad m_1\le\cdots\le m_k,
+\]
+and write \(x(\gamma)=x(m_1)\cdots x(m_k)\), \(x(\emptyset)=1\), for \(x=e,h,f\).
+
+\begin{proposition}[PBW basis]\label{prop:pbw}
+A PBW basis of \(M_{N_1,N_2}(\varphi)\) is
+\[
+  \mathcal B_{N_1,N_2}
+  =
+  \{\,
+    e(\alpha)h(\beta)f(\gamma)u:
+    \alpha\in\G_{N_1},\ \beta\in\G_{-1},\ \gamma\in\G_{N_2}
+  \,\}.
+\]
+\end{proposition}
+
+\begin{proof}
+Take the vector space complement
+\[
+  \mathfrak a
+  =
+  \operatorname{span}\{e_i:i\le N_1\}
+  \oplus
+  \operatorname{span}\{h_i:i\le -1\}
+  \oplus
+  \operatorname{span}\{f_i:i\le N_2\}
+\]
+of \(S_{N_1,N_2}\) in \(\slh\). By the PBW theorem,
+\[
+  U(\slh)\cong U(\mathfrak a)\otimes U(S_{N_1,N_2})
+\]
+as vector spaces. Tensoring with the one-dimensional \(S_{N_1,N_2}\)-module
+\(\C_\varphi\) turns the \(S_{N_1,N_2}\)-factors into scalars, leaving exactly the
+ordered PBW monomials of \(\mathfrak a\).
+\end{proof}
+
+\begin{lemma}[Localization formulas]\label{lem:loc}
+For \(F=f_b\) and \(s\in\Z\),
+\[
+  f_nF^s=F^sf_n,
+\]
+\[
+  h_nF^s=F^sh_n-2sF^{s-1}f_{n+b},
+\]
+\[
+  e_nF^s
+  =
+  F^se_n
+  +sF^{s-1}\bigl(h_{n+b}+n\delta_{n+b,0}K\bigr)
+  -2\binom{s}{2}F^{s-2}f_{n+2b}.
+\]
+\end{lemma}
+
+\begin{proof}
+One has
+\[
+  [F,f_n]=0,\qquad
+  [F,h_n]=2f_{n+b},\qquad
+  [F,e_n]=-(h_{n+b}+n\delta_{n+b,0}K),
+\]
+\[
+  (\ad F)^2(e_n)=-2f_{n+2b},\qquad
+  (\ad F)^3(e_n)=0.
+\]
+In the localization,
+\[
+  xF^s=\sum_{j\ge0}(-1)^j\binom{s}{j}F^{s-j}(\ad F)^j(x),
+\]
+a finite sum.
+\end{proof}
+
+\section*{1. The case \(N_1=-1\), \(N_2=1\)}
+
+Fix
+\[
+  M=M_{-1,1}(\varphi),\qquad F=f_1.
+\]
+Since \(F\) is a PBW variable, \(F\) acts injectively on \(M\). Let
+\[
+  \D_FM=\{F^m:m\ge0\}^{-1}M.
+\]
+Because the \(f_i\) commute pairwise, \(\D_FM\) has basis
+\[
+  \{F^s e(\alpha)h(\beta)f(\delta)u:
+  s\in\Z,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_0\},
+\]
+and \(M\) corresponds to \(s\ge0\). The localization quotient
+\[
+  T_FM=\D_FM/M
+\]
+has PBW basis
+\[
+  \mathcal C
+  =
+  \{F^{-m}e(\alpha)h(\beta)f(\delta)u+M:
+  m\ge1,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_0\}.
+\]
+Put
+\[
+  \bar u_m=F^{-m}u+M\ (m\ge1),\qquad
+  \bar u=\bar u_1.
+\]
+Define \(\psi:S_{0,0}\to\C\) by
+\[
+  \psi(K)=c,\qquad
+  \psi(h_0)=\lambda_0+2,\qquad
+  \psi(h_1)=\lambda_1,\qquad
+  \psi(h_i)=0\ (i\ge2),
+\]
+\[
+  \psi(e_i)=0\ (i>0),\qquad
+  \psi(f_i)=0\ (i>0),
+\]
+and let
+\[
+  A=M_{0,0}(\psi)=\Ind_{S_{0,0}}^{\slh}\C_\psi,
+  \qquad
+  u'=1\otimes1.
+\]
+
+\begin{lemma}\label{lem:cyc}
+The vector \(\bar u\in T_FM\) satisfies
+\[
+  x\bar u=\psi(x)\bar u\qquad(x\in S_{0,0}).
+\]
+\end{lemma}
+
+\begin{proof}
+For \(s=-1\), Lemma~\ref{lem:loc} gives
+\[
+  f_nF^{-1}=F^{-1}f_n,
+\]
+\[
+  h_nF^{-1}=F^{-1}h_n+2F^{-2}f_{n+1},
+\]
+\[
+  e_nF^{-1}
+  =
+  F^{-1}e_n
+  -F^{-2}\bigl(h_{n+1}+n\delta_{n+1,0}K\bigr)
+  -2F^{-3}f_{n+2}.
+\]
+Hence, for \(n>0\),
+\[
+  f_n\bar u=0,\qquad e_n\bar u=0
+\]
+(for \(n=1\), \(f_1\bar u=F^{-1}f_1u+M=F^{-1}Fu+M=u+M=0\)). For the
+Cartan part,
+\[
+  h_0\bar u=(F^{-1}h_0+2F^{-2}f_1)u+M
+  =(\lambda_0+2)F^{-1}u+M
+  =(\lambda_0+2)\bar u
+  =\psi(h_0)\bar u,
+\]
+\[
+  h_1\bar u=(F^{-1}h_1+2F^{-2}f_2)u+M=\lambda_1\bar u=\psi(h_1)\bar u,
+\]
+and, for \(n\ge2\),
+\[
+  h_n\bar u=(F^{-1}h_n+2F^{-2}f_{n+1})u+M=0=\psi(h_n)\bar u.
+\]
+Also \(K\bar u=c\bar u=\psi(K)\bar u\).
+\end{proof}
+
+\begin{proposition}\label{prop:phi}
+There is a unique \(\slh\)-module homomorphism
+\[
+  \Phi:A\longrightarrow T_FM,\qquad \Phi(u')=\bar u.
+\]
+If \(\lambda_1\ne0\), then \(\Phi\) is surjective.
+\end{proposition}
+
+\begin{proof}
+Let
+\[
+  \psi_U:U(S_{0,0})\longrightarrow\C
+\]
+be the algebra character extending the Lie algebra character \(\psi\). By
+Lemma~\ref{lem:cyc}, for every \(a\in U(S_{0,0})\) we have
+\[
+  a\bar u=\psi_U(a)\bar u.
+\]
+This relation is not only a relation for the generators in \(S_{0,0}\): if
+\(a=s_1\cdots s_k\), with \(s_i\in S_{0,0}\), then
+\(a\bar u=\psi(s_1)\cdots\psi(s_k)\bar u=\psi_U(a)\bar u\), and the
+general case follows by linearity.
+
+Write \(\C_\psi=\C\mathbf 1_\psi\). On the unbalanced tensor product define
+\[
+  \widetilde\Phi:U(\slh)\otimes\C_\psi\longrightarrow T_FM,
+  \qquad
+  \widetilde\Phi(x\otimes b\mathbf 1_\psi)=b\,x\bar u.
+\]
+For \(x\in U(\slh)\), \(a\in U(S_{0,0})\), and \(b\in\C\), the balancing
+relation is sent to
+\[
+\begin{aligned}
+  &\widetilde\Phi\bigl(xa\otimes b\mathbf 1_\psi
+      -x\otimes a(b\mathbf 1_\psi)\bigr) \\
+  &\qquad=b\,xa\bar u-b\,\psi_U(a)x\bar u
+   =b\,x\bigl(a\bar u-\psi_U(a)\bar u\bigr)=0.
+\end{aligned}
+\]
+Hence \(\widetilde\Phi\) kills the balancing subspace and descends to the
+well-defined linear map
+\[
+  \Phi:A=U(\slh)\otimes_{U(S_{0,0})}\C_\psi\longrightarrow T_FM,
+  \qquad \Phi(x\otimes_{U(S_{0,0})}b\mathbf 1_\psi)=b\,x\bar u.
+\]
+For \(y\in\slh\),
+\[
+  \Phi\bigl(y\cdot(x\otimes_{U(S_{0,0})}b\mathbf 1_\psi)\bigr)
+  =b\,yx\bar u
+  =y\cdot\bigl(b\,x\bar u\bigr),
+\]
+so \(\Phi\) is an \(\slh\)-module homomorphism. In particular,
+\(\Phi(u')=\bar u\); since \(A=U(\slh)u'\), this condition also gives
+uniqueness.
+
+For \(m\ge1\),
+\[
+  e_0F^{-m}=F^{-m}e_0-mF^{-m-1}h_1-m(m+1)F^{-m-2}f_2.
+\]
+Thus
+\[
+  e_0\bar u_m=-m\lambda_1\bar u_{m+1},
+\]
+and
+\[
+  e_0^r\bar u=(-1)^rr!\lambda_1^r\bar u_{r+1}\qquad(r\ge0).
+\]
+If \(\lambda_1\ne0\), then
+\[
+  \bar u_m=\frac{(-1)^{m-1}}{(m-1)!\lambda_1^{m-1}}e_0^{m-1}\bar u\in\im\Phi.
+\]
+A PBW basis of \(T_FM\) is
+\[
+  B_{m,\eta}:=F^{-m}X_\eta u+M,
+  \qquad
+  X_\eta=e(\alpha)h(\beta)f(\delta),
+\]
+where \(m\ge1\), \(\alpha,\beta\in\G_{-1}\), \(\delta\in\G_0\). Fix a total PBW
+monomial order \(\prec\) on the exterior multi-indices \(\eta\), for instance the
+degree-lexicographic order induced by the chosen PBW ordering of the generators.
+For
+\[
+  C_{m,\eta}=\frac{(-1)^{m-1}}{(m-1)!\lambda_1^{m-1}}X_\eta e_0^{m-1}u'\in A,
+\]
+one has
+\[
+  \Phi(C_{m,\eta})=X_\eta\bar u_m.
+\]
+Moving the exterior factors in \(X_\eta\) past \(F^{-m}\) gives a finite triangular
+expansion
+\[
+  \Phi(C_{m,\eta})
+  =
+  B_{m,\eta}
+  +
+  \sum_{\eta'\prec\eta,\,m'}a_{m',\eta'}B_{m',\eta'}
+  +
+  \sum_{i=0}^{N_\eta}r_i(m,\eta)\bar u_{m+i},
+\]
+where \(a_{m',\eta'},r_i(m,\eta)\in\C\); the last finite sum is precisely the part
+with zero exterior PBW index.
+We prove \(B_{m,\eta}\in\im\Phi\) by induction on \(\eta\). The case \(\eta=0\) is
+\(\bar u_m\in\im\Phi\). Assuming
+\[
+  B_{m',\eta'}\in\im\Phi\qquad(\eta'\prec\eta,\ m'\ge1),
+\]
+the triangular formula gives
+\[
+  B_{m,\eta}
+  =
+  \Phi(C_{m,\eta})
+  -
+  \sum_{\eta'\prec\eta,\,m'}a_{m',\eta'}B_{m',\eta'}
+  -
+  \sum_{i=0}^{N_\eta}r_i(m,\eta)\bar u_{m+i}
+  \in\im\Phi.
+\]
+Hence every PBW basis vector of \(T_FM\) lies in \(\im\Phi\).
+\end{proof}
+
+\begin{theorem}\label{thm:iso}
+Assume
+\[
+  \lambda_1=\varphi(h_1)\ne0.
+\]
+Then
+\[
+  \Phi:M_{0,0}(\psi)\longrightarrow T_{f_1}M_{-1,1}(\varphi)
+\]
+is an isomorphism.
+\end{theorem}
+
+\begin{proof}
+By Proposition~\ref{prop:phi}, \(\Phi\) is surjective. For injectivity, take for
+\(A=M_{0,0}(\psi)\) the PBW basis
+\[
+  \mathcal B_{0,0}
+  =
+  \{\,
+    e_0^pe(\alpha)h(\beta)f(\delta)u':
+    p\ge0,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_0
+  \,\},
+\]
+and order both \(\mathcal B_{0,0}\) and \(\mathcal C\) lexicographically by
+\((p,\eta)\) and \((m,\eta)\), respectively, with \(\eta\) ordered by the
+degree-lexicographic order induced by the chosen PBW ordering, under the
+correspondence
+\[
+  e_0^pe(\alpha)h(\beta)f(\delta)u'
+  \longleftrightarrow
+  F^{-p-1}e(\alpha)h(\beta)f(\delta)u+M.
+\]
+By Lemma~\ref{lem:loc}, the leading term of
+\[
+  \Phi(e_0^pe(\alpha)h(\beta)f(\delta)u')
+\]
+is
+\[
+  (-1)^pp!\lambda_1^p\,F^{-p-1}e(\alpha)h(\beta)f(\delta)u+M;
+\]
+the remaining terms come from the commutators produced when moving
+\(e_0,h_i,e_i,f_i\) past powers of \(F\), and they either involve lower PBW
+monomials or lie in lower filtration layers under the same monomial. Thus
+\(\Phi\) is upper triangular between the two PBW bases, with diagonal
+coefficients
+\[
+  (-1)^pp!\lambda_1^p\ne0.
+\]
+Therefore \(\Phi\) is injective.
+\end{proof}
+
+\begin{remark}
+If \(\lambda_1=0\), the isomorphism generally fails. Then
+\[
+  e_0\bar u=0,
+\]
+while in \(M_{0,0}(\psi)\) the element \(e_0\) is a free variable of the PBW
+complement and cannot be killed by the generating vector.
+\end{remark}
+
+\begin{theorem}\label{thm:simple}
+Assume
+\[
+  \lambda_1=\varphi(h_1)\ne0,\qquad c=\varphi(K)\ne-2.
+\]
+Then
+\[
+  T_{f_1}M_{-1,1}(\varphi)=\D_{f_1}M_{-1,1}(\varphi)/M_{-1,1}(\varphi)
+\]
+is a simple \(\slh\)-module.
+\end{theorem}
+
+\begin{proof}
+The FGXZ irreducibility criterion gives simplicity of \(M_{N_1,N_2}(\chi)\)
+when
+\[
+  \chi(h(N_1+N_2+1))\ne0,\qquad \chi(K)\ne-2.
+\]
+For \(A=M_{0,0}(\psi)\), this is
+\[
+  \psi(h_1)=\lambda_1\ne0,\qquad \psi(K)=c\ne-2.
+\]
+Thus \(A\) is simple, and by Theorem~\ref{thm:iso} it is isomorphic to
+\(T_{f_1}M_{-1,1}(\varphi)\). Hence the latter is simple.
+\end{proof}
+
+\section*{2. The general boundary version}
+
+\begin{theorem}\label{thm:general}
+Let \(N\ge1\),
+\[
+  M=M_{-1,N}(\varphi),\qquad F=f_N,
+\]
+and assume
+\[
+  \lambda_N=\varphi(h_N)\ne0.
+\]
+Then
+\[
+  \D_{f_N}M_{-1,N}(\varphi)/M_{-1,N}(\varphi)
+  \cong
+  M_{0,N-1}(\psi),
+\]
+where \(\psi:S_{0,N-1}\to\C\) is given by
+\[
+  \psi(K)=c,\qquad
+  \psi(h_0)=\lambda_0+2,\qquad
+  \psi(h_i)=\lambda_i\ (i\ge1).
+\]
+If moreover \(c\ne-2\), then the quotient is a simple \(\slh\)-module.
+\end{theorem}
+
+\begin{proof}
+The proof for \(N=1\) carries over verbatim with the shifts
+\(n+1\rightsquigarrow n+N\), \(n+2\rightsquigarrow n+2N\). Lemma~\ref{lem:loc}
+gives, for \(s=-1\),
+\[
+  f_nF^{-1}=F^{-1}f_n,
+\]
+\[
+  h_nF^{-1}=F^{-1}h_n+2F^{-2}f_{n+N},
+\]
+\[
+  e_nF^{-1}
+  =
+  F^{-1}e_n
+  -F^{-2}\bigl(h_{n+N}+n\delta_{n+N,0}K\bigr)
+  -2F^{-3}f_{n+2N}.
+\]
+Hence \(x\bar u=\psi(x)\bar u\) for \(x\in S_{0,N-1}\): for \(n=N\) one uses
+\[
+  f_N\bar u=F^{-1}f_Nu+M=F^{-1}Fu+M=u+M=0,
+\]
+the Cartan and \(e\)-remainders are killed by \(\lambda_i=0\ (i>N)\), and
+\(h_0\bar u=(\lambda_0+2)\bar u\) since \(2F^{-2}f_Nu=2F^{-2}Fu=2\bar u\).
+Moreover
+\[
+  e_0F^{-m}=F^{-m}e_0-mF^{-m-1}h_N-m(m+1)F^{-m-2}f_{2N},
+\]
+so
+\[
+  e_0\bar u_m=-m\lambda_N\bar u_{m+1}
+\]
+(because \(f_{2N}u=0\)), and \(e_0^r\bar u=(-1)^rr!\lambda_N^r\bar u_{r+1}\).
+The PBW bases of the quotient and of \(M_{0,N-1}(\psi)\) are
+\[
+  \{F^{-m}e(\alpha)h(\beta)f(\delta)u+M:
+  m\ge1,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_{N-1}\}
+\]
+and
+\[
+  \{e_0^pe(\alpha)h(\beta)f(\delta)u':
+  p\ge0,\ \alpha,\beta\in\G_{-1},\ \delta\in\G_{N-1}\},
+\]
+and the triangular argument of Theorem~\ref{thm:iso} yields the isomorphism,
+the diagonal coefficients being
+\[
+  (-1)^pp!\lambda_N^p\ne0.
+\]
+Simplicity follows from the FGXZ criterion applied to \(M_{0,N-1}(\psi)\), which
+requires
+\[
+  \psi(h_N)=\lambda_N\ne0,\qquad \psi(K)=c\ne-2.
+\]
+\end{proof}
+
+\begin{remark}[General \((a,b)\)]
+For \(M_{a,b}(\varphi)\) localized at the boundary \(f_b\), assuming
+\[
+  \varphi(h_{a+b+1})\ne0,
+\]
+the same triangular PBW argument is expected to give
+\[
+  \D_{f_b}M_{a,b}(\varphi)/M_{a,b}(\varphi)
+  \cong
+  M_{a+1,b-1}(\psi),
+\]
+where \(\psi:S_{a+1,b-1}\to\C\) is given by
+\[
+  \psi(K)=c,\qquad
+  \psi(h_0)=\lambda_0+2,\qquad
+  \psi(h_i)=\lambda_i\ (i\ge1),
+\]
+\[
+  \psi(e_i)=0\ (i>a+1),\qquad \psi(f_j)=0\ (j>b-1).
+\]
+By the FGXZ criterion, \(M_{a+1,b-1}(\psi)\) is simple when
+\[
+  \psi(h_{a+b+1})=\varphi(h_{a+b+1})\ne0,\qquad \psi(K)=c\ne-2,
+\]
+in which case the localization quotient is simple.
+\end{remark}
+
+\end{document}

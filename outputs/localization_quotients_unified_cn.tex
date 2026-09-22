@@ -1,0 +1,1092 @@
+% !TEX program = xelatex
+\documentclass[UTF8,11pt]{ctexart}
+
+\usepackage[a4paper,margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem,microtype,xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black]{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small 边界与非边界局部化商}
+\fancyhead[R]{\small 合并版研究笔记}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+\setlength{\emergencystretch}{3em}
+\setlength{\parskip}{3pt}
+\setlist{itemsep=3pt,topsep=5pt}
+\allowdisplaybreaks[2]
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\N}{\mathbb N}
+\newcommand{\g}{\mathfrak g}
+\newcommand{\slc}{\mathfrak{sl}_2}
+\newcommand{\slh}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\slt}{\widetilde{\mathfrak{sl}}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\Ind}{\operatorname{Ind}}
+\newcommand{\Ann}{\operatorname{Ann}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\Supp}{\operatorname{Supp}}
+\newcommand{\pole}{\operatorname{pole}}
+\newcommand{\I}{\mathcal I}
+\newcommand{\X}{\mathcal X}
+\newcommand{\D}{\mathcal D}
+\newcommand{\T}{\mathcal T}
+
+\theoremstyle{definition}
+\newtheorem{proposition}{命题}[section]
+\newtheorem{lemma}[proposition]{引理}
+\newtheorem{theorem}[proposition]{定理}
+\newtheorem{corollary}[proposition]{推论}
+\newtheorem{remark}[proposition]{备注}
+
+\title{光滑仿射 \(\slh\)-模的边界与非边界局部化商\\
+\large 合并版：living note v8（2026-09-02）的边界、单性与 flow 结果\\
+加上《非边界局部化商》（2026-09-11）的结果}
+\author{}
+\date{2026 年 9 月}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本笔记合并项目的两条现有线索。边界线索（living note v8）证明
+\(\T_{f_b}M^c_{a,b}(\varphi)\cong M^c_{a+1,b-1}(\psi)\) 及其单性流、含导子
+版本、迭代边界链、\(\Omega\)-商流与 critical level 下 \(\theta\)-参数保持
+的流。非边界线索研究商 \(Q_c=\T_{f_c}M_{a,b}\)（\(c<b\)）：PBW 模型、根模态
+与 Cartan 模态的刻画、权结构、cyclicity、深区整数参数下的显式真子模、基本
+模的 Takiff 模型、annihilator 保持与导出函子性质。两条线索由任意模态三分
+法、交换局部化引理以及“迭代边界移动填满任意缺口区间”连接起来。所有断言均
+附直接证明；本笔记不声称已完成独立审稿或形式化验证。
+\end{abstract}
+
+\section{记号与背景}\label{sec:setup}
+
+所有向量空间与张量积都在 \(\C\) 上。令
+\[
+\slh=(\slc\otimes\C[t,t^{-1}])\oplus\C K,\qquad
+\slt=\slh\oplus\C d,\qquad U=U(\slh),
+\]
+其中 \(x_r=x\otimes t^r\)，关系为
+\begin{align*}
+[e_r,f_s]&=h_{r+s}+r\delta_{r+s,0}K,&
+[h_r,h_s]&=2r\delta_{r+s,0}K,\\
+[h_r,e_s]&=2e_{r+s},&
+[h_r,f_s]&=-2f_{r+s},&
+[d,x_r]&=rx_r.
+\end{align*}
+\(e\) 之间两两交换，\(f\) 之间两两交换，\(K\) 中心。取整数 \(a,b\) 满足
+\(a+b\ge0\)，置 \(L=a+b+1\ge1\)，并令
+\[
+S_{a,b}=\Span\{K,\ h_i\ (i\ge0),\ e_i\ (i>a),\ f_j\ (j>b)\}.
+\]
+固定特征 \(\chi:S_{a,b}\to\C\)，满足 \(\chi(e_i)=\chi(f_j)=0\)，
+\(\chi(K)=\kappa\)，\(\chi(h_i)=\lambda_i\)，且 \(i>L\) 时 \(\lambda_i=0\)。
+这些条件使 \(\chi\) 成为 Lie 代数特征。令
+\[
+M=M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad
+M^f_{a,b}(\chi)=\Ind_{S_{a,b}}^{\slt}\C_\chi,\qquad u=1\otimes1_\chi.
+\]
+对模 \(V\) 上的单射根向量 \(F\)，记
+\[
+D_FV=U_F\otimes_UV,\qquad U_F=U[F^{-1}],\qquad
+\T_FV=D_FV/V.
+\]
+更一般地，对任意 \(U\)-模 \(V\)，定义 \(\T_FV\) 为局部化映射
+\(V\to D_FV\) 的余核；则 \(\T_FV=(U_F/U)\otimes_UV\)。
+
+固定整数 \(c<b\)，写
+\[
+F=f_c,\qquad d_*=b-c\ge1,\qquad
+Q_c=\T_FM=D_FM/M,\qquad w_m=F^{-m}u+M\ (m\ge1).
+\]
+由于 \(\ad F\) 在 \(U\) 上局部幂零，\(F\) 的幂构成 Ore 集。
+\emph{\(Q_c\) 上没有算子 \(F^{-1}\)。}
+
+模称为 \emph{smooth}，若每个向量都被某个 \(\slc\otimes t^N\C[t]\) 消去。
+算子 \(x\) 局部幂零指每个向量被 \(x\) 的某次幂杀死；局部有限指每个向量
+生成有限维 \(\C[x]\)-模。向量 \(v\) 称为 \(F\)-torsion，若存在 \(n\) 使
+\(F^nv=0\)。下文“权”指 \(\C h_0\oplus\C K\) 的权。
+
+原诱导模满足 FGXZ 判据 \cite{FGXZ}：
+
+\begin{theorem}[FGXZ 判据]\label{thm:fgxz}
+\(M_{a,b}(\chi)\) 单，当且仅当
+\[
+\lambda_L\ne0,\qquad \kappa\ne-2.
+\]
+\end{theorem}
+
+该判据不能直接搬到 \(Q_c\) 上。
+
+\section{PBW 基与局部化正规形}\label{sec:pbw}
+
+\begin{proposition}[左正规 PBW 模型与分母过滤]\label{prop:pbw}
+取 PBW 序：先放 \(F=f_c\)，再放自由族
+\[
+f_j\ (j\le b,\ j\ne c),\qquad e_i\ (i\le a),\qquad h_r\ (r<0),
+\]
+最后放 \(S_{a,b}\) 的一组基。记中间三族的有序单项式集合为 \(\X\)（含空
+单项式）。则
+\begin{align*}
+M &: \quad \{F^qXu:q\ge0,\ X\in\X\},\\
+D_FM &: \quad \{F^qXu:q\in\Z,\ X\in\X\},\\
+Q_c &: \quad \{F^{-m}Xu+M:m\ge1,\ X\in\X\}
+\end{align*}
+分别是基。特别地 \(Q_c\) 非零且可数无限维。\(F\) 在 \(Q_c\) 上满射且局部
+幂零，且
+\[
+\ker F^r=\Span\{F^{-m}Xu+M:1\le m\le r,\ X\in\X\}\qquad(r\ge1).
+\]
+\(Q_c\) 的每个非零 \(\g\)-子模都与 \(\ker F\) 非零相交。
+\end{proposition}
+
+\begin{proof}
+第一组基是诱导模的 PBW 定理，且使 \(M\) 成为 \(\C[F]\)-自由模。局部化给出
+第二组基：张成性由把分母移到左侧得到，线性无关性由对关系式乘以 \(F\) 的
+公共幂并回到第一组基得到。取商给出第三组。核公式随即得到；最后一句对子模
+中非零向量施加仍非零的 \(F\) 的最高次幂。
+\end{proof}
+
+\begin{lemma}[交换公式与纯分式生成]\label{lem:fractions}
+对 \(s\in U\) 与 \(m\ge1\)，
+\begin{equation}\label{eq:commute}
+sF^{-m}=\sum_{j\ge0}\binom{m+j-1}{j}F^{-m-j}(\ad F)^j(s),
+\end{equation}
+为有限和。并且 \(Q_c=\sum_{m\ge1}Uw_m\)。
+\end{lemma}
+
+\begin{proof}
+\(m=1\) 时反复把 \(s\) 移过 \(F^{-1}\)；因 \(\ad F\) 局部幂零，过程终止，
+对 \(m\) 归纳得到二项系数。给分子 PBW 单词赋权 \(\rho=2\#e+\#h\)（\(f\)-因子
+权零）：重排不增加该权，且 \((\ad F)\) 的每次非零作用严格降低它。于是
+\[
+Xw_m=F^{-m}Xu+M+\text{分子权严格更小的有限余项}.
+\]
+对 \(\rho(X)\) 归纳（同时覆盖所有分母阶 \(m\)）即得。
+\end{proof}
+
+\begin{lemma}[右正规局部化 PBW]\label{lem:right-pbw}
+设 \(F=f_r\)，\(r\le b\)。取 \(M^c_{a,b}(\chi)\) 的 PBW 序使 \(f_r\) 为
+\emph{最后一个}自由变量，记其余有序单项式为 \(\X_r\)。则
+\[
+\{XF^qu:X\in\X_r,\ q\in\Z_{\ge0}\},\qquad
+\{XF^qu:X\in\X_r,\ q\in\Z\},\qquad
+\{XF^{-m}u+M:X\in\X_r,\ m\ge1\}
+\]
+分别是 \(M^c_{a,b}(\chi)\)、\(D_FM^c_{a,b}(\chi)\)、\(\T_FM^c_{a,b}(\chi)\)
+的基。相应地，\(\{d^kXF^qu:k\ge0,\ X\in\X_r,\ q\in\Z\}\) 是
+\(D_FM^f_{a,b}(\chi)\) 的基，商中只保留 \(q<0\)。
+\end{lemma}
+
+\begin{proof}
+\(\ad F\) 在 \(U\) 与 \(U(\slt)\) 上局部幂零，且 \([F,d]=-rF\)，故
+\(\{F^m:m\ge0\}\) 是 Ore 集。第一组基是 \(f_r\) 殿后的 PBW 定理。局部化中，
+有限交换公式把负幂移到每个有序单项式右侧；线性无关性在 associated
+graded 上验证：那里局部化即多项式环对 \(\operatorname{gr}F\) 的局部化，幂
+集从 \(\Z_{\ge0}\) 扩为 \(\Z\)。把 \(d\) 放在 PBW 序最左端得到最后断言。
+\end{proof}
+
+\section{边界情形}\label{sec:boundary}
+
+置
+\[
+F=f_b,\qquad E=e_{a+1},\qquad H=h_{a+b+1}=h_L.
+\]
+定义 \(\psi:S_{a+1,b-1}\to\C\) 为
+\[
+\psi(K)=\chi(K),\qquad
+\psi(h_0)=\chi(h_0)+2,\qquad
+\psi(h_i)=\chi(h_i)\ (i>0),
+\]
+并在 \(S_{a+1,b-1}\) 的根向量上取零。即 \(\psi\) 与 \(\chi\) 只在
+\(h_0\)-特征值上差一个 \(+2\)。
+
+\begin{lemma}[\(\psi\) 是特征]\label{lem:char}
+上述赋值定义一个 Lie 代数特征 \(\psi:S_{a+1,b-1}\to\C\)。
+\end{lemma}
+
+\begin{proof}
+唯一可能出问题的是 \([e_i,f_j]=h_{i+j}+i\delta_{i+j,0}K\)，其中
+\(i>a+1\)，\(j>b-1\)。此时 \(i+j\ge a+b+2=L+1\)，中心项为零且
+\(\psi(h_{i+j})=\lambda_{i+j}=0\)。其余括号 \([h_i,e_j]\)、\([h_i,f_j]\)
+落入被消去的尾部，而 \(i,j\ge0\) 时
+\([h_i,h_j]=2i\delta_{i+j,0}K\) 的值恒为零。
+\end{proof}
+
+\begin{lemma}[循环向量]\label{lem:cyc}
+向量 \(\bar u=F^{-1}u+M\in\T_FM\) 满足
+\[
+x\bar u=\psi(x)\bar u\qquad(x\in S_{a+1,b-1}).
+\]
+\end{lemma}
+
+\begin{proof}
+对 \(j>b-1\)：若 \(j=b\)，则 \(f_b\bar u=u+M=0\)；若 \(j>b\)，则
+\(f_ju=0\)。由 \(h_iF^{-1}=F^{-1}h_i+2F^{-2}f_{i+b}\) 得
+\(h_0\bar u=(\lambda_0+2)\bar u\)（因 \(2F^{-2}f_bu=2F^{-2}Fu=2\bar u\)），
+且 \(i>0\) 时 \(h_i\bar u=\lambda_i\bar u\)。对 \(j>a+1\)，
+\[
+e_jF^{-1}=F^{-1}e_j-F^{-2}h_{j+b}-2F^{-3}f_{j+2b},
+\]
+其中 \(j+b>L\) 故 \(h_{j+b}u=0\)，\(j+2b>b\) 故 \(f_{j+2b}u=0\)。于是
+\(e_j\bar u=0\)，且 \(K\bar u=\kappa\bar u\)。
+\end{proof}
+
+\begin{theorem}[边界局部化]\label{thm:boundary}
+若
+\[
+\lambda_L=\chi(h_L)\ne0,
+\]
+则存在自然的 \(\slh\)-模同构
+\[
+\boxed{\ \T_{f_b}M^c_{a,b}(\chi)\cong M^c_{a+1,b-1}(\psi),\ }
+\]
+把目标的生成元 \(u'\) 送到
+\[
+\bar u=f_b^{-1}u+M.
+\]
+结论与 level \(\kappa\) 无关。
+\end{theorem}
+
+\begin{proof}
+由引理~\ref{lem:cyc} 与诱导模的泛性质，存在唯一 \(\slh\)-模同态
+\[
+\Phi:M^c_{a+1,b-1}(\psi)\longrightarrow\T_FM,
+\qquad u'\longmapsto\bar u.
+\]
+令 \(\X\) 为 \(e_i\ (i\le a)\)、\(h_j\ (j<0)\)、\(f_k\ (k\le b-1)\) 的有序
+单项式，并把源的 PBW 序取成 \(E\) 殿后。则
+\(\{XE^pu':X\in\X,\ p\ge0\}\) 是 \(M^c_{a+1,b-1}(\psi)\) 的基，由引理
+~\ref{lem:right-pbw}，\(\{XF^{-p-1}u+M:X\in\X,\ p\ge0\}\) 是商的基。关系
+\[
+[E,F]=H,\qquad (\ad F)^2(E)=-2f_{a+2b+1},
+\]
+连同 \(Eu=0\)、\(Hu=\lambda_Lu\)、\(f_{a+2b+1}u=0\)，给出
+\[
+EF^su=s\lambda_LF^{s-1}u\qquad(s\in\Z),
+\]
+特别地
+\[
+E^pF^{-1}u=(-1)^pp!\lambda_L^{\,p}F^{-p-1}u.
+\]
+因此
+\[
+\Phi(XE^pu')=(-1)^pp!\lambda_L^{\,p}XF^{-p-1}u+M,
+\]
+即 \(\Phi\) 把一组 PBW 基双射地送到另一组 PBW 基的非零标量倍，故为同构。
+\end{proof}
+
+\begin{remark}[满射 + 单性捷径]\label{rem:shortcut}
+若只证单性，可避开基比较：链 \(EF^{-m}u=-m\lambda_LF^{-m-1}u\) 给出所有纯
+分式在 \(\Phi\) 的像中，引理~\ref{lem:fractions} 给出满射。若
+\(\kappa\ne-2\)，由定理~\ref{thm:fgxz} 源 \(M^c_{a+1,b-1}(\psi)\) 单（因
+\(\psi(h_L)=\lambda_L\ne0\)、\(\psi(K)=\kappa\ne-2\)）；单模的非零满射自动
+是同构。
+\end{remark}
+
+\begin{corollary}[边界商的单性]\label{cor:simple}
+若 \(\lambda_L\ne0\) 且 \(\kappa\ne-2\)，则 \(\T_{f_b}M^c_{a,b}(\chi)\) 单：
+它同构于 \(M^c_{a+1,b-1}(\psi)\)，后者的两个不可约性参数为
+\[
+\psi(h_{a+b+1})=\lambda_L,\qquad \psi(K)=\kappa.
+\]
+\end{corollary}
+
+\begin{remark}[为什么不是完整局部化]\label{rem:full}
+完整局部化 \(D_FM\) 含 \(M\) 为非零子模，故不可能单。承载标准模结构的是商
+\(\T_FM=D_FM/M\)。扭曲局部化保持 \(F\) 可逆，同样不直接是标准诱导模。
+\end{remark}
+
+\begin{proposition}[边界 \(b\)-函数]\label{prop:bfun}
+设 \(F=f_b\)、\(E=e_{a+1}\)。则
+\[
+EF^su=s\chi(h_L)F^{s-1}u\qquad(s\in\Z),
+\]
+等价地 \(EF^{s+1}u=(s+1)\chi(h_L)F^su\)，故 monic \(b\)-多项式为
+\[
+b(s)=s+1,\qquad\text{带参数地},\qquad b_\chi(s)=(s+1)\chi(h_L).
+\]
+条件 \(\lambda_L\ne0\) 正是负幂方向没有障碍的条件。
+\end{proposition}
+
+\begin{proof}
+即有限展开 \(EF^s=F^sE+sF^{s-1}H-2\tbinom{s}{2}F^{s-2}f_{a+2b+1}\) 作用于
+\(u\)。free-field 模的同类共振见 \cite[Section 5]{FGM}。
+\end{proof}
+
+\section{任意模态：三分法与缺口不变量}\label{sec:trichotomy}
+
+\begin{proposition}[任意模态三分法]\label{prop:trichotomy}
+设 \(M=M^c_{a,b}(\chi)\)，考虑 \(F=f_r\)。
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.8em]
+\item 若 \(r>b\)，则 \(F\) 在 \(M\) 上局部幂零，故 \(D_FM=0\)：不存在非
+平凡的局部化。
+\item 若 \(r=b\) 且 \(\chi(h_L)\ne0\)，则由定理~\ref{thm:boundary}，
+\(\T_{f_b}M\cong M^c_{a+1,b-1}(\psi)\)。
+\item 若 \(r<b\)，则 \(D_FM\ne0\)，但 \(\T_FM\) 不同构于任何标准模
+\(M^c_{a',b'}(\chi')\)：局部幂零负根模态集为 \(\{r\}\cup\{j:j>b\}\)，带
+缺口，而标准模具有完整上尾 \(\{j:j>b'\}\)。
+\end{enumerate}
+对 \(M^f_{a,b}(\chi)\) 同样的三分法成立。情形 (iii) 在第
+\ref{sec:cartan}--\ref{sec:deep} 节深入研究。
+\end{proposition}
+
+\begin{proof}
+\(r>b\) 时 \(Fu=0\) 且 \(F^m(xu)=(\ad F)^m(x)u\) 在 \(m\gg0\) 时为零，故
+\(F\) 局部幂零。\(r<b\) 时由引理~\ref{lem:right-pbw} 得局部化基：\(F\) 在
+商上局部幂零，\(j\le b\)、\(j\ne r\) 的 \(f_j\) 是单射的自由多项式变量，
+\(j>b\) 的局部幂零性从 \(M\) 继承。
+\end{proof}
+
+\begin{proposition}[负根模态刻画]\label{prop:root}
+在 \(Q_c\) 上，
+\[
+\begin{array}{c|l}
+j=c&f_j\ \text{满射且局部幂零},\\
+j\le b,\ j\ne c&f_j\ \text{单射且不满射},\\
+j>b&f_j\ \text{局部幂零}.
+\end{array}
+\]
+因此局部幂零负根模态集恰为 \(\{c\}\cup\{j:j>b\}\)。
+\end{proposition}
+
+\begin{proof}
+第一项即命题~\ref{prop:pbw}。第二项：\(f_j\) 是交换代数模型中的自由多项式
+变量乘法。第三项：用 \(f_ju=0\)、\(\ad f_j\) 局部幂零以及 \([f_j,F]=0\)。
+\end{proof}
+
+\begin{corollary}[非同构与 Hom 消去]\label{cor:hom}
+\(c<b\) 时 \(Q_c\) 不同构于任何标准模 \(M_{a',b'}(\psi)\)。固定 \(M\)，对
+不同 \(c,c'\le b\)，
+\[
+\Hom_\g(T_{f_c}M,T_{f_{c'}}M)=0.
+\]
+\end{corollary}
+
+\begin{proof}
+标准模的局部幂零集是半直线。Hom 断言：\(f_c\) 在源上局部幂零、在目标上
+单射。
+\end{proof}
+
+\begin{proposition}[smooth 性与权结构]\label{prop:smooth}
+\(Q_c\) 是 smooth 模，\(K\) 作用为 \(\kappa\)，\(h_0\) 半单且
+\[
+\Supp_{h_0}Q_c=\lambda_0+2\Z.
+\]
+每个非零权空间可数无限维。模没有非零有限维子模或商，且对全仿射代数不可
+积。
+\end{proposition}
+
+\begin{proof}
+若 \(X\) 含 \(r_e\) 个 \(e\)-因子与 \(r_f\) 个 \(f\)-因子，则
+\[
+h_0(F^{-m}Xu+M)=(\lambda_0+2m+2r_e-2r_f)(F^{-m}Xu+M).
+\]
+所述陪集中的全部权都会出现；加入任意多 \(h_{-1}\) 因子给出同权的无穷多个
+独立向量。smooth 性由有限交换公式
+\[
+h_rF^{-m}=F^{-m}h_r+2mF^{-m-1}f_{r+c},
+\]
+\[
+e_rF^{-m}=F^{-m}e_r-mF^{-m-1}(h_{r+c}+r\delta_{r+c,0}K)
+-m(m+1)F^{-m-2}f_{r+2c}
+\]
+（取 \(r,r+c,r+2c\) 足够大）得到。\(F\) 的满射性与局部幂零性排除非零有限
+维商；有限维 smooth \(\g\)-模平凡，而平凡子模被 \(f_{c+1}\) 的单射性排
+除；自由根模态排除可积性。
+\end{proof}
+
+\section{正 Cartan 模态与局部化深度}\label{sec:cartan}
+
+\begin{proposition}[极点阶严格增长]\label{prop:pole}
+对 \(1\le i\le d_*\)、\(\zeta\in\C\) 与非零 \(v\in Q_c\)，
+\[
+\pole_F((h_i-\zeta)v)=\pole_F(v)+1,
+\]
+其中极点阶指 PBW 展开中的最大分母指数。特别地，
+\[
+\ker p(h_i)=0\qquad(0\ne p\in\C[t]).
+\]
+故 \(h_i\) 没有非零局部有限向量、特征向量或广义特征向量。
+\end{proposition}
+
+\begin{proof}
+把 \(v\) 的最高极点项写成 \(F^{-m}v_m+M\)，\(v_m\ne0\)。项
+\(F^{-m}h_iv_m\) 的极点阶至多 \(m\)，而极点阶 \(m+1\) 的系数为
+\(2mf_{c+i}v_m\pmod{FM}\)。因 \(c+i\le b\) 且 \(c+i\ne c\)，
+\(f_{c+i}\) 在 \(M/FM\) 上的乘法单射，该系数非零，且不能被低阶项或
+\(-\zeta v\) 抵消。迭代表明 \(v,h_iv,\ldots,h_i^nv\) 的极点阶互不相同。
+\end{proof}
+
+\begin{corollary}\label{cor:no-whittaker}
+对每个标准诱导模，
+\[
+\Hom_\g(M_{a',b'}(\psi),Q_c)=0.
+\]
+更一般地，对任何含 \(h_1\) 的 Lie 子代数，\(Q_c\) 没有非零一维特征向量。
+\end{corollary}
+
+\begin{proposition}[高阶 Cartan 模态]\label{prop:high}
+若 \(i>d_*\)，则对所有 \(m\ge1\) 有 \(h_iw_m=\lambda_iw_m\)，且
+\(h_i-\lambda_i\) 在整个 \(Q_c\) 上局部幂零。
+\end{proposition}
+
+\begin{proof}
+因 \(c+i>b\)，\(h\)-交换公式的修正项消去 \(u\)。一般地，在 smooth 模中若
+\(i>0\) 且 \(h_iw=\lambda w\)，则
+\((h_i-\lambda)^NXw=(\ad h_i)^N(X)w\)；\(N\) 足够大时每个存活项都含有指标
+任意大的根因子，从而消去 \(w\)。对所有 \(w_m\) 应用并配合引理
+~\ref{lem:fractions}。
+\end{proof}
+
+因此，没有非零局部有限向量的正 Cartan 模态恰为 \(h_1,\ldots,h_{b-c}\)：
+这是读出局部化深度的第二个内禀不变量。
+
+\section{基本模 \texorpdfstring{\(Q_0=T_{f_0}M_{-1,1}\)}{Q0}}\label{sec:basic}
+
+这里 \(a=-1\)、\(b=1\)、\(c=0\)，\(L=d_*=1\)。所有断言允许任意
+\(\lambda_0,\lambda_1,\kappa\)。纯分式满足
+\begin{align}
+f_0w_1&=0,\qquad f_0w_m=w_{m-1}\quad(m>1),\notag\\
+h_0w_m&=(\lambda_0+2m)w_m,\label{eq:basic}\\
+e_0w_m&=-m(\lambda_0+m+1)w_{m+1},\label{eq:basic-e}\\
+h_1w_m&=\lambda_1w_m+2mf_1w_{m+1},\notag\\
+e_1w_m&=-m\lambda_1w_{m+1}-m(m+1)f_1w_{m+2}.\notag
+\end{align}
+与 \(f_1\) 处的边界局部化不同，纯分式递推的控制参数是 \(\lambda_0\)，不是
+\(\lambda_1\)。
+
+\begin{proposition}[精确 cyclicity]\label{prop:cyclic}
+\(Q_0\) 对所有参数都是循环模，且
+\[
+Q_0=Uw_1\ \Longleftrightarrow\ \lambda_0\notin\{-2,-3,-4,\ldots\}.
+\]
+若 \(\lambda_0=-s\)（\(s\ge2\)），则 \(Q_0=Uw_s\)，而 \(Uw_1\) 是真子模。
+\end{proposition}
+
+\begin{proof}
+若 \(\lambda_0\) 不是 \(\le-2\) 的负整数，\eqref{eq:basic-e} 中从 \(m=1\)
+起的系数均非零，归纳得 \(w_m\in Uw_1\)；引理~\ref{lem:fractions} 给出
+\(Q_0=Uw_1\)。若 \(\lambda_0=-s\)，系数恰在 \(m=s-1\) 处为零；从 \(w_s\)
+出发，\(e_0\) 生成所有 \(m\ge s\) 的 \(w_m\)，\(f_0\) 生成
+\(w_{s-1},\ldots,w_1\)，故 \(Q_0=Uw_s\)。但 \(e_0^{s-1}w_1=0\)，故
+\(Uw_1\subseteq G\)，而 \(w_s\notin G\)（\(G\) 见命题~\ref{prop:integer}）。
+\end{proof}
+
+\begin{proposition}[\(e_0\)-局部幂零部分]\label{prop:integer}
+令
+\[
+G=\{v\in Q_0:e_0^Nv=0\ \text{对某个}\ N\ge1\}.
+\]
+这是 \(\g\)-子模，且
+\[
+\begin{cases}
+0\ne G\ne Q_0,&\lambda_0\in\Z,\\
+G=0,&\lambda_0\notin\Z.
+\end{cases}
+\]
+因此 \(\lambda_0\) 为整数时 \(Q_0\) 总可约。非整数时 \(e_0\) 单射；这里不
+断言单性。
+\end{proposition}
+
+\begin{proof}
+置 \(E=e_0\)。因 \(\ad E\) 在 \(U\) 上局部幂零，展开式
+\[
+E^n(sv)=\sum_{r=0}^n\binom nr(\ad E)^r(s)E^{n-r}v
+\]
+证明 \(UG\subseteq G\)。
+
+先设 \(p=\lambda_0\in\Z\)。选 \(k\ge\max(1,p+2)\)，置 \(x=f_0\)、
+\(y=f_1\)、\(\eta=\lambda_1\)。子空间 \(\C[x,y]u\) 在 \(e_0,h_0,f_0\) 下稳
+定，且
+\begin{equation}\label{eq:polynomial-e}
+e_0(x^jy^\ell u)
+=j(p-j+1-2\ell)x^{j-1}y^\ell u+\ell\eta x^jy^{\ell-1}u.
+\end{equation}
+定义
+\[
+v_k=\sum_{j=0}^k a_jx^jy^{k-j}u,\qquad a_0=1,\qquad
+a_j=-\frac{(k-j+1)\eta}{j(p-2k+j+1)}a_{j-1}.
+\]
+分母均非零（\(p-2k+j+1\le p-k+1<0\)）。\(e_0v_k\) 中
+\(x^{j-1}y^{k-j}u\) 的系数为
+\[
+j(p-2k+j+1)a_j+(k-j+1)\eta a_{j-1}=0,
+\]
+故 \(e_0v_k=0\)，且 \(h_0v_k=\nu v_k\)，\(\nu=p-2k\le-2\)。秩一交换公式给出
+\[
+e_0(f_0^{-m}v_k)=-m(\nu+m+1)f_0^{-m-1}v_k,
+\]
+其系数在 \(m=-\nu-1\) 处为零。在 \(Q_0\) 中，
+\[
+f_0^{-1}v_k+M=f_1^kw_1\ne0,\qquad
+e_0^{-\nu-1}(f_1^kw_1)=0,
+\]
+故 \(G\ne0\)。另一方面，\(m\ge\max(1,-p)\) 时 \eqref{eq:basic-e} 作用于
+\(w_m\) 的所有系数非零，故 \(w_m\notin G\)：\(G\) 是真子模。
+
+再设 \(\lambda_0\notin\Z\) 且 \(G\ne0\)。因 \(G\) 在 \(h_0\) 下稳定且 \(h_0\)
+半单，\(G\) 含非零权向量；作用适当 \(e_0\) 次幂得到非零
+\(v'\in\ker e_0\)。写 \(h_0v'=\nu v'\)，取最小 \(N\ge1\) 使 \(f_0^Nv'=0\)。
+\(\slc\)-恒等式给出
+\[
+0=e_0f_0^Nv'=N(\nu-N+1)f_0^{N-1}v',
+\]
+由最小性 \(\nu=N-1\in\Z\)，与 \(\nu\in\lambda_0+2\Z\) 矛盾。
+\end{proof}
+
+\begin{remark}[该子模证明了什么、没证明什么]\label{rem:G}
+\(G\) 是 \(e_0\)-局部幂零的最大子模，作为
+\(\langle e_0,h_0,f_0\rangle\cong\slc\)-模局部有限。商 \(Q_0/G\) 非零且
+\(e_0\) 在其上单射。这里没有证明 \(G\)、\(Q_0/G\) 单，也没有证明
+\(Q_0\) 长度为二或不可分解。
+\end{remark}
+
+\begin{proposition}[精确 Takiff 模型]\label{prop:takiff}
+子空间
+\[
+V=\Span\{f_1^kw_m:m\ge1,\ k\ge0\}
+\cong\C[x,x^{-1},y]/\C[x,y]
+\]
+在非负 current 代数 \(\slc[t]\) 下稳定，且次数至少二的模态作用为零；因此
+它是 Takiff 代数 \(\slc[t]/t^2\slc[t]\) 的模。在
+\(f_1^kw_m\leftrightarrow x^{-m}y^k\) 下，
+\begin{align*}
+f_0&=x,\qquad f_1=y,\\
+h_0&=\lambda_0-2x\partial_x-2y\partial_y,\\
+h_1&=\lambda_1-2y\partial_x,\\
+e_0&=\lambda_0\partial_x+\lambda_1\partial_y
+      -x\partial_x^2-2y\partial_x\partial_y,\\
+e_1&=\lambda_1\partial_x-y\partial_x^2.
+\end{align*}
+这些是精确公式，不是次数截断。\(V\) 不是全仿射代数的子模（负 Cartan 模态
+会离开它）。
+\end{proposition}
+
+\section{一般非边界指标：深区与浅区}\label{sec:deep}
+
+\subsection{谱流归一化}
+
+对 \(k\in\Z\)，定义自同构
+\[
+\sigma_k(e_i)=e_{i+k},\quad
+\sigma_k(f_i)=f_{i-k},\quad
+\sigma_k(h_i)=h_i+k\delta_{i,0}K,\quad
+\sigma_k(K)=K.
+\]
+扭曲约定为 \(x\cdot_{\rm new}v=\sigma_k(x)v\)。追踪诱导条件与局部化元，得到
+\begin{equation}\label{eq:spectral}
+(Q_c)^{\sigma_{-c}}\cong
+T_{f_0}M_{a+c,b-c}(\chi'),
+\qquad
+\chi'(h_0)=\mu:=\lambda_0-c\kappa,
+\end{equation}
+其中 \(\chi'(K)=\kappa\)、\(\chi'(h_i)=\lambda_i\ (i>0)\)。这是\emph{扭曲
+后}的同构，不是原模同构。有用的归一化坐标为
+\[
+A=a+c,\qquad B=b-c=d_*,\qquad A+B=L-1,\qquad \mu=\lambda_0-c\kappa.
+\]
+
+\begin{proposition}[深区]\label{prop:deep}
+设 \(c\le-a-1\)，等价地 \(d_*\ge L\)。置
+\[
+E=e_{-c},\qquad H=h_0-cK,\qquad F=f_c.
+\]
+它们构成 \(\slc\)-triple，\(Eu=0\)、\(Hu=\mu u\)，且
+\[
+Ew_m=-m(\mu+m+1)w_{m+1}.
+\]
+以下断言不需要 \(\lambda_L\ne0\)：
+\begin{enumerate}[label=(\roman*)]
+\item \(Q_c=Uw_1\) 当且仅当 \(\mu\notin\{-2,-3,\ldots\}\)。
+若 \(\mu=-s\)（\(s\ge2\)），则 \(Q_c=Uw_s\ne Uw_1\)。
+\item 子空间
+\[
+G_c=\{v\in Q_c:E^Nv=0\ \text{对某个}\ N\ge1\}
+\]
+是 \(\g\)-子模。\(\mu\in\Z\) 时非零且真，\(\mu\notin\Z\) 时为零。
+\item \(E\) 在非零商 \(Q_c/G_c\) 上单射。
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+交换子 \([e_{-c},f_c]=h_0-cK\) 给出秩一 triple；深区条件恰为 \(-c>a\)，故
+\(Eu=0\)。置 \(Y_b=f_b\)。在 \(\C[F,Y_b]u\) 上，
+\begin{equation}\label{eq:deep-poly}
+E(F^jY_b^\ell u)
+=j(\mu-j+1-2\ell)F^{j-1}Y_b^\ell u
++\ell\lambda_{d_*}F^jY_b^{\ell-1}u,
+\end{equation}
+即把 \eqref{eq:polynomial-e} 中的
+\((p,\eta,x,y)\) 换成 \((\mu,\lambda_{d_*},F,Y_b)\)。\(\mu\in\Z\) 时，用同样
+的最高向量构造得到 \(0\ne f_b^kw_1\in G_c\) 且
+\(E^{2k-\mu-1}(f_b^kw_1)=0\)；若 \(d_*>L\) 则 \(\lambda_{d_*}=0\)，向量简化
+为 \(f_b^ku\)。\(m\ge\max(1,-\mu)\) 的纯分式不是 \(E\)-局部幂零的，故
+\(G_c\) 真。\(\mu\notin\Z\) 时，命题~\ref{prop:integer} 的最小 \(N\) 论证迫
+使最高权为整数，矛盾，故 \(G_c=0\)。商上的单射由
+\(Ev\in G_c\Rightarrow v\in G_c\) 得到。
+\end{proof}
+
+\begin{proposition}[浅区]\label{prop:shallow}
+设 \(-a\le c<b\)，等价地 \(1\le d_*<L\)。
+则 \(E=e_{-c}\) 在 \(Q_c\) 上单射（对一切 \(\mu\)）。
+若 \(\lambda_L\ne0\)，则 \(w_1\) 生成 \(Q_c\)。
+\end{proposition}
+
+\begin{proof}
+此区中 \(e_{-c}\) 属于自由 PBW 补空间，不能用 \(Eu=0\)。改取
+\(Y=e_{L-c}\)。因 \(L-c>a\) 且 \(L+c>b\)，
+\[
+Yu=0,\qquad [Y,F]=h_L,\qquad f_{L+c}u=0,
+\]
+中间恒等式无中心项（\(L\ge1\)）。\(e\)-交换公式给出
+\[
+Yw_m=-m\lambda_Lw_{m+1},
+\]
+故 \(\lambda_L\ne0\) 时配合引理~\ref{lem:fractions} 得 cyclicity。
+
+\(E\) 的单射性用分子权 \(\rho=2\#e+\#h\)：在非零 PBW 展开的最高层上，左乘
+\(E\) 增加一个自由的 \(e_{-c}\)-因子，权增加二；所有交换项至多增加一。在
+associated graded PBW 空间中最高项是自由多项式变量的乘法，单射且不可抵消。
+\end{proof}
+
+\section{扩张、annihilator 与导出函子}\label{sec:homological}
+
+\begin{proposition}[自然扩张不分裂]\label{prop:extension}
+短正合列
+\[
+0\longrightarrow M\longrightarrow D_FM\longrightarrow Q_c\longrightarrow0
+\]
+不分裂。事实上
+\[
+\Hom_\g(Q_c,D_FM)=\Hom_\g(Q_c,M)=\Hom_\g(M,Q_c)=0.
+\]
+若 \(M\) 单，则它是 \(D_FM\) 的唯一单子模且是本质子模；从而 \(D_FM\) 不可
+分解。
+\end{proposition}
+
+\begin{proof}
+源 \(Q_c\) 是 \(F\)-torsion，而 \(F\) 在 \(D_FM\) 与 \(M\) 上单射；这证明
+前两个消去并排除截面。第三个是推论~\ref{cor:no-whittaker}。对
+\(0\ne v\in D_FM\)，足够高的 \(F\) 次幂把 \(v\) 送入 \(M\) 中的非零向量。
+\end{proof}
+
+\begin{proposition}[annihilator 保持]\label{prop:ann}
+在普通包络代数中，
+\[
+\Ann_U M=\Ann_U D_FM=\Ann_U Q_c.
+\]
+\end{proposition}
+
+\begin{proof}
+令 \(\Delta=\ad F\)。双侧理想 \(\Ann_UM\) 在 \(\Delta\) 下稳定，故
+\eqref{eq:commute} 表明 \(\Ann_UM\) 中每个元素消去 \(D_FM\)；包含关系
+\(M\subseteq D_FM\) 给出前两个 annihilator 相等，且该公共理想含于
+\(\Ann_UQ_c\)。反过来设 \(s\in\Ann_UQ_c\)，取 \(t\ge0\) 使
+\(\Delta^{t+1}(s)=0\)。对 \(v\in M\)、\(m\ge1\)，\(sF^{-m}v\in M\)。左乘
+\(F^{m+t}\) 得
+\[
+P_v(m):=\sum_{j=0}^t\binom{m+j-1}{j}F^{t-j}\Delta^j(s)v
+\ \in F^{m+t}M,
+\]
+这是关于 \(m\) 的向量值多项式。其有限个系数的非负 \(F\)-指数有共同上界，
+故 \(m\) 足够大时左端所在空间与 \(F^{m+t}M\) 相交为零；于是
+\(P_v\equiv0\)。代入 \(m=0\)（用 \(\binom{j-1}{j}=0\)，\(j\ge1\)）得
+\(F^tsv=0\)；\(F\) 单射给出 \(sv=0\)。
+\end{proof}
+
+\begin{proposition}[函子与导出性质]\label{prop:derived}
+对任意 \(U\)-模 \(V\)，
+\begin{align*}
+T_FV&=(U_F/U)\otimes_UV,\\
+L_1T_F(V)&\cong\{v\in V:F^nv=0\ \text{对某个}\ n\ge0\},\\
+L_jT_F(V)&=0\qquad(j\ge2).
+\end{align*}
+该函子右正合，且在三个项均 \(F\)-torsion-free 的短正合列上正合。特别地，
+\[
+D_FQ_c=0,\qquad T_FQ_c=0,\qquad L_1T_F(Q_c)\cong Q_c.
+\]
+\end{proposition}
+
+\begin{proof}
+Ore 局部化作为右 \(U\)-模平坦，故
+\(0\to U\to U_F\to U_F/U\to0\) 是 \(U_F/U\) 的平坦分解。与 \(V\) 张量后，
+其一次同调即 \(\ker(V\to D_FV)\)，恰为 \(F\)-torsion 子模；无更高同调。
+\end{proof}
+
+\section{再局部化、边界链与迭代}\label{sec:chains}
+
+\begin{proposition}[交换商局部化]\label{prop:commuting}
+设 \(F=f_c\)、\(G=f_j\)，\(c,j\le b\) 且不同，记 \(D_{F,G}M\) 为同时局部
+化。有自然同构
+\[
+T_G(T_FM)\cong
+\frac{D_{F,G}M}{D_FM+D_GM}
+\cong T_F(T_GM).
+\]
+对任意有限族不同自由负根模态成立，且与次序无关。
+\end{proposition}
+
+\begin{proof}
+这些模态交换、局部化交换，且 PBW 使 \(M\) 在 \(F,G\) 两个独立多项式变量上
+自由；在 \(D_{F,G}M\) 内
+\[
+D_FM\cap D_GM=M.
+\]
+又 \(G\) 在 \(T_FM\) 上单射。对定义 \(T_FM\) 的正合列在 \(G\) 处局部化得
+\(D_G(T_FM)\cong D_{F,G}M/D_GM\)，再商掉 \(T_FM\) 的像即中间表达式。其 PBW
+基恰由两个指数均严格为负的项组成。
+\end{proof}
+
+\begin{corollary}[填满缺口区间]\label{cor:fill}
+设 \(\lambda_L\ne0\)。按任意次序对
+\[
+f_c,f_{c+1},\ldots,f_b
+\]
+各做一次商局部化，得到
+\[
+M_{a+b-c+1,c-1}\bigl(\chi^{(b-c+1)}\bigr),
+\qquad
+\chi^{(b-c+1)}(h_0)=\lambda_0+2(b-c+1),
+\]
+其余特征值不变。
+\end{corollary}
+
+\begin{proof}
+由命题~\ref{prop:commuting}，可把次序排成 \(f_b,f_{b-1},\ldots,f_c\)。每
+一步的下一个模态都是当前标准模的边界模态，定理~\ref{thm:boundary} 适用。
+全程 \(L=a+b+1\) 与非零参数 \(\lambda_L\) 不变。
+\end{proof}
+
+基本例为
+\[
+T_{f_1}\bigl(T_{f_0}M_{-1,1}(\chi)\bigr)
+\cong T_{f_0}\bigl(T_{f_1}M_{-1,1}(\chi)\bigr)
+\cong M_{1,-1}(\chi^{(2)}),\qquad \lambda_1\ne0.
+\]
+这是迭代的\emph{商}局部化；必须除以相应部分局部化之和，且最终模单并不推
+出第一次商模单。
+
+\begin{theorem}[迭代边界链]\label{thm:iterated}
+设 \(\chi(h_L)\ne0\)。对 \(k\ge1\) 定义 \(\chi^{(k)}\) 为
+\[
+\chi^{(k)}(K)=\chi(K),\qquad
+\chi^{(k)}(h_0)=\chi(h_0)+2k,\qquad
+\chi^{(k)}(h_i)=\chi(h_i)\ (i>0).
+\]
+则
+\begin{equation}\label{eq:iterated}
+\boxed{\ \T_{f_{b-k+1}}\cdots\T_{f_{b-1}}\T_{f_b}
+M^c_{a,b}(\chi)\cong M^c_{a+k,b-k}(\chi^{(k)}),\ }
+\end{equation}
+最右端函子先作用，每步使用同一个非退化条件 \(\chi(h_L)\ne0\)。特别地，对
+\(M^c_{-1,N}(\chi)\) 与 \(n\le N\)，取 \(k=N-n+1\)，
+\begin{equation}\label{eq:iterated-special}
+\boxed{\ \T_{f_n}\T_{f_{n+1}}\cdots\T_{f_N}
+M^c_{-1,N}(\chi)\cong M^c_{N-n,n-1}(\chi^{(N-n+1)}).\ }
+\end{equation}
+\end{theorem}
+
+\section{加入导子}\label{sec:derivation}
+
+在 \(M^f_{a,b}(\chi)\cong\C[d]\otimes M^c_{a,b}(\chi)\) 上，\(\slt\)-作用是半
+直积：对 \(x_r\) 与 \(p(d)\in\C[d]\)，
+\[
+d\bigl(p(d)\otimes v\bigr)=dp(d)\otimes v,\qquad
+x_r\bigl(p(d)\otimes v\bigr)=p(d-r)\otimes x_rv.
+\]
+特别地，\(F=f_b\) 时
+\(F^{-1}(p(d)\otimes v)=p(d+b)\otimes F^{-1}v\)。
+
+\begin{proposition}[局部化与加入 \(d\) 交换]\label{prop:loc-induction}
+设 \(X\) 是 \(F=f_b\)-torsion-free 的 \(\slh\)-模。则有自然的 \(\slt\)-模同
+构
+\[
+D_F\bigl(\Ind_{\slh}^{\slt}X\bigr)\cong\Ind_{\slh}^{\slt}(D_FX),
+\qquad
+\boxed{\ \T_F\bigl(\Ind_{\slh}^{\slt}X\bigr)\cong\Ind_{\slh}^{\slt}(\T_FX).\ }
+\]
+作为向量空间，\(\T_F(\C[d]\otimes X)\cong\C[d]\otimes\T_FX\)。
+\end{proposition}
+
+\begin{proof}
+置 \(A=U(\slh)\)、\(B=U(\slt)\)。因 \([d,F]=bF\)，导子 \(\ad d\) 延拓到
+\(D_FA\)，且 PBW 给出 \(D_FB\cong B\otimes_AD_FA\)。故
+\(D_F(B\otimes_AX)\cong B\otimes_AD_FX\)。因 \(B\) 是自由右 \(A\)-模，
+\(B\otimes_A-\) 正合，作用到 \(0\to X\to D_FX\to\T_FX\to0\) 即得商同构。
+\end{proof}
+
+\begin{theorem}[含导子的边界局部化]\label{thm:boundary-f}
+若 \(\chi(h_L)\ne0\)，则
+\[
+\boxed{\ \T_{f_b}M^f_{a,b}(\chi)\cong M^f_{a+1,b-1}(\psi).\ }
+\]
+在 PBW 正规形 \(M^f\cong\C[d]\otimes M^c\) 下，同构逐项为
+\[
+d^kXE^pu'\longmapsto
+(-1)^pp!\lambda_L^{\,p}\,d^kXF^{-p-1}u+M^f_{a,b}(\chi).
+\]
+迭代链 \eqref{eq:iterated}--\eqref{eq:iterated-special} 对 \(M^f\) 原样成立。
+\end{theorem}
+
+\begin{proposition}[非边界含导子版本]\label{prop:d-nonb}
+有自然 \(\slt\)-模同构
+\[
+\I(Q_c)\cong T_{f_c}\I(M),\qquad
+\I(V)=\Ind_{\slh}^{\slt}V\cong\C[d]\otimes V,
+\]
+显式地
+\[
+\alpha\bigl(F^{-m}(P(d)\otimes v)\bigr)=P(d+mc)\otimes F^{-m}v,
+\]
+逆为 \(P(d)\otimes F^{-m}v\mapsto F^{-m}(P(d-mc)\otimes v)\)。若
+\(0\ne N\ne Q_c\) 是 \(\g\)-子模，则 \(0\ne\I(N)\ne\I(Q_c)\)。
+\end{proposition}
+
+\begin{proof}
+在 \(\I(M)\) 上，\(\I(M)\to\I(D_FM)\) 的目标具有 \(F\)-可逆作用：
+\[
+F(P(d)\otimes v)=P(d-c)\otimes Fv,\qquad
+F^{-1}(P(d)\otimes v)=P(d+c)\otimes F^{-1}v.
+\]
+局部化的泛性质把映射延拓为 \(\alpha:D_F\I(M)\to\I(D_FM)\)，显式公式尊重等
+价分式。\(U(\slt)\) 是自由右 \(U\)-模，故 \(\I\) 正合；取商即得余核的同
+构。\(\I\) 的正合性与忠实性给出最后断言。
+\end{proof}
+
+\section{非 critical 的 \(\Omega\)-单性流}\label{sec:omega}
+
+设 \(\kappa\ne-2\)。\(\slt\) 的 Casimir 元 \(\Omega\) 与 \(U(\slt)\) 交换；为
+简化记号取代表 \(P(\Omega)=1\)，写
+\[
+L_{a,b}(\chi;\mu):=M^f_{a,b}(\chi)/(\Omega-\mu)M^f_{a,b}(\chi).
+\]
+
+\begin{theorem}[非 critical 单性流]\label{thm:omega-flow}
+设
+\[
+\chi(h_L)\ne0,\qquad \kappa\ne-2.
+\]
+则 \(f_b\) 在 \(L_{a,b}(\chi;\mu)\) 上单射，且
+\[
+\boxed{\ \T_{f_b}L_{a,b}(\chi;\mu)\cong L_{a+1,b-1}(\psi;\mu).\ }
+\]
+两端都是单 \(\slt\)-模，Casimir 参数 \(\mu\) 不变。更一般地，
+\[
+\T_{f_{b-k+1}}\cdots\T_{f_b}L_{a,b}(\chi;\mu)
+\cong L_{a+k,b-k}(\chi^{(k)};\mu).
+\]
+\end{theorem}
+
+\begin{proof}
+由 \cite[公式 (4.1)]{FGXZ}，level \(\kappa\ne-2\) 时 \(L_{a,b}(\chi;\mu)\)
+限制到 \(\slh\) 同构于 \(M^c_{a,b}(\chi)\)；故 \(f_b\) 保持单射。因
+\(\Omega\) 与 \(F=f_b\) 交换，Ore 局部化的正合性给出
+\[
+\T_F\bigl(M^f/(\Omega-\mu)M^f\bigr)
+\cong
+\bigl(\T_FM^f\bigr)/(\Omega-\mu)\bigl(\T_FM^f\bigr).
+\]
+定理~\ref{thm:boundary-f} 把右端化为
+\(M^f_{a+1,b-1}(\psi)/(\Omega-\mu)M^f_{a+1,b-1}(\psi)
+=L_{a+1,b-1}(\psi;\mu)\)。\cite[定理 4.1]{FGXZ} 的不可约性参数在边界移动下
+不变，故两端单。迭代即可。
+\end{proof}
+
+\begin{remark}[为什么不能停在 \(M^f\)]\label{rem:omega}
+非 critical level 下 \((\Omega-\mu)M^f\) 是 \(M^f\) 的真子模，故原始模
+\(M^f\) 与原始商 \(\T_{f_b}M^f\cong M^f_{a+1,b-1}(\psi)\) 一般不单。完整的
+单性流是
+\[
+\boxed{\ \text{边界局部化商}\ +\ \Omega\text{-中心约化},\ }
+\]
+两步可交换，且 \(\mu\) 全程不变。
+\end{remark}
+
+\section{critical level：\(\theta\)-参数保持不变}\label{sec:critical}
+
+本节始终 \(\kappa=\chi(K)=-2\)，\(q:=L=a+b+1\)。对约化情形
+\((a,b)=(-1,q)\)，论文 \cite{FGXZ} 使用的 critical 中心模态即
+Segal--Sugawara 模态 \(T(q-i)\)。
+
+\begin{proposition}[spectral flow 对 Sugawara 模态的作用]\label{prop:spectral}
+设 \(\sigma_k\) 如第~\ref{sec:deep} 节。在完成化包络代数中，
+\[
+\boxed{\ \sigma_k(T(m))
+=T(m)+\frac{k}{2}(K+2)h_m+\frac{k^2}{4}K(K+2)\delta_{m,0}.\ }
+\]
+因此在 critical level \(K=-2\) 上，
+\[
+\boxed{\ \sigma_k(T(m))=T(m)\ }
+\]
+作为任意 smooth 模上的算子成立。
+\end{proposition}
+
+\begin{proof}
+把 \(T(m)\) 写成 \cite[公式 (2.3)]{FGXZ} 三组 normal-ordered 和的
+\(\tfrac14(2,2,1)\) 组合。\(k>0\) 时，spectral flow 把第一组
+\(\sum_i:e_{-i}f_{m+i}:\) 的 normal-ordering 分界从 \(i>0\) 移到
+\(i>-k\)，产生 \(kh_m+\tfrac{k(k-1)}{2}K\delta_{m,0}\)；第二组
+\(\sum_i:f_{-i}e_{m+i}:\) 产生
+\(kh_m+\tfrac{k(k+1)}{2}K\delta_{m,0}\)；第三组
+\(\sum_i:h_{-i}h_{m+i}:\) 产生 \(2kKh_m+k^2K^2\delta_{m,0}\)。代入系数
+\(\tfrac14(2,2,1)\) 即得公式；负 \(k\) 由
+\(\sigma_{k+\ell}=\sigma_k\sigma_\ell\) 推出，令 \(K=-2\) 得不变性。
+\end{proof}
+
+对 critical 特征，定义
+\[
+Z_i^{a,b}:=\sigma_{-a-1}\bigl(T(q-i)\bigr),\qquad i\in\N,
+\]
+并令 \(I^{a,b}_{\boldsymbol\theta}\) 为 critical 中心中由
+\(Z_i^{a,b}-\theta_i\) 生成的理想。置
+\[
+\overline M^{\,c}_{a,b}(\chi;\boldsymbol\theta)
+:=M^c_{a,b}(\chi)/I^{a,b}_{\boldsymbol\theta}M^c_{a,b}(\chi),
+\qquad
+\overline M^{\,f}_{a,b}(\chi;\boldsymbol\theta)
+:=\Ind_{\slh}^{\slt}\overline M^{\,c}_{a,b}(\chi;\boldsymbol\theta).
+\]
+由命题~\ref{prop:spectral}，level \(-2\) 上
+\[
+Z_i^{a,b}=T(q-i)=Z_i^{a+1,b-1},
+\]
+故边界移动不改变 \(\boldsymbol\theta\)。
+
+\begin{theorem}[critical 单性流]\label{thm:critical-flow}
+设
+\[
+\chi(K)=-2,\qquad \chi(h_q)\ne0.
+\]
+则 \(f_b\) 在 \(\overline M^{\,c}_{a,b}(\chi;\boldsymbol\theta)\) 上单射，且
+\[
+\boxed{\ \T_{f_b}\overline M^{\,c}_{a,b}(\chi;\boldsymbol\theta)
+\cong \overline M^{\,c}_{a+1,b-1}(\psi;\boldsymbol\theta),\ }
+\]
+两端都是单 \(\slh\)-模。把 \(c\) 换成 \(f\) 同样成立，两端都是单
+\(\slt\)-模。
+\end{theorem}
+
+\begin{proof}
+\cite{FGXZ} 的 critical 不可约性定理使
+\(\overline M^{\,c}_{a,b}(\chi;\boldsymbol\theta)\) 单。\(F\)-torsion 向量构
+成子模（因 \(\ad F\) 局部幂零）；critical PBW 基含非零向量
+\(f_q^{\,m}\bar u\)，经 \(\sigma_{a+1}\) 扭回说明 \(f_b\) 不全局部幂零。故
+\(f_b\) 单射。因每个 \(T(m)\) 与 \(\slh\) 及 \(F\) 交换，Ore 局部化的正合
+性给出
+\[
+\T_F\!\left(M^c_{a,b}/I^{a,b}_{\boldsymbol\theta}M^c_{a,b}\right)
+\cong
+\frac{\T_FM^c_{a,b}}{I^{a,b}_{\boldsymbol\theta}\bigl(\T_FM^c_{a,b}\bigr)}.
+\]
+定理~\ref{thm:boundary} 与 \(Z_i^{a,b}=Z_i^{a+1,b-1}=T(q-i)\) 把右端识别为
+\(\overline M^{\,c}_{a+1,b-1}(\psi;\boldsymbol\theta)\)。\(f\)-版本由命题
+~\ref{prop:loc-induction} 得到，单性来自 \cite[定理 4.2]{FGXZ}。
+\end{proof}
+
+迭代得
+\[
+\T_{f_{b-k+1}}\cdots\T_{f_b}
+\overline M^{\,\bullet}_{a,b}(\chi;\boldsymbol\theta)
+\cong
+\overline M^{\,\bullet}_{a+k,b-k}(\chi^{(k)};\boldsymbol\theta),
+\qquad \bullet\in\{c,f\},
+\]
+整条链中 \(\boldsymbol\theta\) 不变。
+
+\section{顶点代数视角}\label{sec:vertex}
+
+由 smooth 性与固定的 \(K\) 作用，每个 \(Q_c\) 都是普遍仿射顶点代数
+\(V^\kappa(\slc)\) 的弱模；见 \cite[Section 2]{FGXZ}。是否下降到其简单商需
+单独验证定义顶点理想消去该模；仅凭 smooth 性不能断定。
+
+\section{开放问题}\label{sec:open}
+
+\begin{enumerate}[leftmargin=*,label=\arabic*.]
+\item \textbf{基本模的非整数单性。} 在 \(\lambda_1\ne0\)、\(\kappa\ne-2\)
+下，最自然的候选判据是
+\[
+T_{f_0}M_{-1,1}(\chi)\ \text{单}\ \Longleftrightarrow\ \lambda_0\notin\Z.
+\]
+目前只证明了必要方向。缺的一步是把任意非零子模中的向量降到能生成整个商
+的纯分式。
+\item \textbf{深区的对应判据。} 在 \(\lambda_L\ne0\)、\(\kappa\ne-2\)、
+\(d_*\ge L\) 下，\(\mu=\lambda_0-c\kappa\notin\Z\) 是否推出单性？
+\item \textbf{整数参数的子模层。} 判定 \(G_c\)、\(Q_c/G_c\) 是否单、
+\(G_c\) 是否 socle、扩张是否分裂、\(Q_c\) 是否有有限
+Jordan--H\"older 长度。
+\item \textbf{浅区的单性。} 此区 \(e_{-c}\) 对一切 \(\mu\) 单射，深区的整
+数障碍消失。原模单是否已经足够？
+\item \textbf{参数同构与退化。} level \(\kappa\)、权支撑
+\(\lambda_0+2\Z\)、负根局部幂零集、正 Cartan 局部有限区间都是必要不变量；
+\(i>d_*\) 时广义特征值 \(\lambda_i\) 也是。\(\lambda_L=0\) 或 \(\kappa=-2\)
+情形的完整分类尚未解决。
+\item \textbf{critical 中心约化。} 在 \(\kappa=-2\) 时研究完成中心、其中心
+约化及与局部化的相容性；命题~\ref{prop:ann} 不处理完成中心的问题。
+\item \textbf{多缺口与扭曲局部化。} 命题~\ref{prop:commuting} 提示一个由
+自由模态有限集索引的族。还可研究广义共轭
+\[
+\Theta_\xi(s)=\sum_{j\ge0}\binom{\xi}{j}(\ad F)^j(s)F^{-j},\qquad \xi\in\C,
+\]
+（对每个 \(s\in U\) 和式有限）作用于 \(D_FM\)。它要求 \(F\) 可逆，不能直
+接作用于 \(Q_c\)。
+\end{enumerate}
+
+\section{文献与验证记录}\label{sec:verify}
+
+原诱导模、其单性判据、spectral flow 自同构与 smooth 模的顶点代数对应来自
+\cite{FGXZ}；free-field 模的局部化比较见 \cite{FGM}。边界同构与导子诱导框
+架来自此前的项目笔记 \cite{Boundary,LivingV8}，非边界结果来自
+\cite{Nonboundary}。
+
+机器检查。第~\ref{sec:basic} 节的 Takiff 作用公式经 5,866 项精确有理数检
+查（\texttt{work/check\_nonboundary\_takiff.py}），覆盖六个生成元的括号关
+系、整数参数的最高向量递推、显式局部幂零向量与纯分式共振，包含
+\(\lambda_1=0\) 且无多项式次数截断。独立地，在 2026-09-02 的验证轮次中，
+第~\ref{sec:pbw}、\ref{sec:boundary}、\ref{sec:derivation}、
+\ref{sec:critical} 节的关键公式经三个引擎（Python/SymPy、Mathematica
+14.3、GAP 4.15.1）共 76 项符号检查，全部通过：局部化公式作为对一切
+\(s,t\in\Z\) 一致的 Laurent 作用（两边都是 \(s,t\) 的次数至多三次的多项
+式，故符号恒等是精确的）、封闭交换形式、\(\sigma_k\) 对全部定义关系的自同
+构性、\(\psi\) 的特征性质、循环向量关系、链
+\(E^pF^{-1}u=(-1)^pp!\lambda_L^{\,p}F^{-p-1}u\)（多组 \((a,b)\)）、导子平移
+以及 spectral flow 公式的复合律与 \(K=-2\) 不变性。两个边界事实也已进入
+Danus 的 LLM 审查事实图（fact ID \texttt{d6bf6fef62dc8971}、
+\texttt{b388fabb701946d3}）。不声称任何 Lean/Coq 形式化；论文级定理
+（FGXZ 判据、critical 不可约性陈述、完成中心计算）仍为外部输入。
+
+\begingroup
+\raggedright
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue, K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024; journal version 2025).
+\href{https://arxiv.org/html/2404.03855v2}{arXiv full text}.
+
+\bibitem{FGM}
+V.~Futorny, D.~Grantcharov, R.~A.~Martins,
+\emph{Localization of free field realizations of affine Lie algebras},
+arXiv:1404.7148v2 (2015).
+\href{https://arxiv.org/html/1404.7148v2}{arXiv full text}.
+
+\bibitem{Boundary}
+Earlier project working notes, \emph{Boundary localization: advisor note}
+(September 2026) and \emph{Boundary localization and derivation extension}
+(September 8, 2026).
+
+\bibitem{LivingV8}
+Project living note, \emph{Smooth representations of affine Kac--Moody
+algebras: PBW bases, irreducibility, and localization tasks},
+version v8 (2026-09-02).
+
+\bibitem{Nonboundary}
+Project note, \emph{Nonboundary localization quotients of smooth affine
+\(\mathfrak{sl}_2\)-modules} (2026-09-11).
+\end{thebibliography}
+\endgroup
+\end{document}

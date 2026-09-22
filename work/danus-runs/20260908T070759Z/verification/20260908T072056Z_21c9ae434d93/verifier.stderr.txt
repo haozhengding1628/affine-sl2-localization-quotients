@@ -1,0 +1,6 @@
+2026-09-08T07:20:58.034077Z  WARN codex_core::shell_snapshot: Failed to create shell snapshot for powershell: Shell snapshot not supported yet for PowerShell
+2026-09-08T07:20:58.142586Z ERROR codex_core::session::session: failed to load skill C:\Users\perrychuh\.codex\skills\bggg-creator-image2ppt\SKILL.md: missing YAML frontmatter delimited by ---
+2026-09-08T07:20:58.142667Z ERROR codex_core::session::session: failed to load skill C:\Users\perrychuh\.codex\skills\bggg-creator-image2psd\SKILL.md: missing YAML frontmatter delimited by ---
+2026-09-08T07:20:58.142684Z ERROR codex_core::session::session: failed to load skill C:\Users\perrychuh\.codex\skills\bggg-skill-taotie\SKILL.md: missing YAML frontmatter delimited by ---
+2026-09-08T07:20:58.143538Z ERROR codex_core::session::session: failed to load skill C:\Users\perrychuh\.codex\skills\mcp-builder\SKILL.md: missing YAML frontmatter delimited by ---
+2026-09-08T07:20:58.143559Z ERROR codex_core::session::session: failed to load skill C:\Users\perrychuh\.codex\skills\read-github\SKILL.md: missing YAML frontmatter delimited by ---

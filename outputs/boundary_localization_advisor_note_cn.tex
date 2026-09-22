@@ -1,0 +1,447 @@
+% !TEX program = xelatex
+\documentclass[UTF8,11pt]{ctexart}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\hypersetup{pdftitle={边界局部化商的同构及其推广},pdfauthor={讨论笔记}}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\g}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\D}{\mathcal D}
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\Span}{\operatorname{span}_{\C}}
+\newtheorem{theorem}{定理}
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{备注}
+\setlength{\emergencystretch}{2em}
+\title{边界局部化商的同构及其推广\\
+  \large \(M_{0,0}(\psi)\cong T_{f_1}M_{-1,1}(\varphi)\)}
+\author{进展汇报笔记}
+\date{2026 年 9 月 7 日}
+
+\begin{document}
+\maketitle
+
+\section{定义、记号与假设}
+
+所有向量空间及张量积均在 \(\C\) 上。本文使用不含次数导子 \(d\) 的仿射 Lie 代数
+\[
+  \g=(\mathfrak{sl}_2\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g).
+\]
+记 \(x_i=x\otimes t^i\)。对 \(i,j\in\Z\)，其括号为
+\begin{equation}\label{eq:brackets}
+\begin{aligned}
+ [e_i,f_j]&=h_{i+j}+i\delta_{i+j,0}K,&
+ [h_i,h_j]&=2i\delta_{i+j,0}K,\\
+ [h_i,e_j]&=2e_{i+j},&
+ [h_i,f_j]&=-2f_{i+j},
+\end{aligned}
+\end{equation}
+其中 \(K\) 中心，\([e_i,e_j]=[f_i,f_j]=0\)，\(\delta\) 为 Kronecker 符号。
+
+\paragraph{诱导模。}
+取 \(a,b\in\Z\)，始终假设 \(a+b\ge0\)，并令 \(L=a+b+1\ge1\)。定义
+\[
+ S_{a,b}=\Span\{K,\ h_i\ (i\ge0),\ e_i\ (i>a),\ f_j\ (j>b)\}.
+\]
+由 \eqref{eq:brackets}，它是 Lie 子代数，且
+\[
+ [S_{a,b},S_{a,b}]
+ =\Span\{e_i\ (i>a),\ f_j\ (j>b),\ h_k\ (k\ge L+1)\}.
+\]
+因此一个特征 \(\chi:S_{a,b}\to\C\) 等价于任取
+\(c,\lambda_0,\ldots,\lambda_L\in\C\)，并规定
+\[
+ \chi(K)=c,\quad \chi(h_i)=\lambda_i\ (0\le i\le L),\quad
+ \chi(h_i)=0\ (i>L),\quad \chi(e_i)=\chi(f_j)=0.
+\]
+这里根向量的指标均取其在 \(S_{a,b}\) 中的范围，并约定 \(\lambda_i=0\)（\(i>L\)）。记
+\[
+ \C_\chi=\C 1_\chi,\qquad
+ M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad u_\chi=1\otimes1_\chi.
+\]
+其中 \(s1_\chi=\chi(s)1_\chi\)（\(s\in S_{a,b}\)）。
+特别地 \(h_0\in S_{a,b}\)，故 \(h_0u_\chi=\lambda_0u_\chi\)。
+这些定义与 \cite[\S2.3]{FGXZ} 一致。
+
+\paragraph{PBW 记号。}
+\(\Gamma_r\) 表示有限非降整数列 \(\alpha=(i_1,\ldots,i_k)\) 的集合，
+其中各 \(i_\nu\le r\)；允许空列。记
+\[
+ \ell(\alpha)=k,\qquad
+ x(\alpha)=x_{i_1}\cdots x_{i_k},\qquad x(\varnothing)=1.
+\]
+PBW 定理允许对补空间的基任取全序，再把 \(S_{a,b}\) 的基放在其后；
+相应有序单项式作用于 \(u_\chi\) 即给出诱导模的基。
+这里补空间只作为向量空间使用，无须是 Lie 子代数。
+
+\paragraph{局部化及商。}
+对边界元素 \(z=f_b\)，记 \(\Sigma_z=\{z^r:r\ge0\}\)。
+\(\ad z\) 在 \(\g\) 上、从而在 \(U\) 上局部幂零。
+有限交换公式给出左右 Ore 条件，故可定义
+\[
+ U_z=\Sigma_z^{-1}U,\qquad
+ \D_zM=U_z\otimes_U M,\qquad T_zM=\D_zM/M.
+\]
+最后一个定义用于 \(z\) 在 \(M\) 上作用单射的情形；本文由 PBW 基验证这一点。
+\(M\) 是 \(\D_zM\) 的 \(U\)-子模，故 \(T_zM\) 是 \(U\)-模。
+符号 \(z^{-m}u+M\) 总表示局部化中向量的商类，不要求 \(z^{-1}\) 在商模上作用。
+称 \(V\) 为 smooth 模，如果对每个 \(v\in V\)，存在 \(R\)，使
+\(e_rv=h_rv=f_rv=0\) 对所有 \(r\ge R\) 成立。
+
+\paragraph{基本情形与目标。}
+以下固定
+\[
+ M=M_{-1,1}(\varphi),\quad u=u_\varphi,\quad F=f_1,\quad
+ T=T_FM,\quad w_m=F^{-m}u+M\quad(m\ge1).
+\]
+记 \(c=\varphi(K)\)、\(\lambda_i=\varphi(h_i)\)（\(i\ge0\)）。此时
+\begin{equation}\label{eq:cyclic}
+ e_i u=0\ (i\ge0),\quad f_j u=0\ (j\ge2),\quad
+ h_i u=\lambda_i u\ (i\ge0),\quad Ku=cu,\quad \lambda_i=0\ (i\ge2).
+\end{equation}
+定义 \(\psi:S_{0,0}\to\C\) 为
+\[
+ \psi(K)=c,\quad \psi(h_0)=\lambda_0+2,\quad
+ \psi(h_1)=\lambda_1,\quad \psi(h_i)=0\ (i\ge2),\quad
+ \psi(f_i)=\psi(e_i)=0\ (i\ge1),
+\]
+并记 \(A=M_{0,0}(\psi)\)、\(v=1\otimes1_\psi\)。
+同构的假设是 \(\lambda_1\ne0\)；中心参数 \(c\) 任意。
+只有讨论单性时才另加 \(c\ne-2\)。
+
+为统一两侧的 PBW 指标，置
+\[
+ \mathcal X=\{X=e(\alpha)h(\beta)f(\gamma):
+       \alpha,\beta\in\Gamma_{-1},\ \gamma\in\Gamma_0\},\qquad
+ d(X)=2\ell(\alpha)+\ell(\beta).
+\]
+定义 \(B_{m,X}=F^{-m}Xu+M\)，并记向量子空间
+\begin{equation}\label{eq:filtration}
+ T_{\le q}=\Span\{B_{m,X}:m\ge1,\ d(X)\le q\}\quad(q\ge0),
+ \qquad T_{\le q}=0\quad(q<0).
+\end{equation}
+此过滤只用于比较向量，不要求各层为 \(U\)-子模。
+
+\section{基本同构及其详细证明}
+
+\begin{theorem}\label{thm:basic}
+若 \(\lambda_1\ne0\)，则
+\[
+ \Phi:A=M_{0,0}(\psi)\longrightarrow T_{f_1}M_{-1,1}(\varphi),
+ \qquad \Phi(xv)=xw_1\quad(x\in U)
+\]
+是唯一满足 \(\Phi(v)=w_1\) 的 \(\g\)-模同构。该结论对任意 \(c\in\C\) 成立。
+\end{theorem}
+
+\subsection{两侧的基及负幂交换公式}
+
+把 \(F\) 放在 \(M\) 的补空间 PBW 序最左端，得到
+\[
+ \{F^rXu:r\ge0,\ X\in\mathcal X\}
+\]
+为 \(M\) 的基。因此 \(M\) 是自由 \(\C[F]\)-模，\(F\) 作用单射。
+局部化后其基为 \(\{F^rXu:r\in\Z,\ X\in\mathcal X\}\)：
+张成性来自把每个分式通分；线性无关性来自左乘充分大的 \(F\) 次幂，
+化为 \(M\) 中的 PBW 关系。故
+\begin{equation}\label{eq:bases}
+ \{B_{m,X}:m\ge1,\ X\in\mathcal X\}\text{ 是 }T\text{ 的基},\qquad
+ \{Xe_0^pv:p\ge0,\ X\in\mathcal X\}\text{ 是 }A\text{ 的基}.
+\end{equation}
+第二组基所用的 PBW 序把 \(e_0\) 放在所有 \(X\) 因子之后、诱导子代数之前。
+特别地 \(w_1\ne0\)。
+
+置 \(D=\ad F\)。由 \eqref{eq:brackets}，
+\[
+ D(f_n)=0,\quad D(h_n)=2f_{n+1},\quad
+ D(e_n)=-(h_{n+1}+n\delta_{n+1,0}K),\quad
+ D^2(e_n)=-2f_{n+2},\quad D^3(e_n)=0.
+\]
+对 \(x\in U\) 及 \(m\ge1\)，在 \(U_F\) 中有有限和
+\begin{equation}\label{eq:commute}
+ xF^{-m}
+   =\sum_{j\ge0}\binom{m+j-1}{j}F^{-m-j}D^j(x).
+\end{equation}
+当 \(m=1\) 时，将右端右乘 \(F\)，利用
+\(D^j(x)F=FD^j(x)-D^{j+1}(x)\) 得望远镜求和，结果为 \(x\)。
+反复使用 \(m=1\) 的公式，并用
+\(\sum_{r=0}^j\binom{m+r-1}{r}=\binom{m+j}{j}\)，即得一般 \(m\)。
+
+\subsection{良定义性与模同态性质}
+
+\eqref{eq:commute} 给出
+\begin{equation}\label{eq:actions}
+\begin{aligned}
+ f_nF^{-m}&=F^{-m}f_n,\\
+ h_nF^{-m}&=F^{-m}h_n+2mF^{-m-1}f_{n+1},\\
+ e_nF^{-m}&=F^{-m}e_n
+   -mF^{-m-1}(h_{n+1}+n\delta_{n+1,0}K)
+   -m(m+1)F^{-m-2}f_{n+2}.
+\end{aligned}
+\end{equation}
+取 \(m=1\)，由 \eqref{eq:cyclic} 逐项得到
+\[
+\begin{gathered}
+ e_nw_1=f_nw_1=0\ (n\ge1),\qquad Kw_1=cw_1,\\
+ h_0w_1=(\lambda_0+2)w_1,\quad h_1w_1=\lambda_1w_1,\quad
+ h_nw_1=0\ (n\ge2).
+\end{gathered}
+\]
+其中 \(f_1w_1=u+M=0\)；
+对 \(n\ge1\)，\(e_n\) 的余项由 \(h_{n+1}u=f_{n+2}u=0\) 消去，
+\(h_n\) 的余项由 \(f_{n+1}u=0\) 消去；
+而 \(h_0\) 的余项为 \(2F^{-2}f_1u+M=2w_1\)。
+所以 \(sw_1=\psi(s)w_1\) 对所有 \(s\in S_{0,0}\) 成立。
+
+令 \(\psi_U:U(S_{0,0})\to\C\) 为 \(\psi\) 的含幺代数扩张。
+对生成元的有限乘积及其线性组合，上述关系给出
+\(aw_1=\psi_U(a)w_1\)（\(a\in U(S_{0,0})\)）。
+线性映射
+\[
+ U\otimes_\C\C_\psi\longrightarrow T,\qquad
+ x\otimes z1_\psi\longmapsto z\,xw_1
+\]
+消掉全部平衡关系，因为
+\[
+ xa\otimes z1_\psi-x\otimes a(z1_\psi)
+ \longmapsto z\,x\bigl(aw_1-\psi_U(a)w_1\bigr)=0.
+\]
+它因此下降为良定义的 \(\Phi:A\to T\)。
+对 \(y,x\in U\)，有
+\(\Phi(y(x\otimes1_\psi))=yxw_1=y\Phi(x\otimes1_\psi)\)，
+故 \(\Phi\) 是 \(U\)-模同态。唯一性由 \(A=Uv\) 得到。
+这一步不使用 \(\lambda_1\ne0\)。
+
+\subsection{每一个纯负幂的显式原像}
+
+取 \eqref{eq:actions} 中的 \(n=0\)，使用
+\(e_0u=f_2u=0\) 及 \(h_1u=\lambda_1u\)，得
+\begin{equation}\label{eq:tower}
+ e_0w_m=-m\lambda_1w_{m+1},\qquad
+ e_0^pw_1=(-1)^pp!\lambda_1^pw_{p+1}\quad(p\ge0).
+\end{equation}
+故在 \(\lambda_1\ne0\) 时，
+\begin{equation}\label{eq:preimage}
+ w_m=\Phi(q_m),\qquad
+ q_m=\frac{(-1)^{m-1}e_0^{m-1}v}{(m-1)!\lambda_1^{m-1}}\quad(m\ge1).
+\end{equation}
+这正是每个 \(f_1^{-m}u+M\) 的显式原像，尚未用到满射性。
+
+\subsection{严格下降的指标}
+
+\begin{lemma}\label{lem:lower}
+对 \(m\ge1\)、\(X\in\mathcal X\)，有
+\begin{equation}\label{eq:lower}
+ Xw_m=B_{m,X}+R_{m,X},\qquad
+ R_{m,X}\in T_{\le d(X)-1}.
+\end{equation}
+其中 \(R_{m,X}\) 是有限线性组合。
+\end{lemma}
+
+\begin{proof}
+给 \(\g\) 的生成元赋非负权
+\[
+ \wt(f_i)=0,\qquad \wt(h_i)=1,\qquad \wt(e_i)=2,\qquad \wt(K)=0,
+\]
+并以单词总权定义 \(U\) 的过滤 \(U_{\le q}\)。
+每个非零括号的权不超过输入总权：
+\([h,e]\)、\([e,f]\)、\([h,f]\)、\([h,h]\) 的权分别不超过
+\(2,1,0,0\)，对应的输入总权为 \(3,2,1,2\)。
+所以 PBW 重排不增加权；将诱导子代数的因子作用于 \(u\)，化为标量或零，
+同样不增加权。
+
+由 \(D\) 在生成元上的公式及 Leibniz 法则，
+\[
+ D(U_{\le q})\subset U_{\le q-1},\qquad
+ D^j(X)\in U_{\le d(X)-j}.
+\]
+这里负过滤层为零，故当 \(j>d(X)\) 时 \(D^j(X)=0\)。
+把 \(D^j(X)u\) 按 \(M\) 的基重排，可写成有限和
+\[
+ D^j(X)u=\sum_{r\ge0,\,X'\in\mathcal X}c_{j,r,X'}F^rX'u,
+ \qquad c_{j,r,X'}\ne0\ \Longrightarrow\ d(X')\le d(X)-j.
+\]
+代入 \eqref{eq:commute}，\(j=0\) 项恰为 \(B_{m,X}\)。
+对 \(j\ge1\)，若 \(r\ge m+j\)，相应项属于 \(M\)，在商中为零；
+否则相应项是 \(B_{m+j-r,X'}\)，且 \(d(X')<d(X)\)。
+这就证明了 \eqref{eq:lower}。
+\end{proof}
+
+\subsection{满射：对指标作强归纳}
+
+对非负整数 \(d\) 证明以下命题：
+\[
+ P(d):\quad
+ B_{m,X}\in\im\Phi\quad
+ \text{对所有 }m\ge1\text{ 及所有 }X\in\mathcal X,\ d(X)\le d.
+\]
+归纳假设始终覆盖所有分母阶数 \(m\)，故余项中的分母增大不影响归纳。
+
+当 \(d=0\) 时，\(X=f(\gamma)\)，与 \(F\) 交换。由 \eqref{eq:preimage}，
+\[
+ B_{m,X}=Xw_m=\Phi(Xq_m).
+\]
+注意初始层包括所有 \(f\)-单项式，而不只包括 \(X=1\)。
+
+设 \(d\ge1\)，并已知 \(P(d-1)\)。任取 \(m\ge1\) 及 \(d(X)=d\)。
+引理~\ref{lem:lower} 给出有限展开
+\[
+ \Phi(Xq_m)=Xw_m
+   =B_{m,X}+\sum_{\nu=1}^{s}c_\nu B_{m_\nu,X_\nu},
+ \qquad m_\nu\ge1,\quad d(X_\nu)\le d-1.
+\]
+由归纳假设，可选 \(a_\nu\in A\) 使
+\(\Phi(a_\nu)=B_{m_\nu,X_\nu}\)。因此
+\[
+ B_{m,X}
+   =\Phi\left(Xq_m-\sum_{\nu=1}^{s}c_\nu a_\nu\right).
+\]
+这证明了 \(P(d)\)，并递归构造了原像。
+每次递归使非负整数 \(d\) 严格下降，且每次只出现有限项，因此过程终止。
+由 \eqref{eq:bases} 中的商模基，\(\Phi\) 满射。
+
+例如，\(X=h_{-1}\) 时 \(d(X)=1\)，且
+\[
+ h_{-1}w_m=B_{m,h_{-1}}+2mB_{m+1,f_0}.
+\]
+右端余项的指标为零，故一个具体原像为
+\[
+ B_{m,h_{-1}}=\Phi\bigl(h_{-1}q_m-2mf_0q_{m+1}\bigr).
+\]
+这一例子也说明归纳须同时涵盖所有 \(m\)。
+
+\subsection{单射：比较最高指标层}
+
+由 \eqref{eq:tower} 和引理~\ref{lem:lower}，
+\begin{equation}\label{eq:leading}
+ \Phi(Xe_0^pv)
+  \equiv (-1)^pp!\lambda_1^pB_{p+1,X}\pmod{T_{\le d(X)-1}}.
+\end{equation}
+设 \(0\ne a=\sum_{X,p}a_{X,p}Xe_0^pv\in A\)，其中只有有限个非零系数。
+令 \(d=\max\{d(X):a_{X,p}\ne0\}\)。在 \(T_{\le d}/T_{\le d-1}\) 中，
+\[
+ \Phi(a)+T_{\le d-1}
+  =\sum_{\substack{X,p\\d(X)=d}}
+    a_{X,p}(-1)^pp!\lambda_1^p\bigl(B_{p+1,X}+T_{\le d-1}\bigr).
+\]
+这些商类由 \eqref{eq:bases} 线性无关，而且 \((-1)^pp!\lambda_1^p\ne0\)；
+故右端非零。因此 \(\Phi(a)\ne0\)，\(\Phi\) 单射，定理~\ref{thm:basic} 得证。
+整个论证只对有限线性组合取最高层，不需要过滤层有限维。
+
+\section{直接推广}
+
+\subsection{任意 \texorpdfstring{\((-1,N)\)}{(-1,N)} 的边界}
+
+\begin{theorem}\label{thm:N}
+令 \(N\ge1\)、\(M=M_{-1,N}(\varphi)\)，记
+\(u=u_\varphi\)、\(c=\varphi(K)\)、\(\lambda_i=\varphi(h_i)\)。
+假设 \(\lambda_N\ne0\)。在 \(S_{0,N-1}\) 上定义特征
+\[
+ \psi(K)=c,\qquad \psi(h_i)=\lambda_i+2\delta_{i,0}\ (i\ge0),\qquad
+ \psi(e_i)=0\ (i\ge1),\quad \psi(f_j)=0\ (j\ge N).
+\]
+则
+\[
+ \Phi_N:M_{0,N-1}(\psi)\xrightarrow{\ \sim\ }T_{f_N}M_{-1,N}(\varphi),
+ \qquad v\longmapsto f_N^{-1}u+M.
+\]
+\end{theorem}
+
+\begin{proof}
+置 \(F=f_N\)、\(w_m=F^{-m}u+M\)。
+在上述交换公式中，分别将 \(n+1,n+2\) 换为 \(n+N,n+2N\)。
+此时 \(e_iu=0\ (i\ge0)\)、\(f_ju=0\ (j>N)\)、\(\lambda_i=0\ (i>N)\)。
+所以 \(e_iw_1=0\ (i\ge1)\)、\(f_jw_1=0\ (j\ge N)\)，
+其中 \(f_Nw_1=u+M=0\)；同时
+\[
+ h_iw_1=(\lambda_i+2\delta_{i,0})w_1\ (i\ge0),\qquad Kw_1=cw_1.
+\]
+这些关系及平衡张量积论证给出良定义的模同态 \(\Phi_N\)。
+又由 \(e_0u=f_{2N}u=0\)，
+\[
+ e_0w_m=-m\lambda_Nw_{m+1},\qquad
+ w_m=\Phi_N\left(
+   \frac{(-1)^{m-1}e_0^{m-1}v}{(m-1)!\lambda_N^{m-1}}\right).
+\]
+将 \(\mathcal X\) 换为
+\[
+ \mathcal X_N=\{e(\alpha)h(\beta)f(\gamma):
+       \alpha,\beta\in\Gamma_{-1},\ \gamma\in\Gamma_{N-1}\}.
+\]
+目标及源的基分别为 \(\{F^{-m}Xu+M\}\) 和 \(\{Xe_0^pv\}\)。
+仍取 \(d(X)=2\ell(\alpha)+\ell(\beta)\)，则 \(\ad f_N\) 使权至少下降一，
+PBW 重排及诱导关系不增加权。因此引理~\ref{lem:lower} 原样成立。
+同一强归纳证明满射；最高层系数为
+\((-1)^pp!\lambda_N^p\ne0\)，证明单射。
+\end{proof}
+
+\subsection{一般边界的一步移动}
+
+\begin{corollary}\label{cor:general}
+取 \(a,b\in\Z\)、\(a+b\ge0\)，令 \(L=a+b+1\)，
+\(M=M_{a,b}(\chi)\)、\(u=u_\chi\)。若 \(\lambda_L=\chi(h_L)\ne0\)，则
+\[
+ M_{a+1,b-1}(\chi^+)\xrightarrow{\ \sim\ }T_{f_b}M,\qquad
+ v\longmapsto f_b^{-1}u+M,
+\]
+其中 \(\chi^+\) 在 \(S_{a+1,b-1}\) 上所有根向量处取值零，且
+\[
+ \chi^+(K)=c,\qquad \chi^+(h_i)=\lambda_i+2\delta_{i,0}\quad(i\ge0).
+\]
+\end{corollary}
+
+\begin{proof}
+取 \(F=f_b\)、\(Y=e_{a+1}\)、\(w_m=F^{-m}u+M\)。
+对 \(i\ge a+2\)，交换 \(e_i\) 与 \(F^{-1}\) 产生的 Cartan 指标
+\(i+b\ge L+1\)，所以该项及中心项为零；其余项含 \(f_{i+2b}u=0\)，
+因为 \(i+2b>b\)。其余诱导关系为
+\[
+ f_jw_1=0\ (j\ge b),\qquad
+ h_iw_1=(\lambda_i+2\delta_{i,0})w_1\ (i\ge0),\qquad Kw_1=cw_1.
+\]
+故映射良定义。因 \(Yu=0\)、\(L>0\)、\(f_{a+1+2b}u=0\)，有
+\[
+ Yw_m=-m\lambda_Lw_{m+1}.
+\]
+余下论证取
+\[
+ \mathcal X_{a,b}=\{e(\alpha)h(\beta)f(\gamma):
+      \alpha\in\Gamma_a,\ \beta\in\Gamma_{-1},\ \gamma\in\Gamma_{b-1}\}
+\]
+及源基 \(\{XY^pv\}\)。\(\ad f_b\) 仍严格降低
+\(d(X)=2\ell(\alpha)+\ell(\beta)\)，故相同的满射归纳与最高层比较适用，
+对角系数为 \((-1)^pp!\lambda_L^p\ne0\)。
+\end{proof}
+
+\subsection{Smooth 性、单性及假设的作用}
+
+上述诱导模都是 smooth 模：对每个有限 PBW 单词，把充分高的
+\(e_r,h_r,f_r\) 移到右端后，所有出现的非中心模式仍充分高，因而杀掉诱导向量；
+所需阈值依赖该单词。已证同构因此也给出局部化商的 smooth 性。
+
+由 \cite[Theorem~1.1]{FGXZ}，当 \(a+b\ge0\) 时，
+\[
+ M_{a,b}(\chi)\text{ 单}\quad\Longleftrightarrow\quad
+ \lambda_{a+b+1}\ne0\ \text{且}\ c\ne-2.
+\]
+在推论~\ref{cor:general} 的 \(\lambda_L\ne0\) 假设下，
+边界商单当且仅当 \(c\ne-2\)。临界层 \(c=-2\) 仍有同构；
+本证明的单射部分未使用单性。
+
+若 \(\lambda_1=0\)，基本情形的模同态仍存在，但
+\(\Phi(e_0v)=e_0w_1=0\)，而 \(e_0v\ne0\) 由源模 PBW 基可知。
+故这一指定生成向量的映射不是同构。
+
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024), \S2.3 and Theorem~1.1.
+\url{https://arxiv.org/abs/2404.03855v2}.
+\end{thebibliography}
+\end{document}

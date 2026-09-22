@@ -1,0 +1,23 @@
+[
+  "C:\\Users\\perrychuh\\AppData\\Local\\OpenAI\\Codex\\bin\\8e5b6932251c2c1c\\codex.EXE",
+  "exec",
+  "--ignore-user-config",
+  "--ephemeral",
+  "--skip-git-repo-check",
+  "--sandbox",
+  "read-only",
+  "-c",
+  "approval_policy=\"never\"",
+  "-c",
+  "model_reasoning_effort=\"high\"",
+  "-C",
+  "C:\\Users\\perrychuh\\Documents\\Codex\\2026-09-02\\well-definess-smooth-kac-moody-latex\\work\\danus-runs\\20260908T070759Z\\verification\\20260908T072056Z_21c9ae434d93",
+  "--color",
+  "never",
+  "--json",
+  "--output-schema",
+  "C:\\Users\\perrychuh\\Documents\\Codex\\2026-09-02\\well-definess-smooth-kac-moody-latex\\work\\danus-runs\\20260908T070759Z\\verification\\20260908T072056Z_21c9ae434d93\\verifier.schema.json",
+  "--output-last-message",
+  "C:\\Users\\perrychuh\\Documents\\Codex\\2026-09-02\\well-definess-smooth-kac-moody-latex\\work\\danus-runs\\20260908T070759Z\\verification\\20260908T072056Z_21c9ae434d93\\verifier.json",
+  "-"
+]

@@ -1,0 +1,473 @@
+% !TEX program = xelatex
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\hypersetup{pdftitle={Boundary localization quotients and induced modules},pdfauthor={Discussion note}}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\g}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\D}{\mathcal D}
+\newcommand{\wt}{\operatorname{wt}}
+\newcommand{\Span}{\operatorname{span}_{\C}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\setlength{\emergencystretch}{2em}
+\title{Boundary Localization Quotients and Induced Modules\\
+  \large \(M_{0,0}(\psi)\cong T_{f_1}M_{-1,1}(\varphi)\)}
+\author{Progress report}
+\date{September 7, 2026}
+\begin{document}
+\maketitle
+
+\section{Definitions, notation, and assumptions}
+
+All vector spaces and tensor products are over \(\C\). We use the affine Lie
+algebra without the degree derivation:
+\[
+ \g=(\mathfrak{sl}_2\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g).
+\]
+Write \(x_i=x\otimes t^i\). For \(i,j\in\Z\), the brackets are
+\begin{equation}\label{eq:brackets}
+\begin{aligned}
+ [e_i,f_j]&=h_{i+j}+i\delta_{i+j,0}K,&
+ [h_i,h_j]&=2i\delta_{i+j,0}K,\\
+ [h_i,e_j]&=2e_{i+j},&
+ [h_i,f_j]&=-2f_{i+j},
+\end{aligned}
+\end{equation}
+with \(K\) central and \([e_i,e_j]=[f_i,f_j]=0\);
+\(\delta\) denotes the Kronecker delta.
+
+\paragraph{Induced modules.}
+Fix \(a,b\in\Z\) with \(a+b\ge0\), and put \(L=a+b+1\ge1\). Set
+\[
+ S_{a,b}=\Span\{K,\ h_i\ (i\ge0),\ e_i\ (i>a),\ f_j\ (j>b)\}.
+\]
+The brackets show that this is a Lie subalgebra, with
+\[
+ [S_{a,b},S_{a,b}]
+ =\Span\{e_i\ (i>a),\ f_j\ (j>b),\ h_k\ (k\ge L+1)\}.
+\]
+Thus a character \(\chi:S_{a,b}\to\C\) is specified by arbitrary
+\(c,\lambda_0,\ldots,\lambda_L\in\C\), through
+\[
+ \chi(K)=c,\quad \chi(h_i)=\lambda_i\ (0\le i\le L),\quad
+ \chi(h_i)=0\ (i>L),\quad \chi(e_i)=\chi(f_j)=0,
+\]
+where the root vectors range over those in \(S_{a,b}\).
+Set \(\lambda_i=0\) for \(i>L\). Define
+\[
+ \C_\chi=\C 1_\chi,\qquad
+ M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad u_\chi=1\otimes1_\chi.
+\]
+Here \(s1_\chi=\chi(s)1_\chi\) for \(s\in S_{a,b}\).
+In particular, \(h_0\in S_{a,b}\), so \(h_0u_\chi=\lambda_0u_\chi\).
+These conventions agree with \cite[\S2.3]{FGXZ}.
+
+\paragraph{PBW notation.}
+Let \(\Gamma_r\) be the set of finite nondecreasing integer sequences
+\(\alpha=(i_1,\ldots,i_k)\) with \(i_\nu\le r\), including the empty sequence.
+Write
+\[
+ \ell(\alpha)=k,\qquad x(\alpha)=x_{i_1}\cdots x_{i_k},\qquad
+ x(\varnothing)=1.
+\]
+Choose any total order on a basis of a vector-space complement of \(S_{a,b}\),
+followed by a basis of \(S_{a,b}\). PBW gives a basis of the induced module
+by the corresponding ordered complement monomials applied to \(u_\chi\).
+The complement need not be a Lie subalgebra.
+
+\paragraph{Localization and its quotient.}
+For the boundary element \(F=f_b\), let \(\Sigma_F=\{F^r:r\ge0\}\).
+The derivation \(\ad F\) is locally nilpotent on \(\g\), hence on \(U\).
+The finite commutation formulas imply the left and right Ore conditions, so set
+\[
+ U_F=\Sigma_F^{-1}U,\qquad
+ \D_FM=U_F\otimes_U M,\qquad T_FM=\D_FM/M.
+\]
+The quotient notation assumes that \(F\) acts injectively on \(M\), which
+we verify below by PBW. Since \(M\) is a \(U\)-submodule of \(\D_FM\),
+the quotient is a \(U\)-module.
+The expression \(F^{-m}u+M\) always denotes a coset of a vector in the
+localization; it does not assert that \(F^{-1}\) acts on the quotient.
+A module \(V\) is smooth if each \(v\in V\) is annihilated by
+\(e_r,h_r,f_r\) for all sufficiently large \(r\).
+
+\paragraph{The basic case.}
+Fix
+\[
+ M=M_{-1,1}(\varphi),\quad u=u_\varphi,\quad F=f_1,\quad
+ T=T_FM,\quad w_m=F^{-m}u+M\quad(m\ge1),
+\]
+and write \(c=\varphi(K)\), \(\lambda_i=\varphi(h_i)\) for \(i\ge0\). Then
+\begin{equation}\label{eq:cyclic}
+\begin{gathered}
+ e_i u=0\ (i\ge0),\qquad f_j u=0\ (j\ge2),\\
+ h_i u=\lambda_i u\ (i\ge0),\qquad Ku=cu,\qquad \lambda_i=0\ (i\ge2).
+\end{gathered}
+\end{equation}
+Define \(\psi:S_{0,0}\to\C\) by
+\[
+\begin{gathered}
+ \psi(K)=c,\qquad \psi(h_0)=\lambda_0+2,\qquad
+ \psi(h_1)=\lambda_1,\qquad \psi(h_i)=0\ (i\ge2),\\
+ \psi(e_i)=\psi(f_i)=0\qquad(i\ge1),
+\end{gathered}
+\]
+and put \(A=M_{0,0}(\psi)\), \(v=1\otimes1_\psi\).
+The isomorphism requires \(\lambda_1\ne0\); the level \(c\) is arbitrary.
+The additional condition \(c\ne-2\) is used only for simplicity.
+
+For common PBW indices on the source and target, set
+\[
+ \mathcal X=\{X=e(\alpha)h(\beta)f(\gamma):
+     \alpha,\beta\in\Gamma_{-1},\ \gamma\in\Gamma_0\},\qquad
+ d(X)=2\ell(\alpha)+\ell(\beta).
+\]
+Write \(B_{m,X}=F^{-m}Xu+M\), and define vector subspaces
+\begin{equation}\label{eq:filtration}
+ T_{\le q}=\Span\{B_{m,X}:m\ge1,\ d(X)\le q\}\quad(q\ge0),
+ \qquad T_{\le q}=0\quad(q<0).
+\end{equation}
+This is a vector-space filtration; its terms need not be \(U\)-submodules.
+
+\section{The basic isomorphism}
+
+\begin{theorem}\label{thm:basic}
+If \(\lambda_1\ne0\), the assignment
+\[
+ \Phi:A=M_{0,0}(\psi)\longrightarrow T_{f_1}M_{-1,1}(\varphi),
+ \qquad \Phi(xv)=xw_1\quad(x\in U)
+\]
+is the unique \(\g\)-module isomorphism sending \(v\) to \(w_1\).
+This holds for every \(c\in\C\).
+\end{theorem}
+
+\subsection{Bases and commutation with negative powers}
+
+Put \(F\) first in the complement PBW order for \(M\). Then
+\[
+ \{F^rXu:r\ge0,\ X\in\mathcal X\}
+\]
+is a basis of \(M\). Consequently \(M\) is free over \(\C[F]\), and \(F\)
+acts injectively.
+The localization has basis \(\{F^rXu:r\in\Z,\ X\in\mathcal X\}\):
+common denominators give spanning, and multiplying a finite relation on
+the left by a sufficiently large power of \(F\) reduces independence to PBW in \(M\).
+It follows that
+\begin{equation}\label{eq:bases}
+\begin{aligned}
+ &\{B_{m,X}:m\ge1,\ X\in\mathcal X\}&&\text{is a basis of }T,\\
+ &\{Xe_0^pv:p\ge0,\ X\in\mathcal X\}&&\text{is a basis of }A.
+\end{aligned}
+\end{equation}
+For the second basis, place \(e_0\) after all factors of \(X\) and before
+the inducing subalgebra. In particular, \(w_1\ne0\).
+
+Put \(D=\ad F\). The brackets give
+\begin{equation}\label{eq:ad}
+\begin{aligned}
+ D(f_n)&=0,& D(h_n)&=2f_{n+1},\\
+ D(e_n)&=-(h_{n+1}+n\delta_{n+1,0}K),&
+ D^2(e_n)&=-2f_{n+2},\qquad D^3(e_n)=0.
+\end{aligned}
+\end{equation}
+For \(x\in U\), \(m\ge1\), the following finite sum is an identity in \(U_F\):
+\begin{equation}\label{eq:commute}
+ xF^{-m}=\sum_{j\ge0}\binom{m+j-1}{j}F^{-m-j}D^j(x).
+\end{equation}
+For \(m=1\), multiply the right-hand side on the right by \(F\) and use
+\(D^j(x)F=FD^j(x)-D^{j+1}(x)\); the sum telescopes to \(x\).
+Iteration gives the formula for general \(m\), using
+\(\sum_{r=0}^j\binom{m+r-1}{r}=\binom{m+j}{j}\).
+
+\subsection{Well-definedness and the module homomorphism}
+
+Equation \eqref{eq:commute} gives
+\begin{equation}\label{eq:actions}
+\begin{aligned}
+ f_nF^{-m}&=F^{-m}f_n,\\
+ h_nF^{-m}&=F^{-m}h_n+2mF^{-m-1}f_{n+1},\\
+ e_nF^{-m}&=F^{-m}e_n
+  -mF^{-m-1}(h_{n+1}+n\delta_{n+1,0}K)
+  -m(m+1)F^{-m-2}f_{n+2}.
+\end{aligned}
+\end{equation}
+Taking \(m=1\) and applying \eqref{eq:cyclic} yields
+\[
+\begin{gathered}
+ e_nw_1=f_nw_1=0\ (n\ge1),\qquad Kw_1=cw_1,\\
+ h_0w_1=(\lambda_0+2)w_1,\qquad h_1w_1=\lambda_1w_1,\qquad
+ h_nw_1=0\ (n\ge2).
+\end{gathered}
+\]
+Indeed, \(f_1w_1=u+M=0\). For \(n\ge1\), the correction terms for \(e_n\)
+vanish because \(h_{n+1}u=f_{n+2}u=0\); those for \(h_n\) vanish because
+\(f_{n+1}u=0\). The correction for \(h_0\) is
+\(2F^{-2}f_1u+M=2w_1\).
+Thus \(sw_1=\psi(s)w_1\) for all \(s\in S_{0,0}\).
+
+Let \(\psi_U:U(S_{0,0})\to\C\) be the unital algebra character extending
+\(\psi\). Applying the preceding relation to finite products and linear
+combinations gives \(aw_1=\psi_U(a)w_1\) for every \(a\in U(S_{0,0})\).
+The linear map
+\[
+ U\otimes_\C\C_\psi\longrightarrow T,\qquad
+ x\otimes z1_\psi\longmapsto z\,xw_1
+\]
+kills every balancing relation, since
+\[
+ xa\otimes z1_\psi-x\otimes a(z1_\psi)
+ \longmapsto z\,x(aw_1-\psi_U(a)w_1)=0.
+\]
+It therefore descends to a well-defined \(\Phi:A\to T\).
+For \(y,x\in U\),
+\(\Phi(y(x\otimes1_\psi))=yxw_1=y\Phi(x\otimes1_\psi)\),
+so \(\Phi\) is \(U\)-linear. Uniqueness follows from \(A=Uv\).
+No nonvanishing assumption on \(\lambda_1\) has been used at this stage.
+
+\subsection{Explicit preimages of all pure negative powers}
+
+Taking \(n=0\) in \eqref{eq:actions}, and using
+\(e_0u=f_2u=0\), \(h_1u=\lambda_1u\), gives
+\begin{equation}\label{eq:tower}
+ e_0w_m=-m\lambda_1w_{m+1},\qquad
+ e_0^pw_1=(-1)^pp!\lambda_1^pw_{p+1}\quad(p\ge0).
+\end{equation}
+Since \(\lambda_1\ne0\), we have
+\begin{equation}\label{eq:preimage}
+ w_m=\Phi(q_m),\qquad
+ q_m=\frac{(-1)^{m-1}}{(m-1)!\lambda_1^{m-1}}e_0^{m-1}v\quad(m\ge1).
+\end{equation}
+This explicitly gives a preimage of each \(f_1^{-m}u+M\), without assuming
+surjectivity.
+
+\subsection{A strictly decreasing integer}
+
+\begin{lemma}\label{lem:lower}
+For \(m\ge1\) and \(X\in\mathcal X\),
+\begin{equation}\label{eq:lower}
+ Xw_m=B_{m,X}+R_{m,X},\qquad R_{m,X}\in T_{\le d(X)-1},
+\end{equation}
+where \(R_{m,X}\) is a finite linear combination.
+\end{lemma}
+
+\begin{proof}
+Assign nonnegative weights
+\[
+ \wt(e_i)=2,\qquad \wt(h_i)=1,\qquad \wt(f_i)=0,\qquad \wt(K)=0,
+\]
+and filter \(U\) by total word weight, writing \(U_{\le q}=0\) for \(q<0\).
+Each bracket has weight at most the sum of its input weights:
+for \([h,e]\), \([e,f]\), \([h,f]\), and \([h,h]\), the output weights
+are at most \(2,1,0,0\), whereas the input sums are \(3,2,1,2\).
+Thus PBW reordering never increases weight. Neither does evaluating
+the inducing factors on \(u\), where they become scalars or zero.
+
+Equation \eqref{eq:ad} and the Leibniz rule give
+\[
+ D(U_{\le q})\subset U_{\le q-1},\qquad
+ D^j(X)\in U_{\le d(X)-j}.
+\]
+In particular \(D^j(X)=0\) for \(j>d(X)\). Expanding in the PBW basis of \(M\),
+we obtain a finite sum
+\[
+ D^j(X)u=\sum_{r\ge0,\,X'\in\mathcal X}c_{j,r,X'}F^rX'u,\qquad
+ c_{j,r,X'}\ne0\ \Longrightarrow\ d(X')\le d(X)-j.
+\]
+Substitute this into \eqref{eq:commute}. The \(j=0\) term is exactly \(B_{m,X}\).
+For \(j\ge1\), a term with \(r\ge m+j\) belongs to \(M\) and vanishes in \(T\).
+Every surviving term is \(B_{m+j-r,X'}\), with \(d(X')<d(X)\).
+This proves \eqref{eq:lower}.
+\end{proof}
+
+\subsection{Surjectivity by strong induction}
+
+For \(d\ge0\), prove the statement
+\[
+ P(d):\quad B_{m,X}\in\im\Phi
+ \quad\text{for every }m\ge1\text{ and every }X\in\mathcal X
+ \text{ with }d(X)\le d.
+\]
+The induction hypothesis includes all denominator exponents simultaneously;
+an increase in the denominator exponent of a correction term is therefore harmless.
+
+For \(d=0\), we have \(X=f(\gamma)\), which commutes with \(F\). Hence
+\[
+ B_{m,X}=Xw_m=\Phi(Xq_m).
+\]
+The base case includes every \(f\)-monomial, not just \(X=1\).
+
+Suppose \(d\ge1\) and \(P(d-1)\) holds. Fix \(m\ge1\) and \(d(X)=d\).
+Lemma~\ref{lem:lower} gives a finite expansion
+\[
+ \Phi(Xq_m)=B_{m,X}+\sum_{\nu=1}^{s}c_\nu B_{m_\nu,X_\nu},
+ \qquad m_\nu\ge1,\quad d(X_\nu)\le d-1.
+\]
+By induction, choose \(a_\nu\in A\) with
+\(\Phi(a_\nu)=B_{m_\nu,X_\nu}\). Then
+\[
+ B_{m,X}=\Phi\left(Xq_m-\sum_{\nu=1}^{s}c_\nu a_\nu\right).
+\]
+This proves \(P(d)\) and recursively constructs a preimage.
+Each recursion involves finitely many terms and strictly decreases the
+nonnegative integer \(d\), so it terminates.
+The target basis in \eqref{eq:bases} proves surjectivity.
+
+For example, \(d(h_{-1})=1\), and
+\[
+ h_{-1}w_m=B_{m,h_{-1}}+2mB_{m+1,f_0}.
+\]
+The correction has degree zero, giving the concrete preimage
+\[
+ B_{m,h_{-1}}=\Phi(h_{-1}q_m-2mf_0q_{m+1}).
+\]
+This also illustrates why the induction must include all \(m\).
+
+\subsection{Injectivity by the highest degree}
+
+By \eqref{eq:tower} and Lemma~\ref{lem:lower},
+\begin{equation}\label{eq:leading}
+ \Phi(Xe_0^pv)\equiv(-1)^pp!\lambda_1^p B_{p+1,X}
+       \pmod{T_{\le d(X)-1}}.
+\end{equation}
+Let \(0\ne a=\sum_{X,p}a_{X,p}Xe_0^pv\in A\), a finite sum, and let
+\(d=\max\{d(X):a_{X,p}\ne0\}\). In \(T_{\le d}/T_{\le d-1}\),
+\[
+ \Phi(a)+T_{\le d-1}
+ =\sum_{\substack{X,p\\d(X)=d}}
+    a_{X,p}(-1)^pp!\lambda_1^p
+       (B_{p+1,X}+T_{\le d-1}).
+\]
+These cosets are linearly independent by \eqref{eq:bases}, and
+\((-1)^pp!\lambda_1^p\ne0\). Thus \(\Phi(a)\ne0\), proving injectivity
+and Theorem~\ref{thm:basic}.
+Only finite linear combinations are used; the filtration terms need not be
+finite-dimensional.
+
+\section{Direct extensions}
+
+\subsection{The boundary of \texorpdfstring{\(M_{-1,N}\)}{M(-1,N)}}
+
+\begin{theorem}\label{thm:N}
+Let \(N\ge1\), \(M=M_{-1,N}(\varphi)\), \(u=u_\varphi\),
+\(c=\varphi(K)\), and \(\lambda_i=\varphi(h_i)\).
+Assume \(\lambda_N\ne0\). Define \(\psi:S_{0,N-1}\to\C\) by
+\[
+\begin{gathered}
+ \psi(K)=c,\qquad \psi(h_i)=\lambda_i+2\delta_{i,0}\quad(i\ge0),\\
+ \psi(e_i)=0\quad(i\ge1),\qquad \psi(f_j)=0\quad(j\ge N).
+\end{gathered}
+\]
+Then there is an isomorphism
+\[
+ \Phi_N:M_{0,N-1}(\psi)\xrightarrow{\ \sim\ }T_{f_N}M_{-1,N}(\varphi),
+ \qquad v\longmapsto f_N^{-1}u+M.
+\]
+\end{theorem}
+
+\begin{proof}
+Put \(F=f_N\), \(w_m=F^{-m}u+M\). In the commutation formulas, replace
+\(n+1,n+2\) by \(n+N,n+2N\), respectively. Now
+\(e_iu=0\) for \(i\ge0\), \(f_ju=0\) for \(j>N\), and
+\(\lambda_i=0\) for \(i>N\).
+Consequently \(e_iw_1=0\) for \(i\ge1\) and \(f_jw_1=0\) for \(j\ge N\);
+at the boundary \(f_Nw_1=u+M=0\). Also
+\[
+ h_iw_1=(\lambda_i+2\delta_{i,0})w_1\quad(i\ge0),\qquad Kw_1=cw_1.
+\]
+These relations give the well-defined homomorphism \(\Phi_N\) by the
+balancing argument. Since \(e_0u=f_{2N}u=0\),
+\[
+ e_0w_m=-m\lambda_Nw_{m+1},\qquad
+ w_m=\Phi_N\left(\frac{(-1)^{m-1}e_0^{m-1}v}
+                         {(m-1)!\lambda_N^{m-1}}\right).
+\]
+Replace \(\mathcal X\) by
+\[
+ \mathcal X_N=\{e(\alpha)h(\beta)f(\gamma):
+      \alpha,\beta\in\Gamma_{-1},\ \gamma\in\Gamma_{N-1}\}.
+\]
+The target and source bases are \(\{F^{-m}Xu+M\}\) and \(\{Xe_0^pv\}\).
+The same degree \(d(X)=2\ell(\alpha)+\ell(\beta)\) is strictly lowered by
+\(\ad f_N\), while reordering and inducing relations do not increase it.
+Thus Lemma~\ref{lem:lower} applies unchanged. The same strong induction
+proves surjectivity, and the highest-degree coefficients
+\((-1)^pp!\lambda_N^p\ne0\) prove injectivity.
+\end{proof}
+
+\subsection{A single step at an arbitrary boundary}
+
+\begin{corollary}\label{cor:general}
+Let \(a,b\in\Z\), \(a+b\ge0\), \(L=a+b+1\), \(M=M_{a,b}(\chi)\),
+and \(u=u_\chi\). If \(\lambda_L=\chi(h_L)\ne0\), then
+\[
+ M_{a+1,b-1}(\chi^+)\xrightarrow{\ \sim\ }T_{f_b}M,\qquad
+ v\longmapsto f_b^{-1}u+M,
+\]
+where \(\chi^+\) vanishes on all root vectors in \(S_{a+1,b-1}\), and
+\[
+ \chi^+(K)=c,\qquad \chi^+(h_i)=\lambda_i+2\delta_{i,0}\quad(i\ge0).
+\]
+\end{corollary}
+
+\begin{proof}
+Set \(F=f_b\), \(Y=e_{a+1}\), \(w_m=F^{-m}u+M\).
+For \(i\ge a+2\), commuting \(e_i\) past \(F^{-1}\) gives a Cartan index
+\(i+b\ge L+1\), so the Cartan and central terms vanish on \(u\).
+The remaining correction vanishes because \(i+2b>b\), hence
+\(f_{i+2b}u=0\).
+The other inducing relations are
+\[
+ f_jw_1=0\ (j\ge b),\quad
+ h_iw_1=(\lambda_i+2\delta_{i,0})w_1\ (i\ge0),\quad Kw_1=cw_1.
+\]
+Thus the homomorphism is well defined. Since \(Yu=0\), \(L>0\), and
+\(f_{a+1+2b}u=0\), we obtain \(Yw_m=-m\lambda_Lw_{m+1}\).
+Use
+\[
+ \mathcal X_{a,b}=\{e(\alpha)h(\beta)f(\gamma):
+    \alpha\in\Gamma_a,\ \beta\in\Gamma_{-1},\ \gamma\in\Gamma_{b-1}\}
+\]
+and the source basis \(\{XY^pv\}\).
+The derivation \(\ad f_b\) strictly lowers
+\(d(X)=2\ell(\alpha)+\ell(\beta)\), so the same surjectivity induction and
+highest-degree comparison apply, with coefficient
+\((-1)^pp!\lambda_L^p\ne0\).
+\end{proof}
+
+\subsection{Smoothness, simplicity, and the assumptions}
+
+The induced modules above are smooth. Indeed, move sufficiently high modes
+past a fixed finite PBW word; all resulting noncentral modes still have
+sufficiently high indices and annihilate the inducing vector.
+The bound depends on the word. The isomorphisms therefore also establish
+smoothness of the localization quotients.
+
+By \cite[Theorem~1.1]{FGXZ}, for \(a+b\ge0\),
+\[
+ M_{a,b}(\chi)\text{ is simple}\quad\Longleftrightarrow\quad
+ \lambda_{a+b+1}\ne0\text{ and }c\ne-2.
+\]
+Under the hypothesis \(\lambda_L\ne0\) of Corollary~\ref{cor:general},
+the boundary quotient is simple if and only if \(c\ne-2\).
+The isomorphism remains valid at the critical level \(c=-2\);
+its injectivity was proved without using simplicity.
+
+If \(\lambda_1=0\), the basic homomorphism still exists, but
+\(\Phi(e_0v)=e_0w_1=0\), whereas \(e_0v\ne0\) by the source PBW basis.
+Thus the specified map is not an isomorphism.
+
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024), \S2.3 and Theorem~1.1.
+\url{https://arxiv.org/abs/2404.03855v2}.
+\end{thebibliography}
+\end{document}

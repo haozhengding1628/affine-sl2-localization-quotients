@@ -1,0 +1,515 @@
+% !TEX program = xelatex
+\documentclass[UTF8,11pt]{ctexart}
+\usepackage[a4paper,margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black,citecolor=blue!50!black]{hyperref}
+\newcommand{\C}{\mathbb C}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\g}{\widehat{\mathfrak{sl}}_2}
+\newcommand{\gt}{\widetilde{\mathfrak{sl}}_2}
+\newcommand{\ad}{\operatorname{ad}}
+\newcommand{\Span}{\operatorname{span}_{\C}}
+\newcommand{\I}{\mathcal I}
+\newcommand{\D}{\mathcal D}
+\newcommand{\wt}{\operatorname{wt}}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\theoremstyle{definition}
+\newtheorem{remark}[theorem]{说明}
+\setlength{\emergencystretch}{2em}
+\title{边界局部化的推广与次数导子的加入}
+\author{研究补充笔记}
+\date{2026 年 9 月 8 日}
+\begin{document}
+\maketitle
+
+\section{定义与问题的精确形式}
+
+所有空间及张量积均在 \(\C\) 上。不含次数导子的代数记为
+\[
+ \g=(\mathfrak{sl}_2\otimes\C[t,t^{-1}])\oplus\C K,\qquad U=U(\g).
+\]
+对 \(x\in\{e,h,f\}\)，记 \(x_r=x\otimes t^r\)。括号约定为
+\begin{equation}\label{eq:brackets}
+\begin{aligned}
+ [e_r,f_s]&=h_{r+s}+r\delta_{r+s,0}K,&[h_r,h_s]&=2r\delta_{r+s,0}K,\\
+ [h_r,e_s]&=2e_{r+s},&[h_r,f_s]&=-2f_{r+s},
+\end{aligned}
+\end{equation}
+且 \(K\) 中心，\([e_r,e_s]=[f_r,f_s]=0\)。加入次数导子后，
+\[
+ \gt=\g\rtimes\C d,\qquad [d,x_r]=r x_r,\quad[d,K]=0,
+ \qquad\widetilde U=U(\gt).
+\]
+
+取 \(a,b\in\Z\)，假设 \(a+b\ge0\)，置 \(L=a+b+1\ge1\)。定义
+\[
+ S_{a,b}=\Span\{K,h_i\ (i\ge0),e_i\ (i>a),f_j\ (j>b)\}.
+\]
+由括号，它是 Lie 子代数，且导出代数为
+\[
+ [S_{a,b},S_{a,b}]=\Span\{e_i\ (i>a),f_j\ (j>b),h_k\ (k\ge L+1)\}.
+\]
+任取 \(c,\lambda_0,\ldots,\lambda_L\in\C\)，约定 \(\lambda_i=0\)（\(i>L\)）。
+特征 \(\chi:S_{a,b}\to\C\) 由
+\[
+ \chi(K)=c,\qquad\chi(h_i)=\lambda_i\ (i\ge0),\qquad
+ \chi(e_i)=\chi(f_j)=0
+\]
+确定；根向量指标取其在 \(S_{a,b}\) 中的范围。令
+\[
+ M_{a,b}(\chi)=U\otimes_{U(S_{a,b})}\C_\chi,\qquad
+ \C_\chi=\C1_\chi,\quad s1_\chi=\chi(s)1_\chi,\quad u=1\otimes1_\chi.
+\]
+特别地，\(h_0\) 属于诱导子代数。这些约定与 \cite[\S2.3]{FGXZ} 一致。
+主同构假设为 \(\lambda_L\ne0\)，中心参数 \(c\) 任意。
+
+对 \(F=f_n\)，记 Ore 局部化及局部化商为
+\[
+ U_F=U[F^{-1}],\qquad \D_FM=U_F\otimes_U M,\qquad
+ T_FM=\operatorname{coker}(M\longrightarrow\D_FM).
+\]
+当 \(F\) 作用单射时，将 \(M\) 视作 \(\D_FM\) 的子模，写 \(T_FM=\D_FM/M\)。
+含 \(d\) 时用 \(\widetilde U_F\) 作相同定义。商中的 \(F^{-m}u+M\) 是向量的商类，
+不意味着 \(F^{-1}\) 在商模上作用。称模 \(V\) 为 smooth，若每个 \(v\in V\)
+都被所有充分高的 \(e_r,h_r,f_r\) 消去。
+
+\paragraph{两个不同的问题。}
+把 \(f_1\) 换成 \(f_n\) 可以指同时改变诱导边界，或保持 \(M_{-1,1}\) 不变。
+前者有统一的同构定理，后者不总成立。加入 \(\C[d]\) 则必须先指定满足
+\([d,x_r]=rx_r\) 的模作用；普通的、不带平移的张量作用并不满足这一关系。
+
+\section{任意边界上的 \texorpdfstring{\(f_n\)}{f-n} 局部化}
+
+\begin{theorem}\label{thm:boundary}
+设 \(a+b\ge0\)、\(L=a+b+1\)、\(\lambda_L\ne0\)，令
+\(M=M_{a,b}(\chi)\)、\(F=f_b\)。在 \(S_{a+1,b-1}\) 上定义特征
+\[
+ \chi^+(K)=c,\qquad \chi^+(h_i)=\lambda_i+2\delta_{i,0}\quad(i\ge0),
+\]
+且所有根向量的特征值为零。则存在唯一满足 \(\Phi(v)=F^{-1}u+M\) 的 \(\g\)-模同构
+\begin{equation}\label{eq:boundary-iso}
+ \Phi:M_{a+1,b-1}(\chi^+)\xrightarrow{\sim}T_{f_b}M_{a,b}(\chi).
+\end{equation}
+它对任意 \(c\in\C\) 成立，包括临界层 \(c=-2\)，也允许 \(b\le0\)。
+\end{theorem}
+
+\subsection{PBW 基与良定义}
+
+令 \(Y=e_{a+1}\)，\(A=M_{a+1,b-1}(\chi^+)\)。
+记 \(\mathcal X\) 为所有有限有序单项式
+\[
+ X=e(\alpha)h(\beta)f(\gamma),\qquad
+ \alpha_i\le a,\quad\beta_i\le-1,\quad\gamma_i\le b-1,
+\]
+包括空单项式；每族内部指标非降，\(\ell\) 表示因子个数。置
+\[
+ \rho(X)=2\ell(\alpha)+\ell(\beta),\qquad
+ w_m=F^{-m}u+M,\quad B_{m,X}=F^{-m}Xu+M.
+\]
+对 \(M\)，将 \(F\) 放在补空间基最左端，然后依次放置 \(X\) 中的生成元，最后放诱导子代数的基。
+PBW 给出 \(\{F^qXu:q\ge0,X\in\mathcal X\}\) 为 \(M\) 的基，故 \(F\) 作用单射。
+通分后用充分大的 \(F\) 次幂消去分母，可知局部化的基为
+\(\{F^qXu:q\in\Z,X\in\mathcal X\}\)。因此
+\begin{equation}\label{eq:pbw-bases}
+ \{B_{m,X}:m\ge1,X\in\mathcal X\}\ \text{为 }T_FM\text{ 的基},\qquad
+ \{XY^pv:p\ge0,X\in\mathcal X\}\ \text{为 }A\text{ 的基}.
+\end{equation}
+源基的 PBW 序将 \(Y\) 放在全部 \(X\) 因子之后、诱导子代数之前。
+补空间只作为向量空间使用，不要求它是 Lie 子代数。
+
+记 \(\Delta=\ad F\)。有限交换公式 \eqref{eq:finite-commutation} 给出
+\[
+\begin{aligned}
+ h_iF^{-m}&=F^{-m}h_i+2mF^{-m-1}f_{i+b},\\
+ e_iF^{-m}&=F^{-m}e_i-mF^{-m-1}(h_{i+b}+i\delta_{i+b,0}K)
+             -m(m+1)F^{-m-2}f_{i+2b}.
+\end{aligned}
+\]
+在 \(w_1\) 上有
+\[
+ h_iw_1=(\lambda_i+2\delta_{i,0})w_1\quad(i\ge0),\qquad Kw_1=cw_1.
+\]
+这是因为 \(i>0\) 时 \(f_{i+b}u=0\)，而 \(i=0\) 时修正项为 \(2F^{-1}u\)。
+又 \(f_jw_1=0\)（\(j>b\)），在边界上 \(f_bw_1=u+M=0\)。
+若 \(i\ge a+2\)，则 \(i+b\ge L+1>0\)，从而
+\[
+ e_iu=h_{i+b}u=f_{i+2b}u=0,\qquad \delta_{i+b,0}=0,
+\]
+故 \(e_iw_1=0\)。这逐项验证了 \(S_{a+1,b-1}\) 的全部诱导关系。
+
+将 \(\chi^+\) 延拓为 \(U(S_{a+1,b-1})\) 的代数特征，记作 \(\chi_U^+\)。
+上述关系对有限乘积与线性组合给出 \(aw_1=\chi_U^+(a)w_1\)。于是线性映射
+\[
+ U\otimes_{\C}\C_{\chi^+}\longrightarrow T_FM,\qquad x\otimes z1_{\chi^+}\longmapsto zxw_1
+\]
+消去每个平衡关系，因为
+\[
+ xa\otimes z1_{\chi^+}-x\otimes a(z1_{\chi^+})
+ \longmapsto zx\bigl(aw_1-\chi_U^+(a)w_1\bigr)=0.
+\]
+因此它下降为良定义的 \(\Phi:A\to T_FM\)。左乘 \(y\in U\) 与该映射交换，
+故 \(\Phi\) 是模同态；\(A=Uv\) 给出唯一性。这里尚未使用 \(\lambda_L\ne0\)。
+
+\subsection{纯负幂的显式原像}
+
+由于 \(Yu=0\)、\([Y,F]=h_L\)、\(f_{b+L}u=0\)，且 \(L>0\) 排除了中心项，
+\[
+ Yw_m=-m\lambda_Lw_{m+1},\qquad
+ Y^pw_1=(-1)^pp!\lambda_L^pw_{p+1}.
+\]
+故定义
+\begin{equation}\label{eq:pure-preimage}
+ q_m=\frac{(-1)^{m-1}}{(m-1)!\lambda_L^{m-1}}Y^{m-1}v
+ \qquad(m\ge1),
+\end{equation}
+便有 \(\Phi(q_m)=w_m\)。这一步直接回答了所有 \(f_b^{-m}u+M\) 是否在像中的问题，
+并未先假设满射。
+
+\subsection{满射归纳与单射}
+
+在 \(U\) 上赋权
+\[
+ \wt(e_i)=2,\qquad\wt(h_i)=1,\qquad\wt(f_i)=\wt(K)=0.
+\]
+每个非零生成元括号的权不超过输入总权减一，因此 PBW 重排不增加总权。
+又 \(\Delta\) 在每个生成元上至少降权一，故由 Leibniz 法则
+\[
+ \Delta^j(X)\in U_{\le\rho(X)-j},\qquad \Delta^j(X)=0\quad(j>\rho(X)).
+\]
+将 \(\Delta^j(X)u\) 按 \(M\) 的基重排，诱导因子作用为标量或零，同样不增加权。
+所以它是有限和
+\[
+ \Delta^j(X)u=\sum_{q,X'}c_{j,q,X'}F^qX'u,
+ \qquad q\ge0,\quad c_{j,q,X'}\ne0\Longrightarrow\rho(X')\le\rho(X)-j.
+\]
+代入有限交换公式：\(j=0\) 项恰为 \(B_{m,X}\)；对 \(j\ge1\)，若 \(q\ge m+j\)，
+相应项在商中为零，否则为 \(B_{m+j-q,X'}\)，且 \(\rho(X')<\rho(X)\)。因此
+\begin{equation}\label{eq:triangular}
+ Xw_m=B_{m,X}+\text{有限个严格较低 }\rho\text{ 层的项}.
+\end{equation}
+
+对非负整数 \(r\) 证明：所有 \(m\ge1\) 及 \(\rho(X)\le r\) 的 \(B_{m,X}\) 都在 \(\Phi\) 的像中。
+\emph{初始层 \(r=0\)}：\(X\) 只含 \(f\)-因子，与 \(F\) 交换，所以
+\(B_{m,X}=\Phi(Xq_m)\)。此层包括任意 \(f\)-单项式，而不只是 \(X=1\)。
+
+\emph{归纳步}：假设结论对 \(r-1\) 成立。固定任意 \(m\ge1\)、\(\rho(X)=r\)，写
+\[
+ \Phi(Xq_m)=B_{m,X}+\sum_{\nu=1}^{s}c_\nu B_{m_\nu,X_\nu},
+ \qquad m_\nu\ge1,\quad\rho(X_\nu)\le r-1.
+\]
+由归纳假设，选择 \(a_\nu\in A\) 使 \(\Phi(a_\nu)=B_{m_\nu,X_\nu}\)，便有
+\[
+ B_{m,X}=\Phi\left(Xq_m-\sum_{\nu=1}^s c_\nu a_\nu\right).
+\]
+每步只有有限项，且非负整数 \(\rho\) 严格下降，因此递归终止。
+归纳始终同时覆盖所有分母阶数，修正项的分母变大不影响论证。
+由目标基 \eqref{eq:pbw-bases}，\(\Phi\) 满射。
+
+由 \eqref{eq:triangular}，
+\[
+ \Phi(XY^pv)=(-1)^pp!\lambda_L^pB_{p+1,X}
+       +\text{严格较低 }\rho\text{ 层的项}.
+\]
+对源中非零有限线性组合，取出现的最高 \(\rho\) 层。
+该层各项映为不同的目标基向量，系数乘上非零数 \((-1)^pp!\lambda_L^p\)，不能抵消。
+所以像非零，\(\Phi\) 单射，定理得证。该证明不要求各层有限维，也不使用单性。
+
+\subsection{特例、迭代与固定原模时的障碍}
+
+取 \(a=-1,b=n\ge1\)，即得到问题一的直接推广：
+\begin{equation}\label{eq:fn-special}
+ M_{0,n-1}(\chi^+)\cong T_{f_n}M_{-1,n}(\chi),\qquad\lambda_n\ne0,
+\end{equation}
+其中 \(q_m=(-1)^{m-1}e_0^{m-1}v/((m-1)!\lambda_n^{m-1})\)。
+若连续移动边界，令 \(N_0=M_{a,b}(\chi)\)、\(N_{r+1}=T_{f_{b-r}}N_r\)，则每个有限 \(r\ge0\) 都有
+\[
+ N_r\cong M_{a+r,b-r}(\chi^{(r)}),\qquad
+ \chi^{(r)}(h_0)=\lambda_0+2r,
+\]
+其余特征值不变。因为 \(a+b\)、\(L\) 和 \(\lambda_L\ne0\) 始终不变，定理可以逐次应用。
+这是对不断改变的模作有限次局部化商，不是无限迭代或同时局部化的断言。
+
+若固定原来的 \(M=M_{-1,1}(\chi)\)，情况不同：
+
+\emph{当 \(n\ge2\)}，\(F=f_n\) 消去 \(u\)。对任意 \(Xu\)，取 \(N\) 使 \((\ad F)^N(X)=0\)。
+展开 \(F^NXu\) 后，\(j<N\) 项含作用于 \(u\) 的正次 \(F\)，\(j=N\) 项为零。
+故 \(F\) 局部幂零，\(\D_FM=0\)，局部化的余核也为零。
+
+\emph{当 \(n\le0\)}，\(F=f_n\) 属于 PBW 补空间，将它放在最左端即证明它作用单射，商非零。
+但
+\[
+ h_1(F^{-1}u+M)=\lambda_1(F^{-1}u+M)+2F^{-2}f_{n+1}u+M.
+\]
+由于 \(n+1\le1\)、\(n+1\ne n\)，末项是非零 PBW 基向量，且与 \(F^{-1}u+M\) 线性无关。
+因此 \(F^{-1}u+M\) 不是 \(h_1\)-特征向量，不能作为上述标准诱导模生成向量的像。
+这只排除了指定的循环映射，并未分类该商模，也未排除选择其他生成向量后的同构。
+
+最后，若 \(\lambda_L=0\)，定理中的循环映射仍然良定义，但
+\(\Phi(Yv)=0\) 而 \(Yv\ne0\)，故这一映射不是同构。
+
+\section{加入次数导子：正确的张量作用}
+
+对任意 \(\g\)-模 \(M\)，定义
+\[
+ \I(M)=\widetilde U\otimes_U M.
+\]
+在 PBW 序中把 \(d\) 放在 \(\g\) 的基之前，得到右 \(U\)-模分解
+\[
+ \widetilde U=\bigoplus_{k\ge0}d^kU,\qquad
+ \I(M)\cong\C[z]\otimes M,\qquad P(z)\otimes m\longleftrightarrow P(d)\otimes_U m.
+\]
+这里 \(z\) 只是多项式变量，用来区别导子 \(d\) 和证明中的其他指标。
+把向量空间因子交换，便得到问题中的 \(M\otimes\C[d]\)；以下将多项式放在左侧。
+PBW 分解还表明 \(\I\) 是正合函子：诱导后的核和像按每个多项式系数分别计算。
+
+\begin{lemma}\label{lem:shift-action}
+在上述实现中，作用必须取为
+\begin{equation}\label{eq:shift-action}
+\begin{aligned}
+ d(P(z)\otimes m)&=zP(z)\otimes m,\\
+ x_r(P(z)\otimes m)&=P(z-r)\otimes x_rm,\\
+ K(P(z)\otimes m)&=P(z)\otimes Km.
+\end{aligned}
+\end{equation}
+这些公式定义 \(\gt\)-模，并给出 \(\I(M)\)。
+\end{lemma}
+\begin{proof}
+由 \(x_rd=(d-r)x_r\)，归纳得 \(x_rP(d)=P(d-r)x_r\)，故公式来自诱导模。
+也可直接检查：对两个齐次模态，
+\[
+ [x_r,y_s](P(z)\otimes m)=P(z-r-s)\otimes[x_r,y_s]m.
+\]
+非中心项的次数为 \(r+s\)，中心项只能在 \(r+s=0\) 时出现，恰与括号的作用一致。
+又
+\[
+ [d,x_r](P(z)\otimes m)
+ =\bigl[zP(z-r)-(z-r)P(z-r)\bigr]\otimes x_rm
+ =rP(z-r)\otimes x_rm.
+\]
+这验证了全部关系。
+\end{proof}
+
+普通张量作用 \(x_r(P\otimes m)=P\otimes x_rm\) 会给出 \([d,x_r]=0\)，
+只要某个非零次数模态作用非零，就不满足所需关系。
+也不能简单把 \(d\) 加入一维诱导特征：若 \(\chi(h_L)=\lambda_L\ne0\)，则任何这样的扩张都将给出
+\[
+ 0=[\chi(d),\chi(h_L)]=\chi([d,h_L])=L\lambda_L\ne0,
+\]
+矛盾。因此诱导子代数仍是 \(S_{a,b}\)，不包含 \(d\)。由张量积的结合性，
+\begin{equation}\label{eq:induction-transitivity}
+ \widetilde M_{a,b}(\chi):=\widetilde U\otimes_{U(S_{a,b})}\C_\chi
+ \cong\I(M_{a,b}(\chi)).
+\end{equation}
+
+\section{局部化与加入导子交换}
+
+这一部分不要求 \(M\) 是特定的诱导模。固定 \(n\in\Z\)、\(F=f_n\)。
+由括号，若 \(\Delta=\ad F\)，则
+\[
+\begin{gathered}
+ \Delta(f_r)=\Delta(K)=0,\quad \Delta(h_r)=2f_{r+n},\quad \Delta(d)=-nF,\\
+ \Delta(e_r)=-(h_{r+n}+r\delta_{r+n,0}K),\qquad
+ \Delta^2(e_r)=-2f_{r+2n},\qquad \Delta^3(e_r)=0.
+\end{gathered}
+\]
+所以 \(\Delta\) 在 \(U\) 及 \(\widetilde U\) 上均局部幂零。
+PBW 的关联分次代数是整环，故两代数中的 \(F\) 都是双侧正则元素。
+若 \(\Delta^{t+1}(a)=0\)，则对 \(N\ge t\)，
+\[
+ F^Na=\sum_{j=0}^t\binom Nj\Delta^j(a)F^{N-j},\qquad
+ aF^N=\sum_{j=0}^t(-1)^j\binom NjF^{N-j}\Delta^j(a).
+\]
+取 \(N\ge m+t\)，分别得到右侧或左侧含因子 \(F^m\) 的表达式，即左右 Ore 条件。
+模局部化可用分式 \(F^{-m}v\) 表示，其等价关系为
+\[
+ F^{-m}v=F^{-\ell}w
+ \quad\Longleftrightarrow\quad
+ F^{k-m}v=F^{k-\ell}w\ \text{对某个 }k\ge m,\ell.
+\]
+因此有限和可以通分，且 \(M\to\D_FM\) 的核恰是被某个 \(F\) 次幂消去的向量。
+
+\begin{theorem}\label{thm:commute}
+设 \(F=f_n\) 在 \(\g\)-模 \(M\) 上作用单射。则存在自然的 \(\gt\)-模同构
+\[
+ \alpha_M:\D_F\I(M)\xrightarrow{\sim}\I(\D_FM),\qquad
+ \overline\alpha_M:T_F\I(M)\xrightarrow{\sim}\I(T_FM).
+\]
+第一同构及其逆分别为
+\begin{equation}\label{eq:alpha}
+\begin{aligned}
+ \alpha_M\bigl(F^{-m}(P(z)\otimes u)\bigr)
+   &=P(z+mn)\otimes F^{-m}u,\\
+ \alpha_M^{-1}\bigl(P(z)\otimes F^{-m}u\bigr)
+   &=F^{-m}(P(z-mn)\otimes u).
+\end{aligned}
+\end{equation}
+第二同构由这些公式取商得到；\(m\ge0\)，\(P\in\C[z]\)，\(u\in M\)。
+\end{theorem}
+
+\begin{proof}
+\emph{单射性与构造。}
+在 \(\I(M)\) 上，\(F\) 的作用为
+\(P(z)\otimes u\mapsto P(z-n)\otimes Fu\)。
+平移可逆，而 \(F\) 在 \(M\) 上单射，故它也在 \(\I(M)\) 上单射。
+在 \(\I(\D_FM)\) 上，\(F\) 可逆，且
+\[
+ F^{-1}(P(z)\otimes v)=P(z+n)\otimes F^{-1}v.
+\]
+迭代给出 \eqref{eq:alpha} 中的正平移 \(+mn\)。分式的基本关系得到保持，因为
+\[
+ P(z-n+(m+1)n)\otimes F^{-m-1}Fu
+ =P(z+mn)\otimes F^{-m}u.
+\]
+与通分合用即证明 \(\alpha_M\) 良定义。
+
+\emph{模同态性。}
+局部幂零给出有限交换公式
+\begin{equation}\label{eq:finite-commutation}
+ aF^{-m}=\sum_{j\ge0}\binom{m+j-1}{j}F^{-m-j}\Delta^j(a)\qquad(m\ge1).
+\end{equation}
+\(m=1\) 时由 \(aF^{-1}=F^{-1}a+F^{-1}\Delta(a)F^{-1}\) 反复代入；
+一般 \(m\) 由归纳及 Pascal 恒等式得到。
+每个非零 \(\Delta^j(x_r)\) 都齐次，次数为 \(r+jn\)；可能的中心项此时次数为零。
+所以
+\begin{align*}
+ \alpha_M\bigl(x_rF^{-m}(P(z)\otimes u)\bigr)
+ &=\sum_{j\ge0}\binom{m+j-1}{j}
+ P\bigl(z-(r+jn)+(m+j)n\bigr)\otimes F^{-m-j}\Delta^j(x_r)u\\
+ &=P(z+mn-r)\otimes x_rF^{-m}u\\
+ &=x_r\alpha_M\bigl(F^{-m}(P(z)\otimes u)\bigr).
+\end{align*}
+\(m=0\) 时只用 \(j=0\) 项。\(K\) 的相容性直接由公式得到。
+对于导子，\([d,F^{-m}]=-mnF^{-m}\)，故
+\begin{align*}
+ \alpha_M\bigl(dF^{-m}(P(z)\otimes u)\bigr)
+ &=\alpha_M\bigl(F^{-m}((z-mn)P(z)\otimes u)\bigr)\\
+ &=zP(z+mn)\otimes F^{-m}u
+ =d\alpha_M\bigl(F^{-m}(P(z)\otimes u)\bigr).
+\end{align*}
+
+\emph{双射与取商。}
+\eqref{eq:alpha} 的第二行给出每个基本张量的原像，所以 \(\alpha_M\) 满射。
+若 \(\alpha_M(F^{-m}w)=0\)，在目标中作用 \(F^m\)，得到 \(w\) 在
+\(\I(\D_FM)\) 中的像为零。\(M\hookrightarrow\D_FM\) 单射，且 \(\I\) 正合，
+故 \(\I(M)\hookrightarrow\I(\D_FM)\) 单射，从而 \(w=0\)。这证明单射及逆公式。
+
+\(\alpha_M\) 在分母为零次的子空间上就是诱导后的嵌入。
+对 \(0\to M\to\D_FM\to T_FM\to0\) 应用 \(\I\)，便得到商上的同构。
+对任意模映射 \(g:M\to N\)，局部化与诱导分别作用为
+\(F^{-m}u\mapsto F^{-m}g(u)\)、\(P\otimes u\mapsto P\otimes g(u)\)。
+代入 \eqref{eq:alpha} 即验证自然性。
+\end{proof}
+
+\begin{corollary}\label{cor:lift}
+给定 \(\g\)-模同构 \(\Phi:A\xrightarrow{\sim}T_FM\)，它提升为
+\[
+ \widetilde\Phi=\overline\alpha_M^{-1}\circ\I(\Phi):
+ \I(A)\xrightarrow{\sim}T_F\I(M).
+\]
+若 \(\Phi(a)=F^{-m}u+M\)，则
+\begin{equation}\label{eq:lift}
+ \widetilde\Phi(P(z)\otimes a)
+ =F^{-m}(P(z-mn)\otimes u)+\I(M).
+\end{equation}
+特别地，若 \(\Phi(q_m)=F^{-m}u+M\)，则
+\begin{equation}\label{eq:poly-preimage}
+ \boxed{\ \widetilde\Phi^{-1}\bigl(F^{-m}(P(z)\otimes u)+\I(M)\bigr)
+ =P(z+mn)\otimes q_m.\ }
+\end{equation}
+\end{corollary}
+
+这里 \(\I(\Phi)\) 本身确为 \(\mathrm{id}_{\C[z]}\otimes\Phi\)，
+但要把目标识别为 \(T_F\I(M)\)，必须加入 \eqref{eq:alpha} 的平移。
+当 \(n\ne0\) 时，不带平移地把 \(P\otimes(F^{-m}u+M)\) 写作
+\(F^{-m}(P\otimes u)+\I(M)\)，通常不与 \(d\) 作用相容。
+
+\section{两个推广合并后的同构}
+
+将定理 \ref{thm:boundary} 代入推论 \ref{cor:lift}，并使用 \eqref{eq:induction-transitivity}，得到
+\begin{corollary}\label{cor:final}
+若 \(a+b\ge0\)、\(L=a+b+1\)、\(\lambda_L\ne0\)，则对任意中心参数 \(c\)，
+\begin{equation}\label{eq:full-iso}
+ \boxed{\ \widetilde M_{a+1,b-1}(\chi^+)
+       \xrightarrow[\ \widetilde\Phi\ ]{\ \sim\ }
+       T_{f_b}\widetilde M_{a,b}(\chi).\ }
+\end{equation}
+它将 \(\widetilde v=1\otimes v\) 映为
+\(f_b^{-1}\widetilde u+\widetilde M_{a,b}(\chi)\)，其中 \(\widetilde u=1\otimes u\)。
+对 \eqref{eq:pure-preimage} 中的 \(q_m\)，有
+\begin{equation}\label{eq:full-preimage}
+ \widetilde\Phi^{-1}\bigl(f_b^{-m}(P(z)\otimes u)+\widetilde M_{a,b}(\chi)\bigr)
+ =P(z+mb)\otimes q_m.
+\end{equation}
+特别地，\(a=-1,b=n\ge1\) 时，
+\[
+ \widetilde M_{0,n-1}(\chi^+)\cong T_{f_n}\widetilde M_{-1,n}(\chi),
+ \qquad\lambda_n\ne0.
+\]
+\end{corollary}
+
+这给出完整流程：不含 \(d\) 的良定义、满射归纳和单射证明先得到 \(\Phi\)；
+正合诱导得到 \(\I(\Phi)\)；自然同构 \(\overline\alpha_M^{-1}\) 把目标改写为含 \(d\) 的局部化商。
+因此无须对 \(d\) 的多项式次数再建立一个新的满射归纳。
+同样，有限次边界移动的结论也可逐次提升。
+
+\section{Smooth 性与结论的边界}
+
+若 \(M\) smooth，有限和 \(\sum_iP_i(z)\otimes m_i\) 中所有 \(m_i\) 有共同的高模态消去界，
+由 \eqref{eq:shift-action}，同一界使该有限和消去。因此 \(\I(M)\) smooth。
+对局部化中的 \(F^{-m}u\)，有限交换公式给出
+\[
+\begin{aligned}
+ h_rF^{-m}u&=F^{-m}h_ru+2mF^{-m-1}f_{r+n}u,\\
+ e_rF^{-m}u&=F^{-m}e_ru-mF^{-m-1}(h_{r+n}+r\delta_{r+n,0}K)u\\
+ &\hspace{2em}-m(m+1)F^{-m-2}f_{r+2n}u,
+\end{aligned}
+\]
+而 \(f_r\) 与 \(F\) 交换。取 \(r\) 充分大，使 \(r,r+n,r+2n\) 都超过 \(u\) 的消去界，
+并使 \(r+n\ne0\)，则各项为零。因此 \(\D_FM\)、\(T_FM\) 也 smooth。
+这同样覆盖负整数 \(n\)。上面的 \(M_{a,b}\) 本身 smooth：将高模态移过固定的有限 PBW 单词，
+只出现有限个指标偏移，最终的充分高模态消去诱导向量。
+
+同构不等于单性。一般而言 \(\I\) 不保持单模：一维平凡 \(\g\)-模 \(\C\) 是单模，
+但 \(\I(\C)=\C[z]\) 有非零真子模 \(z\C[z]\)，其中所有模态作用为零，\(d\) 乘以 \(z\)。
+这个例子只说明一般诱导不保单，并不满足 \(F\) 单射的假设。
+对于本文的非临界诱导模，文献 \cite[\S4.1]{FGXZ} 另外使用 Casimir 中心约化构造单模；
+不能仅凭本笔记的同构便宣布含 \(d\) 的整个诱导模也是单模。
+
+\appendix
+\section{Danus 试跑的范围与记录}
+
+本次使用 Danus 的公开 Codex 版本 \texttt{v0.1.0-codex}，
+在 Windows 上作有限轮次适配：保留上游确定性预检查、验证入口、候选提交闸门及事实图，
+以本机只读 Codex 调用替代 Linux 的常驻进程启动方式。
+没有运行无沙箱启动脚本，没有启用额外的付费策略咨询，也未修改全局代理配置。
+
+两个 worker 分别提交边界同构和导子相容性候选；每次审查均使用独立的冷启动 verifier。
+边界结果首次通过，事实编号为 \texttt{d6bf6fef62dc8971}。
+导子结果首次因定理陈述缺少环境代数与函子的完整定义而被拒收；补齐后通过，
+事实编号为 \texttt{b388fabb701946d3}。
+第二次审查确认正平移 \(+mn\)、逆平移 \(-mn\) 及导子修正项的符号一致。
+
+事实图中的两个英文证明均保存了原始陈述、证明和审查结果；本中文稿将其整理为统一记号，
+并用函子性合成推论 \ref{cor:final}。中文整合稿未另经整篇论文验证器审查。
+适配层及上游相关模块的 67 项离线测试通过；另有依赖弃用警告，以及非阻断的启发式符号识别警告。
+这些软件测试不构成数学证明。
+
+Danus 的 verifier 是 LLM 而非 Lean/Coq，其接受记录不等于形式化证明证书
+\cite{DanusTrust}。本文结论仍应由作者及导师复核；固定原模的非边界商的完整分类和进一步单性问题
+不在本次已证结论内。
+
+\begin{thebibliography}{9}
+\bibitem{FGXZ}
+V.~Futorny, X.~Guo, Y.~Xue and K.~Zhao,
+\emph{Smooth representations of affine Kac--Moody algebras},
+arXiv:2404.03855v2 (2024), \S2.3 and \S4.
+\url{https://arxiv.org/abs/2404.03855v2}.
+\bibitem{DanusTrust}
+FrenzyMath, \emph{Danus: Security and Trust Model},
+\texttt{v0.1.0-codex}, \S1--4.
+\url{https://github.com/frenzymath/Danus/blob/v0.1.0-codex/docs/security-and-trust.md}.
+\end{thebibliography}
+\end{document}

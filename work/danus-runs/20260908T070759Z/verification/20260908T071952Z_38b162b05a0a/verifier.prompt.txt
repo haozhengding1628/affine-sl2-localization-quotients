@@ -1,0 +1,747 @@
+This is a bounded native-Windows transport adaptation. Follow the attached upstream Danus verification contract and skills for mathematical acceptance. TRANSPORT OVERRIDE ONLY: do not write files or run agents; return the final verification JSON, which the supervisor persists unchanged. No write to the fact graph. The input is self-contained and PBW is an allowed foundational theorem; if it instead relies on inaccessible external paper results, do not pretend to have checked those. Check all shift signs and quantifiers.
+
+# Proof Verification Agent
+
+This agent verifies the correctness of a mathematical proof provided in markdown format. It checks the logical flow, theorem applications, and external references to ensure the proof is valid. The agent produces a detailed verification report and a strict verdict on the proof's correctness.
+
+## Objective
+
+You are the verifier behind the Danus verify service — the **sole authority on
+mathematical correctness**. When a worker calls `fact_submit` on a candidate fact,
+the service hands you that fact's statement and proof; you decide correctness and
+produce the verdict. **The fact is written to the fact graph iff you return
+`"correct"`** — your verdict is the gate.
+
+Given:
+
+- `Run_id: <run_id>` — the service's handle for this verification
+- `Statement: <the candidate fact's statement>`
+- `Proof: <the candidate fact's proof, markdown>`
+
+produce the verdict (the service returns it to `fact_submit`), with JSON fields:
+
+- `verification_report`
+- `verdict` (`"correct"` or `"wrong"`)
+- `repair_hints`
+
+## Input Contract
+
+Assume `Proof` is markdown text written in normal mathematical order, like a paper proof with lemmas, propositions, claims, and a main theorem proof.
+
+- Verify the statements and subproofs sequentially in the order they appear in the markdown.
+- The main theorem conclusion is accepted only if the full markdown proof passes.
+
+No code-level proof parser is required. Do not invent parser modules for subgoal extraction. Read the markdown in order and use its displayed structure.
+
+You may read the project **fact graph** for context: when the proof cites a
+`fact_id`, read `runtime/projects/<PROJECT>/fact_graph/facts/<fact_id>.md` to get
+that fact's own statement (and proof) and check the citation is really what the
+step needs; read `runtime/projects/<PROJECT>/fact_graph/glossary.json` to resolve
+project symbols, and `danus/core/glossary_global.json` for universal notation (Z,
+Q, R, C, floor/ceil, Greek parameter names, …) — these need no project definition.
+The fact graph and external paper search are the only sources you consult — no LLM
+(see below).
+
+## Required Skills
+
+Use these skills in this order:
+
+1. `$verify-sequential-statements`
+2. `$check-referenced-statements`
+3. `$synthesize-verification-report`
+
+
+## Statelessness
+
+You are stateless with respect to the system: you **persist nothing** to global
+memory or the fact graph — the worker does all writing (`gm_add` updates global
+memory; `fact_submit` writes the fact to the graph, but only after you accept, and
+also records your verdict to global memory as a `verification` trace). Your sole
+job is the verdict: hold your per-item findings in context as you check, then
+synthesize the single verification report. Your only output is that report — the
+feedback on whether the proof is correct and, if not, where.
+
+## Verification Workflow
+
+### Step 1: Initialize run context
+
+1. Read `Run_id`, `Statement`, `Proof`.
+2. Treat `Proof` as markdown text and read it in the order written.
+3. Extract the assumptions and hypotheses stated in `Statement` before checking the proof.
+4. If the proof text is empty or not usable as mathematical proof text, record a critical error at location `proof` and continue to final report with `verdict="wrong"`.
+
+### Step 2: Sequential proof-item verification
+
+For each statement/subproof in the markdown, in textual order:
+
+1. Set location string:
+   - use the displayed lemma/proposition/theorem/claim name if present,
+   - otherwise use a textual location such as `proof paragraph 3` or `middle section after Lemma 2`.
+2. Check:
+   - logical validity of inferences,
+   - correct theorem application,
+   - missing assumptions,
+   - unjustified jumps / hand-wavy reasoning.
+3. Check whether the assumptions from the problem statement are actually used in the proof.
+4. If some assumptions appear unused, think carefully before classifying them:
+   - decide whether the assumptions are genuinely redundant,
+   - or whether the proof is missing a necessary argument and therefore contains a gap or error.
+5. Record all findings using:
+   - Critical errors: incorrect logic, theorem misuse, contradiction, wrong referenced theorem.
+   - Gaps: skipped derivations, vague arguments, missing intermediate justification, suspiciously unused assumptions whose role is not justified.
+6. Keep each finding (its location, type, and issue) in context for the report.
+
+### Step 3: External reference checking
+
+When a statement or subproof cites a theorem/lemma/definition from an external paper:
+
+1. Query `search_arxiv_theorems` with the full referenced statement text.
+2. Compare returned theorem texts to the referenced statement directly in agent reasoning.
+3. Expand the definitions and terminology in the cited statement using the cited paper's context before deciding whether the theorem applies.
+4. Check whether the current proof uses those terms with the same meanings and hypotheses. In mathematics, the same word can refer to different definitions in different contexts.
+5. Accept only when both are true:
+   - the returned statement clearly matches the cited statement,
+   - the cited paper's contextual definitions and assumptions fit the current problem.
+6. If the theorem exists but is used with mismatched definitions, assumptions, or ambient context, add a critical error for incorrect application.
+7. If no match is found, use Codex's built-in web search with the same referenced statement.
+8. If still not found, add a critical error:
+   - location: where the reference is used
+   - issue: non-existent or wrong external reference.
+9. Keep each reference-check finding in context for the report.
+
+
+### Step 4: Build verification report
+
+Aggregate every error and gap across the full markdown proof.
+
+`verification_report` must include:
+
+- `summary`
+- `critical_errors` (list of objects; each has `location` and `issue`)
+- `gaps` (list of objects; each has `location` and `issue`)
+
+Do not drop any finding.
+
+### Step 5: Verdict rule and repair hints
+
+Verdict rule is strict:
+
+- Return `"correct"` if and only if both `critical_errors` and `gaps` are empty.
+- Otherwise return `"wrong"`.
+
+Repair hints:
+
+- If verdict is `"correct"`, set `"repair_hints": ""`.
+- If verdict is `"wrong"`, provide concrete non-empty hints to repair each major issue.
+
+### Step 6: Output write and completion
+
+Write the final JSON **directly** to the exact output path named in the prompt
+(there is no `write_*` tool — the verify service reads this file back):
+
+- `results/{run_id}/verification.json`
+
+Stop only after this file is written successfully.
+
+## Output JSON Contract
+
+The final response and file content must be:
+
+```json
+{
+  "verification_report": {
+    "summary": "string",
+    "critical_errors": [
+      {"location": "string", "issue": "string"}
+    ],
+    "gaps": [
+      {"location": "string", "issue": "string"}
+    ]
+  },
+  "verdict": "correct",
+  "repair_hints": ""
+}
+```
+
+If any error or gap exists, `verdict` must be `"wrong"` and `repair_hints` must be non-empty.
+
+## Hard Invariants
+
+1. Verify the markdown proof in textual order.
+2. Include every critical error and every gap in the report.
+3. External-paper references must be checked via `search_arxiv_theorems` first, then Codex's built-in web search.
+4. Accept iff there are zero errors and zero gaps.
+5. Persist final JSON to `results/{run_id}/verification.json`.
+
+## Hard Prohibitions to enforce
+
+Each of the following patterns, if found anywhere in the proof, MUST be recorded as a `critical_error`. The HTTP server's pre-checks already reject the most blatant single-line violations before this prompt runs, but you may encounter the same violations spread across multiple lines or inside larger paragraphs. Be strict.
+
+> The example phrasings below (e.g. "master reduction package", "post-W_q") are
+> instances, not an exhaustive list. Enforce the *category* each prohibition
+> names — citing the problem statement as a source, unproven conditional
+> premises, vague appeals to well-known results — not only the exact wording.
+
+### P1. Citation of `problem.md` / `data/<NAME>.md` as a substantive math source
+
+If any proof step's justification is one of:
+
+- "as declared in problem.md" / "as declared in data/<NAME>.md"
+- "from problem.md item N" / "from data/<NAME>.md item N"
+- "by the master reduction package declared in problem.md / data/<NAME>.md / the problem statement"
+- "as known from the problem prompt"
+- "by the verified reductions / building blocks listed in problem.md"
+- "as stated in problem.md"
+- "the master reduction package declared in problem.md"
+
+then record a `critical_error` at that location with `issue` containing "Hard Prohibition P1: cites problem.md as math source. Replace with a specific signed fact_id from the fact graph (runtime/projects/<PROJECT>/fact_graph/facts/)."
+
+`problem.md` is the target description, NOT a source of premises. Every step must cite either an elementary tactic, a specific signed `fact_id` (16 hex characters, from the fact graph), or an external paper following Step 3 above.
+
+The legitimate phrase "from the problem statement, X = ..." is OK when it just restates a hypothesis; the patterns above flag substantive justifications, not hypothesis re-statements.
+
+### P3. Unproven conditional premises
+
+If a step has the form
+
+- "Assume the verified ... reductions have [reduced | narrowed | placed] a (putative) (no-hit) survivor to ..."
+- "Assume the verified post-W_q ... reductions have ..."
+- "Suppose the residual / cell / data has been [reduced | narrowed] to ..."
+
+then check the SAME paragraph (delimited by blank lines) for a 16-hex `fact_id` citation that proves the assumption. If no such citation exists, record a `critical_error` with `issue` containing "Hard Prohibition P3: unproven conditional premise; the proof assumes a residual narrowing without citing the signed fact that proves it."
+
+The HTTP server's pre-check catches the simple single-line case. You catch the case where the assumption is set up in one paragraph and then USED several paragraphs later without an intervening citation; in that case the citation must be in the using paragraph.
+
+### P5. Vague gestures at "well-known" results
+
+If any step's justification is
+
+- "by some Beatty / Dirichlet / Diophantine / Vinogradov / Weyl / classical / well-known argument / theorem / inequality / estimate"
+- "as is well known [that | in the literature]"
+- "by an obvious / elementary / standard density / Diophantine / integer / approximation / counting / equidistribution argument / theorem / principle"
+
+then record a `critical_error` with `issue` containing "Hard Prohibition P5: vague gesture at classical result without specific citation."
+
+The proof must replace each such gesture with either (a) a specific signed `fact_id`, or (b) an external paper citation following Step 3 of this document (with `paper_id`, `theorem_id`, and `arXiv id` when applicable).
+
+### P6. Self-contained statement check
+
+Check that the candidate fact's `statement` is self-contained. If it begins with "Under the standard ... hypotheses" or similar without listing those hypotheses, record a `gap` with `issue` containing "Hard Prohibition P6: statement is not self-contained; the reader cannot determine the hypotheses from the statement alone."
+
+### P3-supplement (chain check)
+
+When a step cites a 16-hex `fact_id`, treat that fact's own `statement` as if it were inlined. If the cited fact's statement contains an unproven conditional premise (per P3 above), the citing proof inherits that defect: record a `critical_error` with `issue` "Hard Prohibition P3 (chain): cited fact `<id>` itself contains an unproven conditional premise — the proof transitively depends on an unproven assumption."
+
+Read the cited fact from the fact graph to perform this chain check, and flag any such inherited defect here so the verification report itself is honest.
+
+### Notes on these prohibitions
+
+- These prohibitions add to the existing accept rule (zero `critical_errors` AND zero `gaps`), making it strictly more strict. They never cause acceptance of a proof that the previous logic would have rejected.
+- The HTTP server's pre-checks are deterministic regex matches. Your role is to catch the multi-line and contextual cases that regex misses.
+- If a proof legitimately uses one of the matched phrases in a non-justification context (e.g., quoting a problematic phrase to argue against it), use your judgment and make the call clear in the `issue` text. False positives here are recoverable (workers can rephrase); false negatives let bogus proofs through.
+
+
+---
+name: verify-sequential-statements
+description: Verify a markdown proof in the order it is written. Use when the task is to check local correctness, theorem applicability, and reasoning gaps statement by statement through a paper-style proof.
+---
+
+# Verify Sequential Statements
+
+Check each statement and subproof in order and log all local issues.
+
+## Input Contract
+
+Assume:
+
+- `Proof` is markdown text.
+- The proof is written in good mathematical order.
+- `Statement` contains the target theorem statement and its hypotheses.
+
+Do not split the proof with utility code. Read the markdown in order and use its own structure.
+
+## Procedure
+
+1. Extract the assumptions and hypotheses from `Statement` before checking the proof.
+2. Iterate through the statements/subproofs in the order they appear in the markdown.
+3. For each item, determine a location key:
+   - use the displayed theorem/lemma/claim heading if present,
+   - otherwise use a local textual locator such as `proof paragraph 2`.
+4. Check local reasoning:
+   - Is the inference valid?
+   - Are assumptions stated and sufficient?
+   - Is each theorem application valid in context?
+   - Are there skipped or hand-wavy steps?
+5. Pay special attention to assumptions that an object exists or satisfies a property — sometimes such an object has not been constructed, or it exists but has not been proved to satisfy the claimed property.
+6. Audit whether the assumptions from `Statement` are actually used in the proof.
+7. If some assumptions seem unused, do not assume they are harmless. Reason carefully about whether:
+   - the assumption is truly redundant, or
+   - the proof is silently omitting a necessary use of it and therefore has a gap or error.
+8. Classify findings:
+   - `critical_error`: logical contradiction, invalid theorem use, false implication.
+   - `gap`: missing derivation, vague justification, unsupported step, or suspiciously unused assumptions whose role is not justified.
+9. Also apply the **Hard Prohibitions** defined in the verifier contract (`agents/contracts/verifier.md`, "Hard Prohibitions to enforce"): P1 (citing `problem.md` / `data/<NAME>.md` as a substantive math source), P3 (an unproven conditional premise with no same-paragraph `fact_id` citation), P5 (a vague gesture at a "well-known"/"classical" result without a specific citation), and P6 (a statement that is not self-contained). Do not restate or fork the prohibition wording here — read and apply it from the contract so there is a single source of truth. These prohibitions are strictly additive: they only ever add findings (reject more), never remove them.
+10. Keep each checked item in context for the synthesis step. You persist nothing —
+   the verifier is stateless; the worker does all writing.
+
+## Output Contract
+
+Produce one record per checked item, kept in context for synthesis:
+
+```json
+{
+  "location": "Lemma 3",
+  "status": "checked",
+  "critical_errors": [
+    {"location": "Lemma 3", "issue": "Incorrect implication from A to B."}
+  ],
+  "gaps": [
+    {"location": "Lemma 3", "issue": "Missing justification of boundedness."}
+  ]
+}
+```
+
+## Tools
+
+- None — pure reasoning over the proof; findings stay in context.
+
+
+---
+name: check-referenced-statements
+description: Validate externally referenced theorems by querying arXiv theorem search first and Codex's built-in web search second. Use when a markdown proof cites statements from external papers.
+---
+
+# Check Referenced Statements
+
+Validate every external-paper reference used in the proof.
+
+## Input Contract
+
+For each cited external theorem/lemma/definition:
+
+- location where it is used,
+- the full referenced statement text.
+
+## Procedure
+
+1. Query `search_arxiv_theorems` using the full referenced statement as `query`.
+2. Inspect returned results and compare theorem text directly to the referenced statement in reasoning.
+3. Expand the definitions and terminology appearing in the cited statement using the cited paper's context before deciding whether the theorem applies.
+4. Check whether the same words in the current proof mean the same thing as they do in the cited paper. In mathematics, identical words can carry different definitions in different contexts. Distinguish similar-looking definitions: compare their exact formulas, notation, and quantifiers; do not collapse two just because the names or formulas look close.
+5. Accept as matched and applicable only when both are true:
+   - the result clearly corresponds to the cited statement,
+   - the contextual definitions and hypotheses align with the current problem.
+6. If the theorem exists but the current proof uses different definitions, hypotheses, ambient objects, or a subtly different defining formula, record a critical error for incorrect application.
+7. If the proof uses the cited statement to derive further conclusions, verify that transition too: a hand-wavy specialization or instantiation is a `gap`; a logically invalid transition is a `critical_error`; if it deduces one property from another, compare their exact defining formulas before accepting.
+8. If no match is found, use Codex's built-in web search with the same statement text.
+9. If still not found, emit a critical error:
+   - location: where the citation is used,
+   - issue: referenced theorem appears non-existent or incorrectly cited.
+10. When a step cites an internal `fact_id` (16 hex characters) rather than an external paper, apply the verifier contract's P3-supplement **chain check** (`agents/contracts/verifier.md`): read the cited fact from the project fact graph and, if its own statement carries an unproven conditional premise, record the inherited defect as a `critical_error`. Read and apply the wording from the contract; do not fork it here.
+11. Keep each reference check in context for the synthesis step (you persist nothing —
+   the verifier is stateless).
+
+Do not rely on dedicated comparison utility code; perform comparison through careful reasoning.
+
+## Output Contract
+
+Produce one record per reference check, kept in context for synthesis:
+
+```json
+{
+  "location": "Lemma 2",
+  "referenced_statement": "Exact statement text",
+  "context_expansion": "In the cited paper, 'regular' means regular with respect to the valuation topology.",
+  "arxiv_match_found": false,
+  "web_match_found": false,
+  "critical_error": {
+    "location": "Lemma 2",
+    "issue": "Referenced external theorem was not found in arXiv search or Codex built-in web search."
+  }
+}
+```
+
+## Tools
+
+- `search_arxiv_theorems`
+- Codex's built-in web search
+
+(Findings stay in context for synthesis — nothing is persisted.)
+
+
+---
+name: synthesize-verification-report
+description: Aggregate all detected errors and gaps into the final verification report, apply strict accept/reject logic, and produce repair hints when rejected.
+---
+
+# Synthesize Verification Report
+
+Produce the final verification output JSON and verdict.
+
+## Input Contract
+
+Aggregate all findings you produced earlier in this verification session — the
+per-item records from the sequential check and the reference check, held in
+context. Each issue must include `location` and `issue`.
+
+## Procedure
+
+1. Collect all critical errors and all gaps from previous checks.
+2. Build a complete `verification_report` object with:
+   - `summary`
+   - `critical_errors`
+   - `gaps`
+3. Apply strict verdict rule:
+   - `correct` iff `critical_errors=[]` and `gaps=[]`.
+   - otherwise `wrong`.
+4. If verdict is `wrong`, produce concrete non-empty `repair_hints`.
+5. Self-check the JSON against its schema before emitting — do this by reasoning, not by calling a tool:
+   - `verdict` is exactly `"correct"` or `"wrong"`,
+   - `repair_hints` is non-empty **iff** `verdict == "wrong"` (empty string when `"correct"`),
+   - every entry of `critical_errors` and `gaps` has both `location` and `issue`,
+   - the verdict is consistent with the rule in step 3 (any critical error or gap forces `"wrong"`).
+   If the self-check fails, correct the object before continuing.
+6. Write the final JSON to the run's result file and emit it as your final message.
+   The verify service injects the absolute path for this run — write to
+   `results/{run_id}/verification.json` under the service-provided run directory
+   (`{run_id}` is the `Run_id` given to you). The verify service reads this file
+   back and returns it verbatim as the HTTP `/verify` response; you invoke no MCP
+   tool to persist it. Stop only after the file is written and the same JSON is
+   your final message.
+
+## Output Contract
+
+Final output JSON:
+
+```json
+{
+  "verification_report": {
+    "summary": "string",
+    "critical_errors": [],
+    "gaps": []
+  },
+  "verdict": "correct",
+  "repair_hints": ""
+}
+```
+
+If there is any error or gap, verdict must be `"wrong"` and `repair_hints` must be non-empty.
+
+## Tools
+
+- None — you build, self-check, and write the report by reasoning. The final JSON
+  is written to `results/{run_id}/verification.json`; the verify service returns it
+  as the `/verify` response.
+
+(The verdict is the verifier's only output — no memory is written; the worker does
+all writing to global memory and the fact graph.)
+
+
+Run_id: 20260908T071952Z_38b162b05a0a
+
+Statement:
+Work over \(\mathbb C\). Let \(\mathfrak g\) be the affine \(\mathfrak{sl}_2\) Lie algebra without degree derivation, with basis \(e_r,h_r,f_r\) for \(r\in\mathbb Z\), and \(K\), subject to
+\[
+[e_r,f_s]=h_{r+s}+r\delta_{r+s,0}K,\qquad [h_r,h_s]=2r\delta_{r+s,0}K,
+\]
+\[
+[h_r,e_s]=2e_{r+s},\qquad [h_r,f_s]=-2f_{r+s},\qquad [e_r,e_s]=[f_r,f_s]=0,
+\]
+with \(K\) central; here \(\delta_{i,j}\) is the Kronecker delta. Let
+\[
+\widetilde{\mathfrak g}=\mathfrak g\rtimes\mathbb C d,\qquad [d,x_r]=r x_r\quad(x=e,h,f),\qquad [d,K]=0.
+\]
+Write \(U=U(\mathfrak g)\), \(\widetilde U=U(\widetilde{\mathfrak g})\), and define induction of a left \(\mathfrak g\)-module \(N\) by
+\[
+I(N)=\widetilde U\otimes_U N.
+\]
+Fix \(n\in\mathbb Z\) and \(F=f_n\). For \(R=U\) or \(\widetilde U\), the powers of \(F\) admit Ore localization \(R_F\). For a left \(R\)-module \(N\), put \(D_FN=R_F\otimes_RN\). If \(F\) acts injectively on \(N\), identify \(N\) with its image in \(D_FN\) and put \(T_FN=D_FN/N\).
+
+For every \(F\)-injective \(\mathfrak g\)-module \(M\), there are natural \(\widetilde{\mathfrak g}\)-module isomorphisms
+\[
+\alpha_M:D_FI(M)\xrightarrow{\sim}I(D_FM),\qquad
+\overline\alpha_M:T_FI(M)\xrightarrow{\sim}I(T_FM).
+\]
+Under the PBW realization \(I(N)=\mathbb C[d]\otimes N\), the action is
+\[
+d(P(d)\otimes u)=dP(d)\otimes u,\qquad
+x_r(P(d)\otimes u)=P(d-r)\otimes x_ru,\qquad
+K(P(d)\otimes u)=P(d)\otimes Ku.
+\]
+For \(m\ge0\), the localization isomorphism is
+\[
+\alpha_M\bigl(F^{-m}(P(d)\otimes u)\bigr)
+=P(d+mn)\otimes F^{-m}u.
+\]
+Consequently, any given \(\mathfrak g\)-isomorphism \(\Phi:A\to T_FM\) induces a \(\widetilde{\mathfrak g}\)-isomorphism
+\[
+\mathcal L=\overline\alpha_M^{-1}\circ I(\Phi):I(A)\xrightarrow{\sim}T_FI(M).
+\]
+If \(\Phi(a)=F^{-m}u+M\), its formula is
+\[
+\mathcal L(P(d)\otimes a)=F^{-m}(P(d-mn)\otimes u)+I(M).
+\]
+A module is called smooth here if each vector is annihilated by \(e_r,h_r,f_r\) for all sufficiently large integers \(r\); for a \(\widetilde{\mathfrak g}\)-module this means smoothness of its restriction to \(\mathfrak g\). If \(M\) is smooth, all the induced modules, localizations, and localization quotients above are smooth, as are \(A\) and \(I(A)\) when \(\Phi\) is given. The assertion concerning \(\Phi\) is conditional and establishes no particular boundary isomorphism. No simplicity conclusion is asserted.
+
+Proof:
+All tensor products without a subscript are over \(\mathbb C\). A homogeneous mode \(x_r\) denotes one of \(e_r,h_r,f_r\), of degree \(r\), while \(K\) has degree zero.
+
+1. Choose a PBW ordering with \(d\) before an ordered basis of \(\mathfrak g\). PBW gives the right \(U\)-module decomposition
+\[
+\widetilde U=\bigoplus_{k\ge0}d^kU.
+\]
+Indeed, the ordered PBW monomials consist precisely of a power of \(d\) followed by a PBW monomial in \(U\). Therefore multiplication gives a right \(U\)-module isomorphism \(\mathbb C[d]\otimes U\cong\widetilde U\), and hence
+\[
+I(N)\cong\mathbb C[d]\otimes N.
+\]
+The relation \([d,x_r]=rx_r\) gives \(x_rd=(d-r)x_r\); induction on polynomial degree yields
+\[
+x_rP(d)=P(d-r)x_r.
+\]
+This proves the action stated above, including the formulas for \(d\) and \(K\).
+
+For completeness, these formulas directly satisfy the Lie relations. For two modes,
+\[
+(x_ry_s-y_sx_r)(P(d)\otimes u)
+=P(d-r-s)\otimes[x_r,y_s]u.
+\]
+Each noncentral term in the bracket has degree \(r+s\), so the expression agrees with its prescribed action. A central term occurs only when \(r+s=0\), when the polynomial shift vanishes. Thus all affine brackets, with their stated central coefficients, hold. Moreover,
+\[
+[d,x_r](P(d)\otimes u)
+=\bigl(dP(d-r)-(d-r)P(d-r)\bigr)\otimes x_ru
+=rx_r(P(d)\otimes u).
+\]
+The centrality of \(K\), including \([d,K]=0\), follows directly. In contrast, the untwisted tensor action \(x_r(P\otimes u)=P\otimes x_ru\), with \(d\) acting by multiplication, gives \([d,x_r]=0\). It fails whenever a mode of nonzero degree acts nontrivially.
+
+The same PBW decomposition proves that \(I\) is exact: as a vector-space functor, it is \(N\mapsto\bigoplus_{k\ge0}d^k\otimes N\), with every induced map acting coefficient by coefficient. Thus it preserves kernels, images, and surjections.
+
+2. Set \(\delta=\operatorname{ad}F\). The defining brackets give
+\[
+\begin{aligned}
+\delta(f_r)&=0,&\delta(K)&=0,\\
+\delta(h_r)&=2f_{r+n},&\delta(d)&=-nF,\\
+\delta(e_r)&=-h_{r+n}-r\delta_{r+n,0}K,&
+\delta^2(e_r)&=-2f_{r+2n}.
+\end{aligned}
+\]
+Consequently \(\delta^2(h_r)=\delta^2(d)=0\) and \(\delta^3(e_r)=0\). Since \(\delta\) is a derivation, its iterated Leibniz formula on a finite product is a multinomial sum. For a sufficiently large iteration, every summand differentiates some factor beyond its nilpotence bound. Every element of an enveloping algebra is a finite linear combination of finite products, so \(\delta\) is locally nilpotent on both \(U\) and \(\widetilde U\).
+
+We give the localization details explicitly. Let \(R\) denote either enveloping algebra. PBW identifies its associated graded algebra with the symmetric algebra of the corresponding Lie algebra. This is a polynomial algebra, possibly on infinitely many variables, and is a domain: any particular pair of polynomials lies in a polynomial algebra on finitely many variables. Leading symbols therefore show that \(R\) is a domain. In particular, all powers of \(F\) are regular on both sides.
+
+If \(\delta^{t+1}(a)=0\), the identities
+\[
+F^Na=\sum_{j=0}^{t}\binom Nj\delta^j(a)F^{N-j},\qquad
+aF^N=\sum_{j=0}^{t}(-1)^j\binom NjF^{N-j}\delta^j(a)
+\tag{1}
+\]
+hold for \(N\ge t\). They follow by induction from \(Fa=aF+\delta(a)\) and \(aF=Fa-\delta(a)\), using Pascal's identity. For \(N\ge m+t\), the first expression is right-divisible by \(F^m\), and the second is left-divisible by \(F^m\). These are the left and right Ore common-multiple conditions; regularity supplies the denominator cancellation condition.
+
+One can construct the module localization directly. For any left \(R\)-module \(N\), form symbols \([m,u]\), where \(m\ge0\) and \(u\in N\), with equality defined by
+\[
+[m,u]=[\ell,v]\quad\Longleftrightarrow\quad
+F^{k-m}u=F^{k-\ell}v\text{ for some }k\ge m,\ell.
+\tag{2}
+\]
+This is an equivalence relation: any two witnessing indices can be increased to a common index. Addition is performed at a common index, and scalar multiplication acts on the numerator. Thus the symbols form a vector space, with \([m,u]=[m+1,Fu]\).
+
+For \(a\in R\), choose \(L\ge0\) and \(b\in R\) satisfying
+\[
+F^La=bF^m,
+\tag{3}
+\]
+which is possible by (1), and set \(a[m,u]=[L,bu]\). This action is independent of the choice: if another pair is \((L',b')\), increase both indices to \(Q\ge L,L'\). Then
+\[
+(F^{Q-L}b-F^{Q-L'}b')F^m=0,
+\]
+so regularity implies equality of the coefficients. It also respects the transition \([m,u]=[m+1,Fu]\). At a common sufficiently large \(L\), write \(F^La=b_mF^m=b_{m+1}F^{m+1}\); cancellation gives \(b_m=b_{m+1}F\). These facts imply compatibility with every equality in (2).
+
+The action is multiplicative. If \(F^La=bF^m\) and \(F^Qc=c'F^L\), then \(F^Qca=c'bF^m\), giving
+\[
+c(a[m,u])=[Q,c'bu]=(ca)[m,u].
+\]
+Additivity follows by increasing indices until the coefficients for the summands have a common denominator, and the identity acts as the identity. The map \(N\to D_FN\), \(u\mapsto[0,u]\), is \(R\)-linear. On this symbol space, \(F\) acts invertibly, with inverse \([m,u]\mapsto[m+1,u]\).
+
+If \(j:N\to V\) is an \(R\)-module map and \(F\) is invertible on \(V\), its unique extension is
+\[
+[m,u]\longmapsto F^{-m}j(u).
+\]
+Equation (2) proves well-definedness. Equation (3), after multiplying by the inverses of the powers of \(F\) in \(V\), proves \(R\)-linearity. Uniqueness follows because \([m,u]=F^{-m}[0,u]\).
+
+To identify this construction with algebra localization without invoking a localization theorem, let \(R_F\) be the algebra obtained by adjoining a two-sided inverse of \(F\) to \(R\). Modules on which \(F\) acts invertibly are exactly the modules extending to \(R_F\), and such extension is unique. The symbol space and \(R_F\otimes_RN\) have the same universal property just proved, so the natural maps between them are inverse. Taking \(N=R\) also shows that \(R\to R_F\) is injective and every element of \(R_F\) has the form \(F^{-m}a\). Together with the Ore identities above, this realizes the asserted Ore localization. We henceforth write \(F^{-m}u\) for \([m,u]\).
+
+The construction establishes the following facts. Every finite sum has a common denominator, because for \(q\ge m\),
+\[
+F^{-m}u=F^{-q}F^{q-m}u.
+\tag{4}
+\]
+The kernel of \(N\to D_FN\) consists exactly of vectors killed by a power of \(F\), by (2). In particular, this map is injective for \(F\)-injective \(N\).
+
+Localization is exact as well. For an exact sequence \(0\to N'\xrightarrow{i}N\xrightarrow{p}N''\to0\), a fraction \(F^{-m}u'\) mapping to zero has \(i(F^ku')=0\) for some \(k\), so it was zero already. Every fraction over \(N''\) lifts by lifting its numerator. Finally, if \(F^{-m}u\) maps to zero, then \(F^kp(u)=0\) for some \(k\), so \(F^ku=i(u')\) for some \(u'\in N'\), and
+\[
+F^{-m}u=F^{-m-k}i(u')
+\]
+lies in the localized image. This proves exactness at every term.
+
+The useful localization action formula is, for \(m\ge1\),
+\[
+aF^{-m}u=\sum_{j\ge0}\binom{m+j-1}{j}F^{-m-j}\delta^j(a)u.
+\tag{5}
+\]
+Each sum is finite. For \(m=1\), repeatedly substitute the identity
+\[
+aF^{-1}=F^{-1}a+F^{-1}\delta(a)F^{-1};
+\]
+the remaining term eventually vanishes by local nilpotence. Induction on \(m\) gives (5): grouping terms of total differentiation order \(j\) uses
+\[
+\sum_{i=0}^j\binom{m+i-1}{i}=\binom{m+j}{j},
+\]
+which follows by telescoping Pascal's identity. For \(m=0\), the action has just the term \(a u\).
+
+In particular, the explicit mode actions on \(D_FM\) are
+\[
+\begin{aligned}
+f_r(F^{-m}u)&=F^{-m}f_ru,\\
+h_r(F^{-m}u)&=F^{-m}h_ru+2mF^{-m-1}f_{r+n}u,\\
+e_r(F^{-m}u)&=F^{-m}e_ru-mF^{-m-1}(h_{r+n}+r\delta_{r+n,0}K)u\\
+&\qquad-m(m+1)F^{-m-2}f_{r+2n}u,\\
+K(F^{-m}u)&=F^{-m}Ku.
+\end{aligned}
+\tag{6}
+\]
+These formulas also apply when \(m=0\), with the correction terms zero. For a \(\widetilde{\mathfrak g}\)-module, (5) additionally gives
+\[
+d(F^{-m}w)=F^{-m}dw-mnF^{-m}w.
+\tag{7}
+\]
+The construction above already proves these actions obey the algebra relations.
+
+On \(I(M)\), the action of \(F\) is
+\[
+F(P(d)\otimes u)=P(d-n)\otimes Fu.
+\tag{8}
+\]
+Translation of polynomials is invertible. The map \(\mathrm{id}\otimes F\) is injective when \(F\) is injective on \(M\), since its kernel is computed coefficient by coefficient. Their composite (8) is therefore injective, justifying the quotient \(T_FI(M)\).
+
+3. The \(\mathfrak g\)-module \(D_FM\) has invertible \(F\), so (8) on \(I(D_FM)\) has inverse
+\[
+F^{-1}(P(d)\otimes z)=P(d+n)\otimes F^{-1}z.
+\]
+Iterating gives the positive shift
+\[
+F^{-m}(P(d)\otimes z)=P(d+mn)\otimes F^{-m}z.
+\tag{9}
+\]
+Define the linear map on fractions by
+\[
+\alpha_M\bigl(F^{-m}(P(d)\otimes u)\bigr)
+=P(d+mn)\otimes F^{-m}u.
+\tag{10}
+\]
+For a fixed denominator this prescription is linear on the numerator. The transition to denominator \(F^{m+1}\) changes that numerator to \(P(d-n)\otimes Fu\); its image is
+\[
+P(d-n+(m+1)n)\otimes F^{-m-1}Fu
+=P(d+mn)\otimes F^{-m}u.
+\]
+Thus (10) respects the fraction relations. Common denominators then prove well-definedness for arbitrary sums.
+
+We check every type of generator. Whenever nonzero, \(\delta^j(x_r)\) is homogeneous of degree \(r+jn\); if it contains a central term, that term has the same degree zero. For \(m\ge1\), (5) and (10) give
+\[
+\begin{aligned}
+\alpha_M\bigl(x_rF^{-m}(P(d)\otimes u)\bigr)
+&=\sum_{j\ge0}\binom{m+j-1}{j}
+P(d-(r+jn)+(m+j)n)\otimes F^{-m-j}\delta^j(x_r)u\\
+&=P(d+mn-r)\otimes x_r(F^{-m}u)\\
+&=x_r\alpha_M\bigl(F^{-m}(P(d)\otimes u)\bigr).
+\end{aligned}
+\]
+For \(m=0\), the same equality follows directly from the induced action, with only the term \(j=0\). Centrality of \(K\) gives its intertwining immediately. For \(d\), (7) yields
+\[
+\begin{aligned}
+\alpha_M\bigl(dF^{-m}(P(d)\otimes u)\bigr)
+&=\alpha_M\bigl(F^{-m}((d-mn)P(d)\otimes u)\bigr)\\
+&=dP(d+mn)\otimes F^{-m}u\\
+&=d\alpha_M\bigl(F^{-m}(P(d)\otimes u)\bigr).
+\end{aligned}
+\]
+Thus \(\alpha_M\) is a \(\widetilde{\mathfrak g}\)-module map, including the degree derivation.
+
+It is surjective because the elementary tensors spanning its target have preimages
+\[
+\beta_M(P(d)\otimes F^{-m}u)
+=F^{-m}(P(d-mn)\otimes u).
+\tag{11}
+\]
+For injectivity, write any element of the source as \(F^{-m}w\), with \(w\in I(M)\). If its image is zero, applying \(F^m\) shows that the image of \(w\) in \(I(D_FM)\) is zero. The map \(M\to D_FM\) is injective, and PBW exactness makes \(I(M)\to I(D_FM)\) injective. Hence \(w=0\). This proves injectivity and also proves that (11) is a well-defined inverse.
+
+At denominator zero, \(\alpha_M\) is the induced inclusion \(I(M)\to I(D_FM)\). Applying the exact functor \(I\) to
+\[
+0\longrightarrow M\longrightarrow D_FM\longrightarrow T_FM\longrightarrow0
+\]
+therefore identifies the corresponding quotients and gives
+\[
+\overline\alpha_M:T_FI(M)\xrightarrow{\sim}I(T_FM).
+\]
+Its inverse is
+\[
+\overline\beta_M\bigl(P(d)\otimes(F^{-m}u+M)\bigr)
+=F^{-m}(P(d-mn)\otimes u)+I(M).
+\tag{12}
+\]
+This descent uses PBW exactness, so it is independent both of the chosen fraction and of the representative modulo \(M\).
+
+For a \(\mathfrak g\)-module map \(f:M\to N\), localization acts by \(F^{-m}u\mapsto F^{-m}f(u)\), and induction acts by \(P\otimes u\mapsto P\otimes f(u)\). Substitution in (10) and (12) shows that the respective squares commute. Thus the isomorphisms are natural on \(F\)-injective modules.
+
+4. Now assume, explicitly, that \(\Phi:A\to T_FM\) is a given \(\mathfrak g\)-isomorphism. The composite
+\[
+\mathcal L=\overline\beta_M\circ I(\Phi)
+\]
+is a \(\widetilde{\mathfrak g}\)-isomorphism. If \(\Phi(a)=F^{-m}u+M\), formula (12) gives
+\[
+\mathcal L(P(d)\otimes a)
+=F^{-m}(P(d-mn)\otimes u)+I(M).
+\tag{13}
+\]
+Every value of \(\Phi\) admits a single-fraction representative by common denominators, and the established quotient map guarantees independence of that choice.
+
+If \(A=Uv\) is cyclic, \(I(A)\) is generated by \(1\otimes v\), since its vectors are sums of \(d^k b(1\otimes v)\), with \(b\in U\). If
+\[
+\Phi(v)=F^{-\ell}u_v+M,
+\]
+then
+\[
+\mathcal L(1\otimes v)=F^{-\ell}(1\otimes u_v)+I(M).
+\tag{14}
+\]
+In particular, a given formula \(\Phi(v)=F^{-1}u+M\) lifts to \(F^{-1}(1\otimes u)+I(M)\).
+
+Whenever \(\Phi(q_m)=F^{-m}u+M\), (10) gives the exact preimage
+\[
+\boxed{\mathcal L^{-1}\bigl(F^{-m}(P(d)\otimes u)+I(M)\bigr)
+=P(d+mn)\otimes q_m.}
+\tag{15}
+\]
+Indeed, substituting the polynomial \(P(d+mn)\) into (13) cancels its shift.
+
+The map \(I(\Phi):I(A)\to I(T_FM)\) is literally \(\mathrm{id}_{\mathbb C[d]}\otimes\Phi\). After swapping vector-space factors, it is \(\Phi\otimes\mathrm{id}_{\mathbb C[d]}\). To use that shorthand for the map into \(T_FI(M)\), one must incorporate the shifted identification (12). The coefficient-preserving prescription
+\[
+P(d)\otimes(F^{-m}u+M)\longmapsto F^{-m}(P(d)\otimes u)+I(M)
+\]
+is generally incorrect. Besides its incompatibility with fraction transitions, (7) exhibits the missing \(-mn\) term in its interaction with \(d\). When \(n=0\), all polynomial shifts vanish.
+
+5. Suppose \(M\) is smooth in the sense defined in the statement. For any vector \(\sum_iP_i(d)\otimes u_i\in I(M)\), choose a common cutoff annihilating all of the finitely many \(u_i\). The induced action formula then shows that every mode above this cutoff annihilates the tensor. Thus induction preserves smoothness.
+
+For a fraction \(F^{-m}u\in D_FM\), let \(N\) be a smoothness cutoff for \(u\). Choose an integer \(B\) large enough that, for every \(r\ge B\),
+\[
+r\ge N,\qquad r+n\ge N,\qquad r+2n\ge N,\qquad r+n\ne0.
+\]
+Such a \(B\) exists for every fixed integer \(n\), including negative \(n\). All terms in (6) vanish for \(r\ge B\); the last condition removes the possible central correction. Hence \(D_FM\) is smooth. Common denominators cover every vector in it. A quotient of a smooth module is smooth, because a cutoff for a representative also annihilates its class. Consequently \(T_FM\), \(I(D_FM)\), and \(I(T_FM)\) are smooth. The isomorphisms already proved give smoothness of \(D_FI(M)\) and \(T_FI(M)\). If \(\Phi\) is given, it also transfers smoothness to \(A\), and then to \(I(A)\).
+
+There is an obstruction to simply adding \(d\) to a one-dimensional inducing character. Let an inducing subalgebra contain \(h_L\), where \(L>0\), and let its character satisfy \(\chi(h_L)=\lambda_L\ne0\). If it extended to a one-dimensional character on a Lie subalgebra also containing \(d\), scalar operators would commute, whereas
+\[
+0=[\chi(d),\chi(h_L)]=\chi([d,h_L])=L\lambda_L\ne0.
+\]
+This contradiction is independent of the chosen scalar \(\chi(d)\). Polynomial induction instead supplies a non-scalar derivation action obeying the required brackets.
+
+6. Finally, an induced isomorphism does not imply simplicity. Induction need not preserve simplicity: take the one-dimensional trivial \(\mathfrak g\)-module \(N=\mathbb C\), on which every mode and \(K\) act by zero. It is simple, since its only vector subspaces are zero and itself. Its induced module is \(I(N)=\mathbb C[d]\), with all modes and \(K\) acting by zero and \(d\) acting by multiplication. The subspace \(d\mathbb C[d]\) is nonzero, proper, and stable under every generator. Therefore \(I(N)\) is not simple.
+
+Here \(F\) acts by zero on \(N\), so this example concerns induction generally and is outside the \(F\)-injective hypothesis. It proves the stated failure of simplicity preservation without making any claim about simplicity under additional hypotheses.
